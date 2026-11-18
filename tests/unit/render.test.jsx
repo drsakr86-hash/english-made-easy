@@ -52,6 +52,34 @@ describe('العرض الأولي لكل وحدة', () => {
     expect(html).toContain('التقدم العام: ' + Math.round((3 / 264) * 100) + '%');
   });
 
+  const done = { 'eme.migration': JSON.stringify({ state: 'done', at: '2026-01-01T00:00:00.000Z' }) };
+  const result = (at) => JSON.stringify({ version: 1, results: [{ at, level: 'B1', perLevel: { A1: { correct: 5, answered: 6, total: 6, passed: true }, A2: { correct: 7, answered: 9, total: 9, passed: true }, B1: { correct: 4, answered: 6, total: 6, passed: true }, B2: { correct: 2, answered: 9, total: 9, passed: false }, C1: { correct: 1, answered: 6, total: 6, passed: false }, C2: { correct: 0, answered: 0, total: 6, passed: false } }, perSkill: { vocabulary: { correct: 8, answered: 18 } } }] });
+
+  it('تبويب مستواي لمستخدم جديد: شرح وزر بدء وتنبيه أنه تقديري', () => {
+    const html = render({ ...done, 'eme.settings': JSON.stringify({ tab: 'placement' }) });
+    expect(html).toContain('اختبار تحديد المستوى');
+    expect(html).toContain('ابدأ الاختبار');
+    expect(html).toContain('ليست شهادة رسمية');
+  });
+
+  it('بعد نتيجة قديمة (أكثر من 7 أيام) تظهر النتيجة وزر الإعادة', () => {
+    const html = render({ ...done, 'eme.settings': JSON.stringify({ tab: 'placement' }), 'eme.placement': result('2020-01-01T10:00:00.000Z') });
+    expect(html).toContain('>إعادة الاختبار<');
+    expect(html).toContain('>B1<');
+    expect(html).toContain('لم يُعرض');
+  });
+
+  it('نتيجة حديثة تمنع الإعادة وتعرض موعدها', () => {
+    const html = render({ ...done, 'eme.settings': JSON.stringify({ tab: 'placement' }), 'eme.placement': result(new Date().toISOString()) });
+    expect(html).not.toContain('>إعادة الاختبار<');
+    expect(html).toContain('يمكنك إعادة الاختبار بعد');
+  });
+
+  it('الرئيسية تعرض المستوى المحفوظ', () => {
+    const html = render({ ...done, 'eme.placement': result('2020-01-01T10:00:00.000Z') });
+    expect(html).toContain('مستواك التقديري: <b>B1 (متوسط)</b>');
+  });
+
   it('تبويب المراجعة يعرض حالة فارغة لمستخدم جديد', () => {
     const html = render({ 'eme.migration': JSON.stringify({ state: 'done', at: '2026-01-01T00:00:00.000Z' }), 'eme.settings': JSON.stringify({ tab: 'review' }) });
     expect(html).toContain('مراجعات اليوم: 0');

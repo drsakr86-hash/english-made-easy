@@ -1,5 +1,6 @@
 // تشغيل: npm run build && npx vite preview --port 4173 --host 127.0.0.1 ثم node tests/e2e/browser-smoke.mjs (يحتاج playwright عالمياً وChrome)
 import { chromium } from '/opt/npm-tools/node_modules/playwright/index.mjs';
+import { questions } from '../../src/data/placement/questions.js';
 const URL = 'http://127.0.0.1:4173/';
 const results = [];
 const ok = (name, pass, info = '') => { results.push({ name, pass, info }); console.log((pass ? 'PASS ' : 'FAIL ') + name + (info ? ' — ' + info : '')); };
@@ -100,6 +101,37 @@ ok('الرئيسية: أيام الالتزام 1 وإجمالي أيام الت
 ok('الرئيسية: الكلمات المتقنة 4 من 132 كما في التخزين', /الكلمات المتقنة: 4 من 132/.test(dash), (dash.match(/الكلمات المتقنة: \d+ من \d+/) || [''])[0]);
 ok('الرئيسية: آخر نشاط حقيقي', /آخر نشاط:.*(إجابة في اختبار|تعليم عنصر)/.test(dash) && act.last !== null, (dash.match(/آخر نشاط:.*/) || [''])[0]);
 ok('سجل النشاط يعدّ كل إجابة (≥ 20 حدثاً: اختبار ومراجعة)', Object.values(act.days).reduce((a, b) => a + b, 0) >= 20, JSON.stringify(act.days));
+
+// تحديد المستوى: إجابات صحيحة حتى B1 وخاطئة بعدها => B1
+await page.click('.tab:has-text("مستواي")');
+ok('مستواي: تنبيه أنه تقديري', (await page.locator('#root').innerText()).includes('ليست شهادة رسمية'));
+await page.click('text=ابدأ الاختبار');
+const byText = Object.fromEntries(questions.map((x) => [x.q, x]));
+let asked = 0, sawPassage = false, guard = 0, feedbackSeen = 0;
+while (guard++ < 60) {
+  if (await page.locator('.score:has-text("مستواك التقديري")').count()) break;
+  const stem = await page.locator('.card .en').first().innerText();
+  const qd = byText[stem];
+  if (!qd) throw new Error('سؤال غير معروف: ' + stem);
+  if (qd.passage) sawPassage = sawPassage || (await page.locator('.rule').count()) > 0;
+  const good = ['A1', 'A2', 'B1'].includes(qd.level);
+  const correctText = qd.options[qd.answer];
+  const opts = await page.locator('.opt').allInnerTexts();
+  const idx = good ? opts.indexOf(correctText) : opts.findIndex((o) => o !== correctText);
+  feedbackSeen += await page.locator('.opt.ok, .opt.bad, .rule:has-text("—")').count();
+  await page.locator('.opt').nth(idx).click();
+  feedbackSeen += await page.locator('.opt.ok, .opt.bad').count();
+  asked++;
+}
+const placed = await page.evaluate(() => JSON.parse(localStorage.getItem('eme.placement')).results);
+ok('تحديد المستوى: النتيجة B1 والاختبار توقف بعد مستويين راسبين (B2 وC1)', placed.length === 1 && placed[0].level === 'B1' && asked === 6 + 9 + 6 + 9 + 6, `${placed[0] && placed[0].level} / ${asked} سؤالاً`);
+ok('تحديد المستوى: ظهر نص القراءة', sawPassage);
+ok('تحديد المستوى: C2 لم يُعرض', placed[0].perLevel.C2.answered === 0 && placed[0].perLevel.C1.answered === 6);
+ok('تحديد المستوى: لا تصحيح ظاهر أثناء الاختبار', feedbackSeen === 0, String(feedbackSeen));
+await page.click('.tab:has-text("الرئيسية")');
+ok('الرئيسية تعرض المستوى', (await page.locator('#root').innerText()).includes('B1 (متوسط)'));
+await page.click('.tab:has-text("مستواي")');
+ok('الإعادة مقفلة 7 أيام', (await page.locator('#root').innerText()).includes('يمكنك إعادة الاختبار بعد'));
 
 // الجمل المركبة: إصلاح F1
 await page.click('.tab:has-text("جمل مركبة")');

@@ -4,11 +4,13 @@ import VocabSection from '../components/VocabSection.jsx';
 import GrammarSection from '../components/GrammarSection.jsx';
 import CompoundSection from '../components/CompoundSection.jsx';
 import Dashboard from '../components/Dashboard.jsx';
+import PlacementSection from '../components/PlacementSection.jsx';
 import ReviewSection from '../components/ReviewSection.jsx';
 import BackupBar from '../components/BackupBar.jsx';
 import { applyResult } from '../engines/review/review.js';
 import { logActivity } from '../engines/progress/progress.js';
 import { loadActivity, saveActivity } from '../storage/activity.js';
+import { loadPlacements, addPlacement, latestPlacement } from '../storage/placement.js';
 import { loadReview, saveReview } from '../storage/review.js';
 import { loadProgress, saveProgress, loadTab, saveTab } from '../storage/progress.js';
 
@@ -20,6 +22,7 @@ const TABS = [
   ['grammar', 'قواعد'],
   ['compound', 'جمل مركبة'],
   ['review', 'مراجعة'],
+  ['placement', 'مستواي'],
 ];
 
 export default function App({ backend, migration }) {
@@ -31,6 +34,7 @@ export default function App({ backend, migration }) {
   const reviewRef = useRef(review);
   const [activity, setActivity] = useState(() => (readOnly ? { days: {}, last: null } : loadActivity(backend)));
   const activityRef = useRef(activity);
+  const [placements, setPlacements] = useState(() => (readOnly ? [] : loadPlacements(backend)));
 
   // الحفظ يتم عند الحدث نفسه (لا داخل effect) ويُظهر تنبيهاً إن فشل.
   const commit = (next) => {
@@ -51,6 +55,11 @@ export default function App({ backend, migration }) {
     setReview(next);
     if (!readOnly) setSaveFailed(!saveReview(backend, next));
     log(itemId[0] === 'g' ? 'lesson' : 'answer', itemId);
+  };
+  const finishPlacement = (result) => {
+    setPlacements((p) => [...p, result]);
+    if (!readOnly) setSaveFailed(!addPlacement(backend, result));
+    log('placement', null);
   };
   const changeTab = (k) => {
     setTab(k);
@@ -80,11 +89,12 @@ export default function App({ backend, migration }) {
         ))}
       </div>
       <div style={{ marginTop: 10 }}>
-        {tab === 'dashboard' && <Dashboard progress={progress} review={review} activity={activity} onGo={changeTab} />}
+        {tab === 'dashboard' && <Dashboard progress={progress} review={review} activity={activity} placement={latestPlacement(placements)} onGo={changeTab} />}
         {['words', 'expressions', 'idioms'].includes(tab) && (
           <VocabSection key={tab} list={content[tab]} known={progress[tab]} onToggle={toggle(tab)} onAnswer={(q, ok) => record(q.itemId, ok)} />
         )}
         {tab === 'grammar' && <GrammarSection lessons={content.grammar} done={progress.grammar} onComplete={complete} onResult={record} />}
+        {tab === 'placement' && <PlacementSection latest={latestPlacement(placements)} onFinish={finishPlacement} />}
         {tab === 'review' && <ReviewSection records={review} onAnswer={(q, ok) => record(q.itemId, ok)} />}
         {tab === 'compound' && <CompoundSection items={content.compound} />}
       </div>
