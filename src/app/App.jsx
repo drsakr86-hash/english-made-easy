@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import * as content from '../data/legacy-content/index.js';
 import VocabSection from '../components/VocabSection.jsx';
 import GrammarSection from '../components/GrammarSection.jsx';
 import CompoundSection from '../components/CompoundSection.jsx';
+import ReviewSection from '../components/ReviewSection.jsx';
 import BackupBar from '../components/BackupBar.jsx';
+import { applyResult } from '../engines/review/review.js';
+import { loadReview, saveReview } from '../storage/review.js';
 import { loadProgress, saveProgress, loadTab, saveTab } from '../storage/progress.js';
 
 const TABS = [
@@ -12,6 +15,7 @@ const TABS = [
   ['idioms', 'مصطلحات'],
   ['grammar', 'قواعد'],
   ['compound', 'جمل مركبة'],
+  ['review', 'مراجعة'],
 ];
 
 export default function App({ backend, migration }) {
@@ -19,11 +23,21 @@ export default function App({ backend, migration }) {
   const [progress, setProgress] = useState(() => (readOnly ? loadProgress({ getItem: () => null }) : loadProgress(backend)));
   const [tab, setTab] = useState(() => (readOnly ? 'words' : loadTab(backend)));
   const [saveFailed, setSaveFailed] = useState(false);
+  const [review, setReview] = useState(() => (readOnly ? {} : loadReview(backend)));
+  const reviewRef = useRef(review);
 
   // الحفظ يتم عند الحدث نفسه (لا داخل effect) ويُظهر تنبيهاً إن فشل.
   const commit = (next) => {
     setProgress(next);
     if (!readOnly) setSaveFailed(!saveProgress(backend, next));
+  };
+  // تسجيل نتيجة إجابة في سجل المراجعة بمعرّف العنصر (الوقت من الساعة هنا فقط)
+  const record = (itemId, ok) => {
+    if (!itemId) return;
+    const next = { ...reviewRef.current, [itemId]: applyResult(reviewRef.current[itemId], itemId, ok, new Date()) };
+    reviewRef.current = next;
+    setReview(next);
+    if (!readOnly) setSaveFailed(!saveReview(backend, next));
   };
   const changeTab = (k) => {
     setTab(k);
@@ -52,9 +66,10 @@ export default function App({ backend, migration }) {
       </div>
       <div style={{ marginTop: 10 }}>
         {['words', 'expressions', 'idioms'].includes(tab) && (
-          <VocabSection key={tab} list={content[tab]} known={progress[tab]} onToggle={toggle(tab)} />
+          <VocabSection key={tab} list={content[tab]} known={progress[tab]} onToggle={toggle(tab)} onAnswer={(q, ok) => record(q.itemId, ok)} />
         )}
-        {tab === 'grammar' && <GrammarSection lessons={content.grammar} done={progress.grammar} onComplete={complete} />}
+        {tab === 'grammar' && <GrammarSection lessons={content.grammar} done={progress.grammar} onComplete={complete} onResult={record} />}
+        {tab === 'review' && <ReviewSection records={review} onAnswer={(q, ok) => record(q.itemId, ok)} />}
         {tab === 'compound' && <CompoundSection items={content.compound} />}
       </div>
       <BackupBar backend={backend} />

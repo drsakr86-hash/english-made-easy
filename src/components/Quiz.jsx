@@ -20,7 +20,7 @@ function Options({ opts, answer, onDone, en }) {
   );
 }
 
-export default function Quiz({ qs, onFinish, resultNote }) {
+export default function Quiz({ qs, onFinish, resultNote, onAnswer }) {
   const [i, setI] = useState(0);
   const [s, setS] = useState(0);
   const [ans, setAns] = useState(false);
@@ -38,7 +38,7 @@ export default function Quiz({ qs, onFinish, resultNote }) {
       <div className="small">سؤال {i + 1} / {qs.length}</div>
       <div className={q.enQ ? 'en' : 'ar'} style={{ marginTop: 6 }}>{q.q}</div>
       {q.sub && <div className="small">{q.sub}</div>}
-      <Options key={i} opts={q.opts} answer={q.a} en={q.enOpts} onDone={(ok) => { setAns(true); if (ok) setS(s + 1); }} />
+      <Options key={i} opts={q.opts} answer={q.a} en={q.enOpts} onDone={(ok) => { setAns(true); if (ok) setS(s + 1); if (onAnswer) onAnswer(q, ok); }} />
       {ans && q.note && <div className="rule">{q.note}</div>}
       {ans && <button className="next" onClick={() => { setI(i + 1); setAns(false); }}>{i + 1 === qs.length ? 'إنهاء' : 'التالي'}</button>}
     </div>

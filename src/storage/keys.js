@@ -15,6 +15,7 @@ export const KEYS = {
   migration: 'eme.migration',
   backup: 'eme.backup.v1',
   preimport: 'eme.backup.preimport',
+  review: 'eme.review',
 };
 
 export const SCHEMA_VERSION = 2;

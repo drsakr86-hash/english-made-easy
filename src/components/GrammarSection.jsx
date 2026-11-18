@@ -3,7 +3,7 @@ import Quiz from './Quiz.jsx';
 import { grammarQuiz, passed } from '../modules/quiz.js';
 
 // إصلاح F2: لا يكتمل الدرس إلا بنتيجة 60% فأكثر (V1 كان يكمله دائماً).
-export default function GrammarSection({ lessons, done, onComplete }) {
+export default function GrammarSection({ lessons, done, onComplete, onResult }) {
   const [open, setOpen] = useState(null);
   const [active, setActive] = useState(null);
   if (active)
@@ -11,7 +11,7 @@ export default function GrammarSection({ lessons, done, onComplete }) {
       <Quiz
         qs={grammarQuiz(active)}
         resultNote={(s, t) => (passed(s, t) ? 'أحسنت، اكتمل الدرس ✅' : 'تحتاج 60% على الأقل لإكمال الدرس. أعد المحاولة.')}
-        onFinish={(s, t) => { if (passed(s, t)) onComplete(active.id); setActive(null); }}
+        onFinish={(s, t) => { if (onResult) onResult(active.id, passed(s, t)); if (passed(s, t)) onComplete(active.id); setActive(null); }}
       />
     );
   return (

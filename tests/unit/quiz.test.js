@@ -93,3 +93,10 @@ describe('إصلاح F2 وتحسين الكلمات', () => {
     }
   });
 });
+
+describe('itemId في الاختبارات', () => {
+  it('اختبار الكلمات والقواعد يحملان معرّف العنصر', () => {
+    expect(vocabQuiz(content.words, lcg(1)).every((q) => /^w-\d{3}$/.test(q.itemId))).toBe(true);
+    expect(grammarQuiz(content.grammar[2]).every((q) => q.itemId === 'g-003')).toBe(true);
+  });
+});

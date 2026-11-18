@@ -3,11 +3,11 @@ import Quiz from './Quiz.jsx';
 import { speak } from './speech.js';
 import { vocabQuiz } from '../modules/quiz.js';
 
-export default function VocabSection({ list, known, onToggle }) {
+export default function VocabSection({ list, known, onToggle, onAnswer }) {
   const [qs, setQs] = useState(null);
   const [filter, setFilter] = useState('all');
   const pct = Math.round((known.length / list.length) * 100);
-  if (qs) return <Quiz qs={qs} onFinish={() => setQs(null)} />;
+  if (qs) return <Quiz qs={qs} onAnswer={onAnswer} onFinish={() => setQs(null)} />;
   const shown = list.filter((x) => filter === 'all' || (filter === 'known' ? known.includes(x.id) : !known.includes(x.id)));
   return (
     <div>

@@ -70,6 +70,28 @@ for (let i = 0; i < 10; i++) {
 ok('اختبار الكلمات: 10 أسئلة وشاشة نتيجة', (await page.locator('.score').innerText()).includes('من 10'), (await page.locator('.score').innerText()).replace(/\n/g, ' '));
 await page.click('.next');
 
+// Smart Review: تسجيل نتائج الاختبار بالمعرّفات ثم المراجعة المستحقة
+const rev1 = await page.evaluate(() => JSON.parse(localStorage.getItem('eme.review')).items);
+const ids1 = Object.keys(rev1);
+ok('نتائج اختبار الكلمات سُجّلت في المراجعة (10 عناصر بمعرّفات)', ids1.length === 10 && ids1.every((i) => /^w-\d{3}$/.test(i)), ids1.join(','));
+ok('كل سجل يحمل الحقول المطلوبة', ids1.every((i) => ['firstLearnedAt', 'lastReviewedAt', 'nextReviewAt', 'correctCount', 'incorrectCount', 'masteryLevel', 'reviewInterval', 'reviewHistory'].every((k) => k in rev1[i])));
+await page.click('.tab:has-text("مراجعة")');
+ok('لا مراجعات مستحقة فور الإجابة', (await page.locator('.card').first().innerText()).includes('مراجعات اليوم: 0'));
+await page.evaluate(() => {
+  const r = JSON.parse(localStorage.getItem('eme.review'));
+  for (const k of Object.keys(r.items)) r.items[k].nextReviewAt = new Date(Date.now() - 86400000).toISOString();
+  localStorage.setItem('eme.review', JSON.stringify(r));
+});
+await page.reload(); await page.waitForSelector('.tabs');
+await page.click('.tab:has-text("مراجعة")');
+ok('بعد مرور الموعد تظهر 10 مراجعات مستحقة', (await page.locator('.card').first().innerText()).includes('مراجعات اليوم: 10'));
+await page.click('text=ابدأ مراجعة اليوم');
+for (let i = 0; i < 10; i++) { await page.locator('.opt').first().click(); await page.click('.next'); }
+await page.click('.score .next');
+const rev2 = await page.evaluate(() => JSON.parse(localStorage.getItem('eme.review')).items);
+ok('كل عنصر سُجّلت له إجابة ثانية', Object.values(rev2).every((r) => r.reviewHistory.length === 2), JSON.stringify(Object.values(rev2).map((r) => r.reviewHistory.length)));
+ok('بعد المراجعة لا مستحق اليوم', (await page.locator('.card').first().innerText()).includes('مراجعات اليوم: 0'));
+
 // الجمل المركبة: إصلاح F1
 await page.click('.tab:has-text("جمل مركبة")');
 let firstCorrect = 0, total = 0;

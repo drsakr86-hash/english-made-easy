@@ -40,7 +40,7 @@ export function saveProgress(backend, progress) {
 export function loadTab(backend) {
   try {
     const t = JSON.parse(getRaw(backend, KEYS.settings) || '{}').tab;
-    return ['words', 'expressions', 'idioms', 'grammar', 'compound'].includes(t) ? t : 'words';
+    return ['words', 'expressions', 'idioms', 'grammar', 'compound', 'review'].includes(t) ? t : 'words';
   } catch {
     return 'words';
   }

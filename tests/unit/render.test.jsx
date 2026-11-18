@@ -37,6 +37,12 @@ describe('العرض الأولي لكل وحدة', () => {
     expect(render({ tab: JSON.stringify('grammar') })).toContain('أنهيت 0 من 19 درساً');
   });
 
+  it('تبويب المراجعة يعرض حالة فارغة لمستخدم جديد', () => {
+    const html = render({ 'eme.migration': JSON.stringify({ state: 'done', at: '2026-01-01T00:00:00.000Z' }), 'eme.settings': JSON.stringify({ tab: 'review' }) });
+    expect(html).toContain('مراجعات اليوم: 0');
+    expect(html).toContain('تبدأ العناصر بالدخول هنا');
+  });
+
   it('عند فشل الترحيل يظهر تنبيه ولا يُفقد شيء', () => {
     const html = render({ k_words: '{bad' });
     expect(html).toContain('تعذر ترحيل بياناتك القديمة');
