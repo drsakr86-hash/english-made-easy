@@ -18,7 +18,7 @@ export default function CompoundSection({ items }) {
         </div>
       )}
       {items.map((x) => (
-        <div className="card" key={x.id}>
+        <div className="card comp" key={x.id}>
           <div className="en">{x.en.replace('___', '____')}</div>
           <div className="ar">{x.ar}</div>
           <div className="small">الأداة: <b style={{ direction: 'ltr', display: 'inline-block' }}>{x.options[x.answer]}</b> — {x.note}</div>

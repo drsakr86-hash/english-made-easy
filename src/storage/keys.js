@@ -18,6 +18,10 @@ export const KEYS = {
   review: 'eme.review',
   activity: 'eme.activity',
   placement: 'eme.placement',
+  plans: 'eme.plans',
+  skills: 'eme.skills',
+  userwords: 'eme.userwords',
+  tutor: 'eme.tutor',
 };
 
 export const SCHEMA_VERSION = 2;

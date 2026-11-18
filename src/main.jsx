@@ -13,3 +13,10 @@ createRoot(document.getElementById('root')).render(
     <App backend={window.localStorage} migration={migration} />
   </StrictMode>,
 );
+
+// دعم العمل دون إنترنت: يُسجَّل في نسخة الإنتاج فقط ولا يؤثر على التشغيل إن فشل.
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register(import.meta.env.BASE_URL + 'sw.js').catch(() => {});
+  });
+}

@@ -6,7 +6,7 @@ import * as content from '../data/legacy-content/index.js';
 
 const fmt = (d) => d.toLocaleDateString('ar-EG', { weekday: 'long', day: 'numeric', month: 'long' });
 
-export default function ReviewSection({ records, onAnswer }) {
+export default function ReviewSection({ records, userwords, onAnswer }) {
   const [qs, setQs] = useState(null);
   const [now, setNow] = useState(() => new Date());
   if (qs) return <Quiz qs={qs} onAnswer={onAnswer} onFinish={() => { setNow(new Date()); setQs(null); }} />;
@@ -21,7 +21,7 @@ export default function ReviewSection({ records, onAnswer }) {
         {sum.total === 0 && <div className="small" style={{ marginTop: 6 }}>تبدأ العناصر بالدخول هنا بعد أن تجيب عنها في أي اختبار.</div>}
         {sum.total > 0 && sum.due === 0 && next && <div className="small" style={{ marginTop: 6 }}>لا مراجعات مستحقة الآن. التالية: {fmt(next)}.</div>}
         {due.length > 0 && (
-          <button className="next" onClick={() => setQs(reviewQuiz(due.map((r) => r.itemId), content))}>
+          <button className="next" onClick={() => setQs(reviewQuiz(due.map((r) => r.itemId), { ...content, userwords }))}>
             ابدأ مراجعة اليوم ({due.length})
           </button>
         )}

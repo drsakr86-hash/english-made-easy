@@ -4,7 +4,7 @@ import { summarize } from '../engines/review/review.js';
 import { levelLabel } from '../modules/levels.js';
 import * as content from '../data/legacy-content/index.js';
 
-const KIND = { answer: 'إجابة في اختبار', mark: 'تعليم عنصر', lesson: 'درس قواعد', placement: 'اختبار تحديد المستوى' };
+const KIND = { answer: 'إجابة في اختبار', mark: 'تعليم عنصر', lesson: 'درس قواعد', placement: 'اختبار تحديد المستوى', plan_task: 'مهمة من خطة اليوم', session: 'إنهاء جلسة اليوم', skill_reading: 'درس قراءة', skill_listening: 'درس استماع', skill_writing: 'تمرين كتابة', save_word: 'حفظ كلمة للمراجعة', tutor_reply: 'محادثة مع المدرس' };
 
 function itemName(id) {
   if (!id) return '';
@@ -13,7 +13,7 @@ function itemName(id) {
   return it ? it.en || it.title : '';
 }
 
-export default function Dashboard({ progress, review, activity, placement, onGo }) {
+export default function Dashboard({ progress, review, activity, placement, plan, onGo }) {
   const [now] = useState(() => new Date()); // يُحسب عند فتح اللوحة
   const o = overview({ progress, content, reviewSummary: summarize(review, now), activity, now });
   const last = o.last
@@ -46,7 +46,14 @@ export default function Dashboard({ progress, review, activity, placement, onGo 
         <div>مستواك التقديري: <b>{placement ? levelLabel(placement.level) : 'لم يُحدَّد بعد'}</b></div>
         <button className="next" onClick={() => onGo('placement')}>{placement ? 'تفاصيل المستوى' : 'ابدأ اختبار تحديد المستوى'}</button>
       </div>
-      <div className="card small">خطة اليوم: قادمة في الدفعة التالية</div>
+      <div className="card">
+        {plan ? (
+          <div>خطة اليوم: <b>{plan.tasks.filter((x) => x.status === 'done').length}</b> من {plan.tasks.length} مهام{plan.session ? ' · سُجّلت الجلسة ✅' : ''}</div>
+        ) : (
+          <div>خطة اليوم: لم تبدأ بعد</div>
+        )}
+        <button className="next" onClick={() => onGo('plan')}>{plan ? 'متابعة الخطة' : 'أنشئ خطة اليوم'}</button>
+      </div>
     </div>
   );
 }

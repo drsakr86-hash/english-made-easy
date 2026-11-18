@@ -1,0 +1,13 @@
+{
+  "name": "English Made Easy",
+  "short_name": "English",
+  "description": "تعلّم الإنجليزية يومياً: كلمات وتعبيرات وقواعد وقراءة واستماع وكتابة",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f7f9",
+  "theme_color": "#1f2937",
+  "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

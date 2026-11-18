@@ -19,7 +19,7 @@ export default function GrammarSection({ lessons, done, onComplete, onResult }) 
       <div className="small">أنهيت {done.length} من {lessons.length} درساً</div>
       <div className="bar"><i style={{ width: (done.length / lessons.length) * 100 + '%' }} /></div>
       {lessons.map((l, i) => (
-        <div className="card" key={l.id}>
+        <div className={'card lesson' + (done.includes(l.id) ? ' known' : '')} key={l.id}>
           <div className="top" onClick={() => setOpen(open === i ? null : i)} style={{ cursor: 'pointer' }}>
             <div className="ar" style={{ fontWeight: 700 }}>{l.title}</div>
             <div>{done.includes(l.id) ? '✅' : '›'}</div>

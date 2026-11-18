@@ -30,3 +30,45 @@ h1{font-size:22px;margin:8px 0 2px}
 .notice.err{background:#fee2e2;border-color:#dc2626}
 .foot{margin-top:24px;padding-top:12px;border-top:1px solid #e5e7eb}
 .foot .btn{font-size:13px}
+.inp{width:100%;border:1px solid #d1d5db;border-radius:10px;padding:10px;font:inherit;direction:ltr;text-align:left;background:#fff}
+textarea.inp{min-height:110px}
+.chip{display:inline-block;border:1px solid #d1d5db;background:#fff;border-radius:16px;padding:5px 12px;margin:3px;font:inherit;cursor:pointer;direction:ltr}
+.chip[disabled]{opacity:.4;cursor:default}
+.okc{color:#16a34a}.badc{color:#dc2626}
+.lvl{display:inline-block;background:#e0e7ff;color:#3730a3;border-radius:8px;padding:0 8px;font-size:12px;margin-inline-start:6px}
+.chat{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.msg{padding:8px 12px;border-radius:12px;max-width:88%;direction:ltr;text-align:left;line-height:1.6;white-space:pre-wrap}
+.msg.me{align-self:flex-end;background:#dbeafe}
+.msg.ai{align-self:flex-start;background:#fff;border:1px solid #e5e7eb}
+
+/* === مظهر البطاقات والتبويبات (تحديث الواجهة) === */
+body{background:linear-gradient(180deg,#eef2ff 0,#f6f7f9 220px) no-repeat,#f6f7f9}
+h1{background:linear-gradient(90deg,#1d4ed8,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:700}
+.card{border-radius:16px;padding:16px;border:1px solid #e8ebf0;box-shadow:0 1px 2px rgba(15,23,42,.05),0 6px 16px rgba(15,23,42,.05)}
+.card.word,.card.lesson,.card.comp{border-inline-start:5px solid #3b82f6;position:relative}
+.card.word.known,.card.lesson.known{border-inline-start-color:#16a34a;background:linear-gradient(90deg,#f0fdf4,#fff 60%)}
+.card.lesson{border-inline-start-color:#8b5cf6}.card.comp{border-inline-start-color:#f59e0b}
+.card .en{font-size:21px;letter-spacing:.2px;color:#111827}
+.card .ar{color:#2563eb;font-weight:600;margin-top:4px}
+.card.lesson .ar{color:#1f2937}
+.card .ex{background:#f3f4f6;border-radius:10px;border-left:3px solid #c7d2fe;padding:8px 10px;margin-top:10px}
+.card .exar{margin-top:6px;padding:0 4px}
+.ic{width:40px;height:40px;border-radius:50%;background:#f3f4f6;display:inline-flex;align-items:center;justify-content:center;font-size:19px;transition:transform .1s,background .15s}
+.ic:active{transform:scale(.92)}
+.ic:hover{background:#e5e7eb}
+.card.known .ic[title="أتقنتها"]{background:#dcfce7}
+.tabs{padding:4px 2px 8px}
+.tab{box-shadow:0 1px 2px rgba(15,23,42,.06);transition:background .15s}
+.tab.on{background:linear-gradient(135deg,#1f2937,#374151);box-shadow:0 2px 8px rgba(31,41,55,.3)}
+.subtab{flex:none;border:1px solid #c7d2fe;background:#eef2ff;color:#3730a3;border-radius:16px;padding:5px 13px;font:inherit;font-size:13px;cursor:pointer}
+.subtab.on{background:#4f46e5;color:#fff;border-color:#4f46e5}
+.btn{border-radius:12px;transition:background .15s}
+.btn.on{box-shadow:0 2px 6px rgba(37,99,235,.3)}
+.next{border-radius:12px;background:linear-gradient(135deg,#1f2937,#374151);padding:11px}
+.opt{border-radius:12px;padding:12px;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.score{background:linear-gradient(135deg,#eef2ff,#fff)}
+.pill{flex:none;border:1px solid #d1d5db;background:#fff;border-radius:18px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer}
+.pill.on{background:#2563eb;color:#fff;border-color:#2563eb}
+.wrap{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.lbl{font-size:12px;color:#6b7280;margin-top:6px}
+.small{line-height:1.7}.card>.small+.inp{margin-top:6px}

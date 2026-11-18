@@ -88,3 +88,19 @@ export function summarize(records, now) {
     levels,
   };
 }
+
+/** يبدأ تتبّع عنصر في المراجعة (مثلاً كلمة محفوظة من درس) دون احتساب إجابة. موعده بعد يوم. لا يغيّر عنصراً متتبَّعاً. */
+export function startTracking(rec, itemId, now) {
+  if (rec) return rec;
+  return {
+    itemId,
+    firstLearnedAt: now.toISOString(),
+    lastReviewedAt: null,
+    nextReviewAt: addDays(now, 1),
+    correctCount: 0,
+    incorrectCount: 0,
+    masteryLevel: 0,
+    reviewInterval: 1,
+    reviewHistory: [],
+  };
+}

@@ -19,7 +19,7 @@ export default function VocabSection({ list, known, onToggle, onAnswer }) {
         <button className={'btn' + (filter === 'new' ? ' on' : '')} onClick={() => setFilter('new')}>لم أتقنها</button>
       </div>
       {shown.map((it) => (
-        <div className="card" key={it.id}>
+        <div className={'card word' + (known.includes(it.id) ? ' known' : '')} key={it.id}>
           <div className="top">
             <div><div className="en">{it.en}</div><div className="ar">{it.ar}</div></div>
             <div>

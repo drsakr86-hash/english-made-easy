@@ -51,7 +51,7 @@ export const passed = (score, total) => total > 0 && score / total >= PASS_RATIO
 // اختبار مراجعة اليوم: سؤال لكل عنصر مستحق. الكلمات بنمط اختبار الكلمات (مشتتات من نفس الوحدة)،
 // والدروس بسؤال عشوائي واحد من الدرس.
 export function reviewQuiz(dueIds, content, rng = Math.random) {
-  const lists = { w: content.words, e: content.expressions, i: content.idioms };
+  const lists = { w: content.words, e: content.expressions, i: content.idioms, u: Object.values((content.userwords && content.userwords.items) || {}) };
   const out = [];
   for (const id of dueIds) {
     const kind = id[0];
@@ -65,7 +65,9 @@ export function reviewQuiz(dueIds, content, rng = Math.random) {
     const list = lists[kind];
     const it = list && list.find((x) => x.id === id);
     if (!it) continue;
-    const wrong = shuffle(list.filter((x) => x.ar !== it.ar && x.en !== it.en), rng).slice(0, 3).map((x) => x.ar);
+    // كلمات المستخدم قليلة: المشتتات تُكمَّل من بنك الكلمات حتى تتوفر ثلاثة
+    const pool = kind === 'u' ? [...list, ...content.words] : list;
+    const wrong = shuffle(pool.filter((x) => x.ar !== it.ar && x.en !== it.en), rng).slice(0, 3).map((x) => x.ar);
     const opts = shuffle([it.ar, ...wrong], rng);
     out.push({ q: it.en, enQ: true, opts, a: opts.indexOf(it.ar), note: it.ex + ' — ' + it.exAr, itemId: id });
   }
