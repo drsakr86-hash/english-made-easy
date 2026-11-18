@@ -183,7 +183,7 @@ describe('مزود Anthropic (بدون شبكة حقيقية)', () => {
   it('يتطلب مفتاحاً', () => expect(() => createAnthropicProvider({})).toThrow());
   it('يرسل المفتاح في الترويسة فقط ويقرأ النص', async () => {
     let seen;
-    const p = createAnthropicProvider({ apiKey: 'sk-test-123', fetchImpl: async (u, o) => { seen = { u, o }; return { ok: true, json: async () => ({ content: [{ text: '{"reply":"hi"}' }] }) }; } });
+    const p = createAnthropicProvider({ apiKey: 'sk-test-123', fetchImpl: async (u, o) => { seen = { u, o }; return { ok: true, json: async () => ({ content: [{ type: 'text', text: '{"reply":"hi"}' }] }) }; } });
     const out = await p.complete({ system: 'S', messages: msgs() });
     expect(out).toBe('{"reply":"hi"}');
     expect(seen.o.headers['x-api-key']).toBe('sk-test-123');
@@ -191,6 +191,10 @@ describe('مزود Anthropic (بدون شبكة حقيقية)', () => {
     expect(JSON.parse(seen.o.body).system).toBe('S');
   });
   it('خطأ HTTP وشكل غير متوقع يرميان', async () => {
+    // رد فيه كتلة تفكير قبل النص (سلوك الموديلات الحديثة): يُؤخذ النص ولا يفشل
+    const pt = createAnthropicProvider({ apiKey: 'k', fetchImpl: async () => ({ ok: true, json: async () => ({ content: [{ type: 'thinking', thinking: '...' }, { type: 'text', text: '{"reply":"ok"}' }] }) }) });
+    expect(await pt.complete({ system: '', messages: msgs() })).toBe('{"reply":"ok"}');
+    await expect(createAnthropicProvider({ apiKey: 'k', fetchImpl: async () => ({ ok: true, json: async () => ({ content: [{ type: 'thinking', thinking: 'x' }] }) }) }).complete({ system: '', messages: msgs() })).rejects.toThrow('provider_bad_shape');
     await expect(createAnthropicProvider({ apiKey: 'k', fetchImpl: async () => ({ ok: false, status: 500 }) }).complete({ system: '', messages: msgs() })).rejects.toThrow();
     await expect(createAnthropicProvider({ apiKey: 'k', fetchImpl: async () => ({ ok: true, json: async () => ({}) }) }).complete({ system: '', messages: msgs() })).rejects.toThrow();
   });

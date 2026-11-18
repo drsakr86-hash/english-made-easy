@@ -15,8 +15,10 @@ export function createAnthropicProvider({ apiKey, model = 'claude-haiku-5-5', ti
         });
         if (!res.ok) throw new Error('provider_http_' + res.status);
         const data = await res.json();
-        const text = data && Array.isArray(data.content) && data.content[0] && data.content[0].text;
-        if (typeof text !== 'string') throw new Error('provider_bad_shape');
+        // قد يسبق النصَّ كتل أخرى (مثل thinking): نجمع كل كتل type=text.
+        const blocks = data && Array.isArray(data.content) ? data.content : [];
+        const text = blocks.filter((b) => b && b.type === 'text' && typeof b.text === 'string').map((b) => b.text).join('');
+        if (!text) throw new Error('provider_bad_shape');
         return text;
       } finally {
         clearTimeout(t);
