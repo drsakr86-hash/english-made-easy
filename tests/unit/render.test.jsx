@@ -28,13 +28,28 @@ describe('العرض الأولي لكل وحدة', () => {
   }
 
   it('يعرض التقدم المرحَّل من V1 (3 من 132 كلمة)', () => {
-    const html = render({ k_words: JSON.stringify(['achieve', 'improve', 'therefore']) });
+    const html = render({ k_words: JSON.stringify(['achieve', 'improve', 'therefore']), tab: JSON.stringify('words') });
     expect(html).toContain('أتقنت 3 من 132');
     expect((html.match(/✅/g) || []).length).toBe(3);
   });
 
   it('يُفتح آخر تبويب محفوظ في V1', () => {
     expect(render({ tab: JSON.stringify('grammar') })).toContain('أنهيت 0 من 19 درساً');
+  });
+
+  it('الرئيسية افتراضية لمستخدم جديد وتعرض أصفاراً حقيقية بلا أرقام وهمية', () => {
+    const html = render({});
+    expect(html).toContain('التقدم العام: 0%');
+    expect(html).toContain('أيام الالتزام المتتالية: <b>0</b>');
+    expect(html).toContain('لا يوجد نشاط بعد');
+    expect(html).toContain('لم يُحدَّد بعد');
+  });
+
+  it('الرئيسية تعرض التقدم المرحَّل من V1', () => {
+    const html = render({ k_words: JSON.stringify(['achieve', 'improve']), k_grammar: JSON.stringify(['الماضي البسيط Past Simple']) });
+    expect(html).toContain('الكلمات المتقنة: <b>2</b> من 132');
+    expect(html).toContain('الدروس المكتملة: <b>1</b> من 19');
+    expect(html).toContain('التقدم العام: ' + Math.round((3 / 264) * 100) + '%');
   });
 
   it('تبويب المراجعة يعرض حالة فارغة لمستخدم جديد', () => {

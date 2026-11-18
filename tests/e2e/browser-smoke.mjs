@@ -92,6 +92,15 @@ const rev2 = await page.evaluate(() => JSON.parse(localStorage.getItem('eme.revi
 ok('كل عنصر سُجّلت له إجابة ثانية', Object.values(rev2).every((r) => r.reviewHistory.length === 2), JSON.stringify(Object.values(rev2).map((r) => r.reviewHistory.length)));
 ok('بعد المراجعة لا مستحق اليوم', (await page.locator('.card').first().innerText()).includes('مراجعات اليوم: 0'));
 
+// Dashboard: بيانات حقيقية بعد النشاط
+await page.click('.tab:has-text("الرئيسية")');
+const dash = await page.locator('#root').innerText();
+const act = await page.evaluate(() => JSON.parse(localStorage.getItem('eme.activity')));
+ok('الرئيسية: أيام الالتزام 1 وإجمالي أيام التعلم 1', /أيام الالتزام المتتالية: 1/.test(dash) && /إجمالي أيام التعلم: 1/.test(dash), dash.split('\n').filter((l) => /الالتزام|إجمالي/.test(l)).join(' | '));
+ok('الرئيسية: الكلمات المتقنة 4 من 132 كما في التخزين', /الكلمات المتقنة: 4 من 132/.test(dash), (dash.match(/الكلمات المتقنة: \d+ من \d+/) || [''])[0]);
+ok('الرئيسية: آخر نشاط حقيقي', /آخر نشاط:.*(إجابة في اختبار|تعليم عنصر)/.test(dash) && act.last !== null, (dash.match(/آخر نشاط:.*/) || [''])[0]);
+ok('سجل النشاط يعدّ كل إجابة (≥ 20 حدثاً: اختبار ومراجعة)', Object.values(act.days).reduce((a, b) => a + b, 0) >= 20, JSON.stringify(act.days));
+
 // الجمل المركبة: إصلاح F1
 await page.click('.tab:has-text("جمل مركبة")');
 let firstCorrect = 0, total = 0;

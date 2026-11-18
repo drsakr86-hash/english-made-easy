@@ -43,7 +43,7 @@ export function convertLegacy(raw, content) {
     }
     parsed[section] = v;
   }
-  let tab = 'words';
+  let tab = 'dashboard';
   if ((raw[LEGACY_KEYS.tab] ?? null) !== null) {
     try {
       const t = JSON.parse(raw[LEGACY_KEYS.tab]);

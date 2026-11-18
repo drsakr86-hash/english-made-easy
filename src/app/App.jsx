@@ -3,13 +3,17 @@ import * as content from '../data/legacy-content/index.js';
 import VocabSection from '../components/VocabSection.jsx';
 import GrammarSection from '../components/GrammarSection.jsx';
 import CompoundSection from '../components/CompoundSection.jsx';
+import Dashboard from '../components/Dashboard.jsx';
 import ReviewSection from '../components/ReviewSection.jsx';
 import BackupBar from '../components/BackupBar.jsx';
 import { applyResult } from '../engines/review/review.js';
+import { logActivity } from '../engines/progress/progress.js';
+import { loadActivity, saveActivity } from '../storage/activity.js';
 import { loadReview, saveReview } from '../storage/review.js';
 import { loadProgress, saveProgress, loadTab, saveTab } from '../storage/progress.js';
 
 const TABS = [
+  ['dashboard', 'الرئيسية'],
   ['words', 'كلمات'],
   ['expressions', 'تعبيرات'],
   ['idioms', 'مصطلحات'],
@@ -25,11 +29,19 @@ export default function App({ backend, migration }) {
   const [saveFailed, setSaveFailed] = useState(false);
   const [review, setReview] = useState(() => (readOnly ? {} : loadReview(backend)));
   const reviewRef = useRef(review);
+  const [activity, setActivity] = useState(() => (readOnly ? { days: {}, last: null } : loadActivity(backend)));
+  const activityRef = useRef(activity);
 
   // الحفظ يتم عند الحدث نفسه (لا داخل effect) ويُظهر تنبيهاً إن فشل.
   const commit = (next) => {
     setProgress(next);
     if (!readOnly) setSaveFailed(!saveProgress(backend, next));
+  };
+  const log = (kind, itemId) => {
+    const next = logActivity(activityRef.current, new Date(), kind, itemId);
+    activityRef.current = next;
+    setActivity(next);
+    if (!readOnly) setSaveFailed((f) => f || !saveActivity(backend, next));
   };
   // تسجيل نتيجة إجابة في سجل المراجعة بمعرّف العنصر (الوقت من الساعة هنا فقط)
   const record = (itemId, ok) => {
@@ -38,13 +50,16 @@ export default function App({ backend, migration }) {
     reviewRef.current = next;
     setReview(next);
     if (!readOnly) setSaveFailed(!saveReview(backend, next));
+    log(itemId[0] === 'g' ? 'lesson' : 'answer', itemId);
   };
   const changeTab = (k) => {
     setTab(k);
     if (!readOnly) saveTab(backend, k);
   };
-  const toggle = (section) => (id) =>
+  const toggle = (section) => (id) => {
+    if (!progress[section].includes(id)) log('mark', id); // التعليم فقط نشاط، لا إلغاؤه
     commit({ ...progress, [section]: progress[section].includes(id) ? progress[section].filter((x) => x !== id) : [...progress[section], id] });
+  };
   const complete = (id) => {
     if (!progress.grammar.includes(id)) commit({ ...progress, grammar: [...progress.grammar, id] });
   };
@@ -65,6 +80,7 @@ export default function App({ backend, migration }) {
         ))}
       </div>
       <div style={{ marginTop: 10 }}>
+        {tab === 'dashboard' && <Dashboard progress={progress} review={review} activity={activity} onGo={changeTab} />}
         {['words', 'expressions', 'idioms'].includes(tab) && (
           <VocabSection key={tab} list={content[tab]} known={progress[tab]} onToggle={toggle(tab)} onAnswer={(q, ok) => record(q.itemId, ok)} />
         )}

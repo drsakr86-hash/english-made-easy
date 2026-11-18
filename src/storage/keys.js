@@ -16,6 +16,7 @@ export const KEYS = {
   backup: 'eme.backup.v1',
   preimport: 'eme.backup.preimport',
   review: 'eme.review',
+  activity: 'eme.activity',
 };
 
 export const SCHEMA_VERSION = 2;
