@@ -51,6 +51,11 @@ await goLearn('كلمات');
 const before = await page.locator('.small').first().innerText();
 await page.locator('.card .ic[title="أتقنتها"]').nth(5).click();
 const after = await page.locator('.small').first().innerText();
+const marked = await page.evaluate(() => JSON.parse(localStorage.getItem('eme.review')).items);
+const markedIds = Object.keys(marked);
+ok('"أتقنتها" تُدخل العنصر في المراجعة (بلا إجابة محتسبة، موعده بعد يوم)', markedIds.length === 1 && /^w-\d{3}$/.test(markedIds[0]) && marked[markedIds[0]].correctCount === 0 && marked[markedIds[0]].incorrectCount === 0 && marked[markedIds[0]].reviewInterval === 1, JSON.stringify(marked).slice(0, 120));
+// عزل سيناريو المراجعة التالي: نحذف عنصر "أتقنتها" من سجل المراجعة (الحالة المختبَرة أعلاه)
+await page.evaluate(() => { const r = JSON.parse(localStorage.getItem('eme.review')); r.items = {}; localStorage.setItem('eme.review', JSON.stringify(r)); });
 await page.reload(); await page.waitForSelector('.tabs');
 const reloaded = await page.locator('.small').first().innerText();
 ok('التقدم يُحفظ بعد إعادة التحميل', after !== before && reloaded === after, `${before} → ${after} → ${reloaded}`);
@@ -317,6 +322,16 @@ await page.click('.row >> text=السجل');
 ok('سجل التعلم يعرض جلسة ودرس قراءة', (await page.locator('#root').innerText()).includes('جلسة يومية') && (await page.locator('#root').innerText()).includes('درس قراءة'));
 await page.click('.tab:has-text("الرئيسية")');
 
+// V3.6: تصحيح الكتابة الحرة بالمدرس (الخادم التجريبي)
+await page.click('.tab:has-text("مهارات")');
+await page.click('.row >> text=كتابة');
+await page.locator('.card:has-text("الإجابة عن سؤال") button.next').click();
+await page.locator('textarea').fill('I goed to school. It was fun.');
+await page.click('button:has-text("صحّح بالمدرس الذكي")');
+await page.waitForSelector('.rule:has-text("I went to school.")', { timeout: 8000 });
+ok('الكتابة الحرة: تصحيح المدرس بالجملة كاملة مع تنبيه التقدير', (await page.locator('.rule:has-text("I went to school.")').count()) >= 1 && (await page.locator('#root').innerText()).includes('وقد يخطئ'));
+await page.click('.tab:has-text("الرئيسية")');
+
 // الجمل المركبة: إصلاح F1
 await goLearn('جمل مركبة');
 let firstCorrect = 0, total = 0;
@@ -331,6 +346,8 @@ for (let r = 0; r < 4; r++) {
   await page.click('.next');
 }
 const ratio = firstCorrect / total;
+const cIds = await page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('eme.review')).items).filter((k) => k[0] === 'c'));
+ok('الجمل المركبة: الإجابات تدخل المراجعة المتباعدة بمعرّفات c-', cIds.length >= 10 && cIds.every((k) => /^c-\d{3}$/.test(k)), String(cIds.length));
 ok('الجمل المركبة: الخيار الأول ليس الصحيح دائماً', ratio > 0.1 && ratio < 0.65, `${firstCorrect}/${total} = ${(ratio * 100).toFixed(0)}%`);
 
 // قواعد: F2 — لا يكتمل الدرس بنتيجة ضعيفة، ويكتمل بنتيجة جيدة

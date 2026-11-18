@@ -72,3 +72,6 @@ h1{background:linear-gradient(90deg,#1d4ed8,#7c3aed);-webkit-background-clip:tex
 .wrap{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
 .lbl{font-size:12px;color:#6b7280;margin-top:6px}
 .small{line-height:1.7}.card>.small+.inp{margin-top:6px}
+
+.ex.sp{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ic.sm{width:32px;height:32px;font-size:15px;flex:none}

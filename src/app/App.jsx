@@ -11,9 +11,10 @@ import TutorSection from '../components/TutorSection.jsx';
 import PlacementSection from '../components/PlacementSection.jsx';
 import ReviewSection from '../components/ReviewSection.jsx';
 import BackupBar from '../components/BackupBar.jsx';
-import { applyResult } from '../engines/review/review.js';
+import { applyResult, startTracking } from '../engines/review/review.js';
 import { recordAttempt, recordFixed, addSubmission, saveVocab } from '../engines/skills/skills.js';
-import { loadTutor } from '../storage/tutor.js';
+import { loadTutor, loadEndpoint } from '../storage/tutor.js';
+import { createTutorClient, DEFAULT_ENDPOINT } from '../engines/ai/client.js';
 import { loadSkills, saveSkills, loadUserWords, saveUserWords } from '../storage/skills.js';
 import { logActivity, dayKey } from '../engines/progress/progress.js';
 import { buildDailyPlan, markTaskDone, closeSession, tasksDone } from '../engines/learning/plan.js';
@@ -80,6 +81,14 @@ export default function App({ backend, migration }) {
     if (!readOnly) setSaveFailed(!saveReview(backend, next));
     log(itemId[0] === 'g' ? 'lesson' : 'answer', itemId);
   };
+  // يبدأ تتبّع عنصر في المراجعة دون احتساب إجابة (لا يغيّر عنصراً متتبَّعاً)
+  const track = (itemId) => {
+    if (reviewRef.current[itemId]) return;
+    const next = { ...reviewRef.current, [itemId]: startTracking(undefined, itemId, new Date()) };
+    reviewRef.current = next;
+    setReview(next);
+    if (!readOnly) setSaveFailed((f) => f || !saveReview(backend, next));
+  };
   const putSkills = (next) => {
     skillsRef.current = next;
     setSkills(next);
@@ -109,6 +118,7 @@ export default function App({ backend, migration }) {
     }
     return r.status;
   };
+  const getClient = () => createTutorClient({ endpoint: readOnly ? DEFAULT_ENDPOINT : loadEndpoint(backend, DEFAULT_ENDPOINT) });
   const finishPlacement = (result) => {
     setPlacements((p) => [...p, result]);
     if (!readOnly) setSaveFailed(!addPlacement(backend, result));
@@ -159,7 +169,10 @@ export default function App({ backend, migration }) {
     if (!readOnly) saveTab(backend, k);
   };
   const toggle = (section) => (id) => {
-    if (!progress[section].includes(id)) log('mark', id); // التعليم فقط نشاط، لا إلغاؤه
+    if (!progress[section].includes(id)) {
+      log('mark', id); // التعليم فقط نشاط، لا إلغاؤه
+      track(id); // "أتقنتها" تدخل العنصر في المراجعة المتباعدة ليُختبر لاحقاً
+    }
     commit({ ...progress, [section]: progress[section].includes(id) ? progress[section].filter((x) => x !== id) : [...progress[section], id] });
   };
   const complete = (id) => {
@@ -195,12 +208,12 @@ export default function App({ backend, migration }) {
         )}
         {tab === 'grammar' && <GrammarSection lessons={content.grammar} done={progress.grammar} onComplete={complete} onResult={record} />}
         {tab === 'plan' && <PlanSection userwords={userwords} plan={plans[today] || null} minutes={planMinutes} onMinutes={changeMinutes} onCreate={createPlan} onTaskDone={planTaskDone} onClose={endSession} onAnswer={(q, ok) => record(q.itemId, ok)} onGrammarResult={grammarFinish} />}
-        {tab === 'skills' && <SkillsSection skills={skills} onAttempt={skillAttempt} onSaveVocab={saveWord} onFixedResult={fixedResult} onSaveWriting={saveWriting} />}
+        {tab === 'skills' && <SkillsSection skills={skills} onAttempt={skillAttempt} onSaveVocab={saveWord} onFixedResult={fixedResult} onSaveWriting={saveWriting} getClient={getClient} level={level()} />}
         {tab === 'tutor' && <TutorSection backend={backend} readOnly={readOnly} level={level()} onSaveVocab={saveWord} log={log} getIntel={getIntel} onGo={changeTab} />}
         {tab === 'report' && <ReportSection key={tab + today + activity.last?.at} getIntel={getIntel} onGo={changeTab} />}
         {tab === 'placement' && <PlacementSection latest={latestPlacement(placements)} onFinish={finishPlacement} />}
         {tab === 'review' && <ReviewSection records={review} userwords={userwords} onAnswer={(q, ok) => record(q.itemId, ok)} />}
-        {tab === 'compound' && <CompoundSection items={content.compound} />}
+        {tab === 'compound' && <CompoundSection items={content.compound} onAnswer={(q, ok) => record(q.itemId, ok)} />}
       </div>
       <BackupBar backend={backend} />
     </div>

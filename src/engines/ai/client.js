@@ -13,6 +13,7 @@ export const ERROR_TEXT = {
   network: 'تعذر الوصول إلى الخادم.',
   server_error: 'حدث خطأ في الخادم. أعد المحاولة.',
 };
+export const DEFAULT_ENDPOINT = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_AI_ENDPOINT) || '';
 export const errorText = (code) => ERROR_TEXT[code] || ERROR_TEXT.server_error;
 
 /** يقبل http فقط لـ localhost، وhttps لغير ذلك. */
@@ -40,7 +41,7 @@ export function createTutorClient({ endpoint, fetchImpl = (...a) => fetch(...a),
         try { data = await res.json(); } catch { data = null; }
         if (!res.ok) return { ok: false, error: (data && typeof data.error === 'string' && ERROR_TEXT[data.error] ? data.error : res.status === 429 ? 'rate_limited' : 'server_error') };
         if (!data || typeof data.reply !== 'string') return { ok: false, error: 'bad_response' };
-        const r = parseTutorReply(JSON.stringify({ reply: data.reply, corrections: data.corrections, newWords: data.newWords }));
+        const r = parseTutorReply(JSON.stringify({ reply: data.reply, corrections: data.corrections, newWords: data.newWords }), 5);
         return { ok: true, ...r };
       } catch (e) {
         return { ok: false, error: e && e.name === 'AbortError' ? 'timeout' : 'network' };

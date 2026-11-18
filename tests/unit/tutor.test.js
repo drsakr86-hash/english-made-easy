@@ -102,6 +102,19 @@ describe('الخادم الوسيط (HTTP حقيقي)', () => {
     expect(j.reply).toContain('interesting');
     expect(j.corrections[0]).toMatchObject({ original: 'I goed to school', corrected: 'I went to school' });
   });
+  it('وضع الكتابة: يقبله التحقق، والمزود التجريبي يصحح كل جملة بالجملة كاملة', async () => {
+    expect(validateChatRequest({ level: 'B1', mode: 'writing', messages: msgs('x') }).ok).toBe(true);
+    expect(buildSystemPrompt({ level: 'B1', mode: 'writing' })).toContain('Writing review');
+    const url = await boot({ provider: createMockProvider() });
+    const text = 'I goed to school. It was fun. He go home.';
+    const res = await post(url, { level: 'B1', mode: 'writing', messages: [{ role: 'user', content: text }] });
+    expect(res.status).toBe(200);
+    const j = await res.json();
+    expect(j.corrections).toEqual([
+      expect.objectContaining({ original: 'I goed to school.', corrected: 'I went to school.' }),
+      expect.objectContaining({ original: 'He go home.', corrected: 'He goes home.' }),
+    ]);
+  });
   it('طلبات غير صالحة: 400 / 404 / 405 / 413', async () => {
     const url = await boot({ provider: createMockProvider() });
     expect((await post(url, '{bad')).status).toBe(400);

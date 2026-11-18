@@ -27,7 +27,7 @@ export default function VocabSection({ list, known, onToggle, onAnswer }) {
               <button className="ic" onClick={() => onToggle(it.id)} title="أتقنتها">{known.includes(it.id) ? '✅' : '⬜'}</button>
             </div>
           </div>
-          <div className="ex">{it.ex}</div>
+          <div className="ex sp"><span>{it.ex}</span><button className="ic sm" onClick={() => speak(it.ex)} title="نطق الجملة">🔊</button></div>
           <div className="exar">{it.exAr}</div>
         </div>
       ))}

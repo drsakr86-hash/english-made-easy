@@ -9,10 +9,17 @@ const FIXES = [
 export function createMockProvider({ fail = false } = {}) {
   return {
     name: 'mock',
-    async complete({ messages }) {
+    async complete({ messages, system = '' }) {
       if (fail) throw new Error('mock failure');
       const last = messages[messages.length - 1].content;
       const corrections = [];
+      if (system.includes('Writing review')) {
+        // مراجعة كتابة: تصحيح كل جملة تحتوي خطأً معروفاً، بالجملة كاملة
+        for (const s of last.split(/(?<=[.!?])\s+/)) {
+          for (const [re, fixed, why, ex] of FIXES) if (re.test(s)) corrections.push({ original: s, corrected: s.replace(re, fixed), explanation: why, example: ex });
+        }
+        return JSON.stringify({ reply: 'Nice effort! Keep writing every day.', corrections: corrections.slice(0, 5), newWords: [] });
+      }
       for (const [re, fixed, why, ex] of FIXES) {
         const m = last.match(re);
         if (m) corrections.push({ original: last, corrected: last.replace(re, fixed), explanation: why, example: ex });

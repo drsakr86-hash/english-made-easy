@@ -26,7 +26,9 @@ export function buildSystemPrompt({ level, mode, scenarioId, topicId }) {
     'Never invent grammar rules or facts. If unsure, say so briefly.',
     'Do not ask for or use personal data (full name, phone, address, ID, passwords).',
   ];
-  if (mode === 'roleplay' && sc) {
+  if (mode === 'writing') {
+    lines.push('Writing review: the learner message is a short text they wrote. Do not continue a conversation. In "reply" give 1-2 sentences of encouraging feedback in English about the content. In "corrections" list up to 5 real mistakes, each with the learner\'s FULL original sentence and the FULL corrected sentence.');
+  } else if (mode === 'roleplay' && sc) {
     lines.push(`Role-play: you play ${sc.aiRole}. The learner plays ${sc.learnerRole}. Goal: ${sc.goal}. Stay in your role and move the scene forward.`);
   } else {
     lines.push(`Free conversation about everyday life${tp ? `, topic: ${tp.title}` : ''}. Ask one level-appropriate question at a time.`);
@@ -34,7 +36,9 @@ export function buildSystemPrompt({ level, mode, scenarioId, topicId }) {
   lines.push(
     'Reply ONLY with one JSON object, no markdown, in this exact shape:',
     '{"reply": string (your next message, English), "corrections": [{"original": string, "corrected": string, "explanation": string (Arabic, one short sentence), "example": string (English)}], "newWords": [{"en": string, "ar": string, "ex": string, "exAr": string}]}',
-    'corrections: only real mistakes in the learner\'s LAST message (max 2), else []. "original" and "corrected" must each be the learner\'s FULL sentence (before and after the fix), not a fragment. newWords: up to 2 useful words from your reply at the learner\'s level, else [].',
+    mode === 'writing'
+      ? 'corrections: real mistakes in the learner\'s text (max 5), else []. "original" and "corrected" must each be the FULL sentence (before and after the fix), not a fragment. newWords: [].'
+      : 'corrections: only real mistakes in the learner\'s LAST message (max 2), else []. "original" and "corrected" must each be the learner\'s FULL sentence (before and after the fix), not a fragment. newWords: up to 2 useful words from your reply at the learner\'s level, else [].',
   );
   return lines.join('\n');
 }
@@ -47,7 +51,7 @@ export function validateChatRequest(body) {
   const level = body.level ?? 'A2';
   if (!LEVELS.includes(level)) return { ok: false, error: 'bad_level' };
   const mode = body.mode ?? 'conversation';
-  if (!['conversation', 'roleplay'].includes(mode)) return { ok: false, error: 'bad_mode' };
+  if (!['conversation', 'roleplay', 'writing'].includes(mode)) return { ok: false, error: 'bad_mode' };
   if (mode === 'roleplay' && !scenarios.some((s) => s.id === body.scenarioId)) return { ok: false, error: 'bad_scenario' };
   if (body.topicId !== undefined && !topics.some((t) => t.id === body.topicId)) return { ok: false, error: 'bad_topic' };
   const correctionMode = body.correctionMode ?? 'instant';
@@ -69,7 +73,7 @@ export function validateChatRequest(body) {
 const str = (x, max) => (typeof x === 'string' ? x.trim().slice(0, max) : '');
 
 /** يحلل رد النموذج ويطبّعه. أي رد غير صالح يتحول إلى نص عادي بلا تصحيحات (لا ينهار التطبيق). */
-export function parseTutorReply(text) {
+export function parseTutorReply(text, maxCorrections = 2) {
   const raw = String(text ?? '').trim();
   let obj = null;
   try {
@@ -84,7 +88,7 @@ export function parseTutorReply(text) {
   const corrections = (Array.isArray(obj.corrections) ? obj.corrections : [])
     .map((c) => ({ original: str(c && c.original, 300), corrected: str(c && c.corrected, 300), explanation: str(c && c.explanation, 300), example: str(c && c.example, 300) }))
     .filter((c) => c.original && c.corrected && c.original !== c.corrected)
-    .slice(0, 2);
+    .slice(0, maxCorrections);
   const newWords = (Array.isArray(obj.newWords) ? obj.newWords : [])
     .map((w) => ({ en: str(w && w.en, 60), ar: str(w && w.ar, 80), ex: str(w && w.ex, 200), exAr: str(w && w.exAr, 200) }))
     .filter((w) => w.en && w.ar)

@@ -40,7 +40,7 @@ export function compoundQuiz(list, rng = Math.random, count = 10) {
     .map((x) => {
       const correct = x.options[x.answer];
       const opts = shuffle(x.options, rng);
-      return { q: x.en, enQ: true, sub: x.ar, opts, a: opts.indexOf(correct), enOpts: true, note: x.note };
+      return { q: x.en, enQ: true, sub: x.ar, opts, a: opts.indexOf(correct), enOpts: true, note: x.note, itemId: x.id };
     });
 }
 
@@ -51,7 +51,7 @@ export const passed = (score, total) => total > 0 && score / total >= PASS_RATIO
 // اختبار مراجعة اليوم: سؤال لكل عنصر مستحق. الكلمات بنمط اختبار الكلمات (مشتتات من نفس الوحدة)،
 // والدروس بسؤال عشوائي واحد من الدرس.
 export function reviewQuiz(dueIds, content, rng = Math.random) {
-  const lists = { w: content.words, e: content.expressions, i: content.idioms, u: Object.values((content.userwords && content.userwords.items) || {}) };
+  const lists = { w: content.words, e: content.expressions, i: content.idioms, c: content.compound, u: Object.values((content.userwords && content.userwords.items) || {}) };
   const out = [];
   for (const id of dueIds) {
     const kind = id[0];
@@ -60,6 +60,14 @@ export function reviewQuiz(dueIds, content, rng = Math.random) {
       if (!lesson) continue;
       const x = lesson.questions[Math.floor(rng() * lesson.questions.length)];
       out.push({ q: x.q, enQ: true, sub: lesson.title, opts: x.options, a: x.answer, enOpts: true, note: lesson.rule, itemId: id });
+      continue;
+    }
+    if (kind === 'c') {
+      const x = (content.compound || []).find((y) => y.id === id);
+      if (!x) continue;
+      const correct = x.options[x.answer];
+      const opts = shuffle(x.options, rng);
+      out.push({ q: x.en, enQ: true, sub: x.ar, opts, a: opts.indexOf(correct), enOpts: true, note: x.note, itemId: id });
       continue;
     }
     const list = lists[kind];

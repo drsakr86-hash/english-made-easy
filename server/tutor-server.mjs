@@ -47,7 +47,7 @@ export function createTutorServer({ provider, allowedOrigin = '', limiter = crea
       if (!v.ok) return send(res, 400, { error: v.error }, origin);
       try {
         const text = await provider.complete({ system: buildSystemPrompt(v.value), messages: v.value.messages });
-        const out = parseTutorReply(text);
+        const out = parseTutorReply(text, v.value.mode === 'writing' ? 5 : 2);
         log(`chat ok provider=${provider.name} level=${v.value.level} mode=${v.value.mode} n=${v.value.messages.length}`);
         return send(res, 200, out, origin);
       } catch (e) {

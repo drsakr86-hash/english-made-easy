@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 import { scenarios, topics } from '../data/tutor/scenarios.js';
 import { LEVELS } from '../engines/ai/prompts.js';
-import { createTutorClient, errorText, validEndpoint } from '../engines/ai/client.js';
+import { createTutorClient, errorText, validEndpoint, DEFAULT_ENDPOINT } from '../engines/ai/client.js';
 import { addAssistant, addUser, bumpUsage, canSend, contextFor, endConversation, markSaved, startConversation, DAILY_USER_CAP } from '../engines/ai/conversation.js';
 import { compareSpoken, PRONUNCIATION_NOTE } from '../engines/ai/pronunciation.js';
 import { checkFixed } from '../engines/skills/skills.js';
@@ -11,7 +11,6 @@ import { AdviceList } from './ReportSection.jsx';
 import { weeklyReport } from '../engines/progress/intelligence.js';
 
 const SUB = [['chat', 'محادثة'], ['roleplay', 'أدوار'], ['pron', 'نطق'], ['advisor', 'مرشدي'], ['history', 'سجلي']];
-const DEFAULT_ENDPOINT = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_AI_ENDPOINT) || '';
 
 function CorrectionCard({ c }) {
   const [typed, setTyped] = useState('');

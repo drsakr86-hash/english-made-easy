@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { compoundQuiz, vocabQuiz, grammarQuiz, shuffle, passed } from '../../src/modules/quiz.js';
+import { compoundQuiz, vocabQuiz, grammarQuiz, reviewQuiz, shuffle, passed } from '../../src/modules/quiz.js';
 import * as content from '../../src/data/legacy-content/index.js';
 
 // مولّد عشوائي ثابت للاختبار
@@ -98,5 +98,19 @@ describe('itemId في الاختبارات', () => {
   it('اختبار الكلمات والقواعد يحملان معرّف العنصر', () => {
     expect(vocabQuiz(content.words, lcg(1)).every((q) => /^w-\d{3}$/.test(q.itemId))).toBe(true);
     expect(grammarQuiz(content.grammar[2]).every((q) => q.itemId === 'g-003')).toBe(true);
+  });
+});
+
+describe('الجمل المركبة في المراجعة المتباعدة', () => {
+  it('أسئلة اختبار الجمل المركبة تحمل معرّف العنصر', () => {
+    for (const q of compoundQuiz(content.compound, lcg(3), 10)) expect(q.itemId).toMatch(/^c-\d+$/);
+  });
+  it('reviewQuiz يبني سؤالاً لعنصر مركّب بخياراته والصحيح بقيمته', () => {
+    const id = content.compound[0].id;
+    const [q] = reviewQuiz([id], content, lcg(5));
+    const x = content.compound[0];
+    expect(q.itemId).toBe(id);
+    expect(q.opts[q.a]).toBe(x.options[x.answer]);
+    expect([...q.opts].sort()).toEqual([...x.options].sort());
   });
 });

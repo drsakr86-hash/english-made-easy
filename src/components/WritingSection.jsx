@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { writing } from '../data/skills/writing.js';
 import { checkFixed, checkFree } from '../engines/skills/skills.js';
+import { errorText } from '../engines/ai/client.js';
+import { LEVELS, LIMITS } from '../engines/ai/prompts.js';
 
 const KIND = { build: 'تكوين جملة', fix: 'تصحيح جملة', answer: 'الإجابة عن سؤال', paragraph: 'كتابة فقرة', situation: 'وصف موقف', message: 'رسالة يومية' };
 const label = (t) => KIND[t.type === 'free' ? t.kind : t.type];
@@ -45,7 +47,42 @@ function Fix({ task, onResult }) {
   );
 }
 
-function Free({ task, onSave, saved }) {
+function AiReview({ text, getClient, level }) {
+  const [state, setState] = useState(null); // null | 'busy' | {error} | {reply, corrections}
+  const client = getClient();
+  const tooLong = text.length > LIMITS.maxChars;
+  const run = async () => {
+    setState('busy');
+    const out = await client.chat({ level: LEVELS.includes(level) ? level : 'A2', mode: 'writing', messages: [{ role: 'user', content: text.trim() }] });
+    setState(out.ok ? { reply: out.reply, corrections: out.corrections } : { error: out.error });
+  };
+  return (
+    <div style={{ marginTop: 8 }}>
+      <button className="btn" disabled={!text.trim() || tooLong || state === 'busy' || !client.configured} onClick={run}>
+        {state === 'busy' ? 'جارٍ التصحيح…' : 'صحّح بالمدرس الذكي'}
+      </button>
+      {!client.configured && <div className="small">يحتاج المدرس الذكي (يُفعَّل من تبويب المدرس). الفحص الآلي أعلاه يعمل دونه.</div>}
+      {tooLong && <div className="small badc">النص أطول من {LIMITS.maxChars} حرفاً: قسّمه إلى أجزاء للتصحيح.</div>}
+      {state && state.error && <div className="notice">{errorText(state.error)}</div>}
+      {state && state.reply !== undefined && (
+        <div className="rule">
+          <div className="ex">{state.reply}</div>
+          {state.corrections.length === 0 && <div className="okc">لم يجد المدرس أخطاء واضحة ✅</div>}
+          {state.corrections.map((c, i) => (
+            <div key={i} style={{ marginTop: 6 }}>
+              <div className="ex"><span className="badc">✗</span> {c.original}</div>
+              <div className="ex"><span className="okc">✓</span> {c.corrected}</div>
+              {c.explanation && <div>{c.explanation}</div>}
+            </div>
+          ))}
+          <div className="small" style={{ marginTop: 6 }}>التصحيح آلي وتقديري وقد يخطئ، فراجعه بنفسك.</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Free({ task, onSave, saved, getClient, level }) {
   const [text, setText] = useState('');
   const [checks, setChecks] = useState(null);
   return (
@@ -56,6 +93,7 @@ function Free({ task, onSave, saved }) {
         <button className="btn" disabled={!text.trim()} onClick={() => setChecks(checkFree(task, text))}>فحص آلي</button>
         <button className="btn on" disabled={!text.trim()} onClick={() => { onSave(task.id, text, checks || checkFree(task, text)); setText(''); setChecks(null); }}>احفظ كتابتي</button>
       </div>
+      <AiReview key={text} text={text} getClient={getClient} level={level} />
       {checks && (
         <div className="rule">
           <div className="small">فحص آلي تقريبي للشكل فقط (الطول والحروف والترقيم والكلمات المطلوبة). لا يقيّم صحة القواعد ولا جودة المعنى.</div>
@@ -72,7 +110,7 @@ function Free({ task, onSave, saved }) {
   );
 }
 
-export default function WritingSection({ skills, onFixedResult, onSave }) {
+export default function WritingSection({ skills, onFixedResult, onSave, getClient, level }) {
   const [open, setOpen] = useState(null);
   const [mine, setMine] = useState(false);
   if (mine) {
@@ -90,7 +128,7 @@ export default function WritingSection({ skills, onFixedResult, onSave }) {
         <button className="btn" style={{ marginBottom: 8 }} onClick={() => setOpen(null)}>رجوع للمهام</button>
         {open.type === 'build' && <Build key={open.id} task={open} onResult={onFixedResult} />}
         {open.type === 'fix' && <Fix key={open.id} task={open} onResult={onFixedResult} />}
-        {open.type === 'free' && <Free key={open.id} task={open} onSave={onSave} saved={skills.submissions.filter((s) => s.taskId === open.id)} />}
+        {open.type === 'free' && <Free key={open.id} task={open} onSave={onSave} saved={skills.submissions.filter((s) => s.taskId === open.id)} getClient={getClient} level={level} />}
       </div>
     );
   }

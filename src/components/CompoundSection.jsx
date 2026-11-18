@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import Quiz from './Quiz.jsx';
 import { compoundQuiz } from '../modules/quiz.js';
+import { speak } from './speech.js';
 
-export default function CompoundSection({ items }) {
+export default function CompoundSection({ items, onAnswer }) {
   const [qs, setQs] = useState(null);
   const [open, setOpen] = useState(false);
-  if (qs) return <Quiz qs={qs} onFinish={() => setQs(null)} />;
+  if (qs) return <Quiz qs={qs} onAnswer={onAnswer} onFinish={() => setQs(null)} />;
   return (
     <div>
       <div className="row">
@@ -19,7 +20,7 @@ export default function CompoundSection({ items }) {
       )}
       {items.map((x) => (
         <div className="card comp" key={x.id}>
-          <div className="en">{x.en.replace('___', '____')}</div>
+          <div className="en">{x.en.replace('___', '____')} <button className="ic sm" onClick={() => speak(x.en.replace('___', x.options[x.answer]))} title="نطق الجملة كاملة">🔊</button></div>
           <div className="ar">{x.ar}</div>
           <div className="small">الأداة: <b style={{ direction: 'ltr', display: 'inline-block' }}>{x.options[x.answer]}</b> — {x.note}</div>
         </div>

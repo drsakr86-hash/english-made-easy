@@ -15,7 +15,9 @@ export function itemName(id, content, userwords) {
   const it = all.find((x) => x.id === id) || (userwords && userwords.items[id]);
   if (it) return it.en;
   const g = content.grammar.find((x) => x.id === id);
-  return g ? g.title : id;
+  if (g) return g.title;
+  const c = (content.compound || []).find((x) => x.id === id);
+  return c ? c.en : id;
 }
 
 /** نافذة الأيام المحلية: آخر n يوماً تنتهي باليوم الحالي. */
