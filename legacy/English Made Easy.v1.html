@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>English Made Easy</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'Cairo',sans-serif;background:#f6f7f9;color:#1f2937}
+#root{max-width:720px;margin:0 auto;padding:12px 12px 40px}
+h1{font-size:22px;margin:8px 0 2px}
+.sub{color:#6b7280;font-size:14px;margin-bottom:10px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px}
+.tab{flex:none;border:1px solid #d1d5db;background:#fff;border-radius:20px;padding:6px 14px;font:inherit;font-size:14px;cursor:pointer}
+.tab.on{background:#1f2937;color:#fff;border-color:#1f2937}
+.bar{height:8px;background:#e5e7eb;border-radius:4px;margin:8px 0 12px;overflow:hidden}
+.bar i{display:block;height:100%;background:#16a34a}
+.row{display:flex;gap:8px;margin-bottom:12px}
+.btn{flex:1;border:1px solid #d1d5db;background:#fff;border-radius:10px;padding:9px;font:inherit;cursor:pointer}
+.btn.on{background:#2563eb;color:#fff;border-color:#2563eb}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin-bottom:10px}
+.en{font-size:19px;font-weight:700;direction:ltr;text-align:left}
+.ar{font-size:16px;margin-top:2px}
+.ex{direction:ltr;text-align:left;color:#4b5563;font-size:14px;margin-top:8px}
+.exar{color:#6b7280;font-size:13px}
+.small{font-size:13px;color:#6b7280}
+.opt{display:block;width:100%;text-align:right;border:1px solid #d1d5db;background:#fff;border-radius:10px;padding:10px;margin-top:8px;font:inherit;cursor:pointer}
+.opt.en2{direction:ltr;text-align:left}
+.opt.ok{background:#dcfce7;border-color:#16a34a}
+.opt.bad{background:#fee2e2;border-color:#dc2626}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.ic{border:none;background:none;font-size:20px;cursor:pointer;padding:0}
+.rule{background:#eff6ff;border-radius:8px;padding:10px;margin-top:8px;font-size:15px;line-height:1.8}
+.next{margin-top:12px;width:100%;border:none;background:#1f2937;color:#fff;border-radius:10px;padding:10px;font:inherit;cursor:pointer}
+.score{text-align:center;font-size:20px;padding:20px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useMemo} = React;
+
+const W = [
+["achieve","يحقق","She worked hard to achieve her goal.","عملت بجد لتحقق هدفها."],
+["improve","يُحسّن","I want to improve my English.","أريد تحسين لغتي الإنجليزية."],
+["decide","يقرر","We decided to travel by train.","قررنا السفر بالقطار."],
+["suggest","يقترح","I suggest we leave early.","أقترح أن نغادر مبكراً."],
+["avoid","يتجنب","Try to avoid fast food.","حاول تجنب الوجبات السريعة."],
+["borrow","يستعير","Can I borrow your pen?","هل أستعير قلمك؟"],
+["lend","يُعير / يُقرض","Could you lend me some money?","هل تقرضني بعض المال؟"],
+["recommend","يوصي بـ","I recommend this book.","أوصي بهذا الكتاب."],
+["manage","ينجح في / يدير","He managed to finish on time.","نجح في الانتهاء في الوقت."],
+["notice","يلاحظ","Did you notice the sign?","هل لاحظت اللافتة؟"],
+["afford","يتحمل ثمن","I can't afford a new car.","لا أستطيع تحمل ثمن سيارة جديدة."],
+["require","يتطلب","This job requires experience.","هذه الوظيفة تتطلب خبرة."],
+["improve","يتحسن","His health is improving.","صحته تتحسن."],
+["arrange","ينظّم / يرتب","I'll arrange a meeting.","سأرتب اجتماعاً."],
+["belong","ينتمي / يخص","This book belongs to me.","هذا الكتاب يخصني."],
+["careful","حذر","Be careful on the road.","كن حذراً على الطريق."],
+["comfortable","مريح","This chair is very comfortable.","هذا الكرسي مريح جداً."],
+["dangerous","خطير","Smoking is dangerous.","التدخين خطير."],
+["enough","كافٍ","We have enough time.","لدينا وقت كافٍ."],
+["familiar","مألوف","Her face looks familiar.","وجهها يبدو مألوفاً."],
+["honest","صادق","He is an honest man.","إنه رجل صادق."],
+["necessary","ضروري","It is necessary to rest.","من الضروري أن ترتاح."],
+["patient","صبور","Be patient with children.","كن صبوراً مع الأطفال."],
+["reliable","يُعتمد عليه","She is a reliable friend.","هي صديقة يُعتمد عليها."],
+["ordinary","عادي","It was an ordinary day.","كان يوماً عادياً."],
+["knowledge","معرفة","Knowledge is power.","المعرفة قوة."],
+["opportunity","فرصة","This is a great opportunity.","هذه فرصة رائعة."],
+["experience","خبرة / تجربة","He has ten years of experience.","لديه عشر سنوات خبرة."],
+["environment","بيئة","We must protect the environment.","يجب أن نحمي البيئة."],
+["advantage","ميزة","Speed is an advantage.","السرعة ميزة."],
+["suddenly","فجأة","Suddenly, it started to rain.","فجأة بدأ المطر."],
+["actually","في الواقع","Actually, I disagree.","في الواقع، أنا لا أوافق."],
+["probably","على الأرجح","He will probably come.","سيأتي على الأرجح."],
+["although","رغم أن","Although it was late, we stayed.","رغم أن الوقت تأخر، بقينا."],
+["however","ومع ذلك","However, I still like it.","ومع ذلك ما زلت أحبه."],
+["instead","بدلاً من ذلك","Take tea instead.","خذ شاياً بدلاً من ذلك."],
+["maybe","ربما","Maybe we can meet tomorrow.","ربما نلتقي غداً."],
+["already","بالفعل","I have already eaten.","لقد أكلت بالفعل."],
+["recently","مؤخراً","I recently moved here.","انتقلت إلى هنا مؤخراً."],
+["rarely","نادراً","He rarely complains.","نادراً ما يشتكي."]
+].map(a=>({en:a[0],ar:a[1],ex:a[2],exAr:a[3]}));
+
+const E = [
+["How come?","كيف ذلك؟ / لماذا؟","How come you didn't call me?","لماذا لم تتصل بي؟"],
+["Take your time.","خذ وقتك.","Take your time, there's no rush.","خذ وقتك، لا يوجد استعجال."],
+["I'm looking forward to it.","أتطلع إليه بشوق.","I'm looking forward to the trip.","أتطلع للرحلة بشوق."],
+["It's up to you.","الأمر عائد إليك.","Pizza or pasta? It's up to you.","بيتزا أم مكرونة؟ القرار لك."],
+["I couldn't agree more.","أوافق تماماً.","That's true. I couldn't agree more.","هذا صحيح، أوافقك تماماً."],
+["No wonder.","لا عجب.","He didn't sleep. No wonder he's tired.","لم ينم. لا عجب أنه متعب."],
+["Make yourself at home.","اعتبر نفسك في بيتك.","Come in and make yourself at home.","تفضل واعتبر نفسك في بيتك."],
+["Keep in touch.","ابقَ على تواصل.","Let's keep in touch.","لنبقَ على تواصل."],
+["What do you do for a living?","ماذا تعمل؟","What do you do for a living?","ما هو عملك؟"],
+["I'm afraid I can't.","للأسف لا أستطيع.","I'm afraid I can't come tonight.","للأسف لا أستطيع القدوم الليلة."],
+["Do you mind if I sit here?","هل تمانع لو جلست هنا؟","Do you mind if I sit here?","هل تمانع أن أجلس هنا؟"],
+["Excuse me, could you help me?","عفواً، هل تساعدني؟","Excuse me, could you help me?","عفواً، هل يمكنك مساعدتي؟"],
+["That makes sense.","هذا منطقي.","Oh, that makes sense now.","آه، هذا منطقي الآن."],
+["I'll get back to you.","سأعود إليك بالرد.","I'll get back to you tomorrow.","سأرد عليك غداً."],
+["It doesn't matter.","لا يهم.","Don't worry, it doesn't matter.","لا تقلق، لا يهم."],
+["Sorry to bother you.","آسف على الإزعاج.","Sorry to bother you, but I'm lost.","آسف على الإزعاج، لكني تائه."],
+["Let me think about it.","دعني أفكر في الأمر.","Let me think about it.","دعني أفكر في الأمر."],
+["What a pity!","يا للأسف!","You missed the party? What a pity!","فاتتك الحفلة؟ يا للأسف!"],
+["Just in case.","تحسباً.","Take an umbrella just in case.","خذ مظلة تحسباً."],
+["By the way,","على فكرة،","By the way, did you call him?","على فكرة، هل اتصلت به؟"]
+].map(a=>({en:a[0],ar:a[1],ex:a[2],exAr:a[3]}));
+
+const I = [
+["Break the ice","يكسر الجمود","He told a joke to break the ice.","حكى نكتة ليكسر الجمود."],
+["Piece of cake","شيء سهل جداً","The exam was a piece of cake.","كان الامتحان في غاية السهولة."],
+["Once in a blue moon","نادراً جداً","We eat out once in a blue moon.","نأكل بالخارج نادراً جداً."],
+["Under the weather","متوعك الصحة","I'm feeling under the weather.","أشعر بتوعك."],
+["Hit the books","يذاكر بجد","I have to hit the books tonight.","يجب أن أذاكر بجد الليلة."],
+["Spill the beans","يفشي السر","Don't spill the beans about the party.","لا تفشِ سر الحفلة."],
+["Cost an arm and a leg","غالٍ جداً","That watch costs an arm and a leg.","تلك الساعة غالية جداً."],
+["Let the cat out of the bag","يكشف السر دون قصد","She let the cat out of the bag.","كشفت السر دون قصد."],
+["Bite the bullet","يتحمل أمراً صعباً","I'll just bite the bullet and do it.","سأتحمل وأفعلها."],
+["Call it a day","ينهي العمل لهذا اليوم","We're tired. Let's call it a day.","نحن متعبون. لننهِ اليوم."],
+["On the same page","متفقون في الفهم","Let's make sure we're on the same page.","لنتأكد أننا متفقون."],
+["Get out of hand","يخرج عن السيطرة","The party got out of hand.","خرجت الحفلة عن السيطرة."],
+["Hit the nail on the head","يصيب كبد الحقيقة","You hit the nail on the head.","لقد أصبت كبد الحقيقة."],
+["Better late than never","أن تأتي متأخراً خير من ألا تأتي","Better late than never!","أن تأتي متأخراً خير من ألا تأتي!"],
+["Back to square one","العودة إلى نقطة البداية","The plan failed; we're back to square one.","فشلت الخطة، عدنا للبداية."],
+["A blessing in disguise","نعمة في ثوب نقمة","Losing that job was a blessing in disguise.","كان فقدان الوظيفة نعمة مخفية."],
+["Speak of the devil","يا مسهّل (عند ظهور من نتحدث عنه)","Speak of the devil, here he comes!","ها هو قد وصل!"],
+["The ball is in your court","الكرة في ملعبك","I've made my offer. The ball is in your court.","قدمت عرضي. القرار بيدك."],
+["Kill two birds with one stone","عصفوران بحجر","Let's kill two birds with one stone.","لنحقق هدفين بخطوة واحدة."],
+["Burn the midnight oil","يسهر للعمل","He burned the midnight oil to finish.","سهر ليكمل العمل."]
+].map(a=>({en:a[0],ar:a[1],ex:a[2],exAr:a[3]}));
+
+// قواعد: كل درس له شرح وتمارين (ناقص + خيارات + إجابة)
+const G = [
+{t:"المضارع البسيط Present Simple",r:"نستخدمه للعادات والحقائق. مع he/she/it نضيف s للفعل: She works. وللنفي والسؤال نستخدم do/does.",q:[["He ___ to school every day.",["go","goes","going"],1],["She ___ like coffee.",["don't","doesn't","isn't"],1],["___ you play football?",["Do","Does","Are"],0]]},
+{t:"المضارع المستمر Present Continuous",r:"للحدث الجاري الآن: am/is/are + فعل+ing. مثال: I am reading now.",q:[["They ___ watching TV now.",["is","are","do"],1],["I am ___ a letter.",["write","writes","writing"],2],["Look! It ___ raining.",["is","are","does"],0]]},
+{t:"الماضي البسيط Past Simple",r:"للحدث انتهى في الماضي. الفعل المنتظم + ed (worked)، وغير المنتظم يتغير (go → went). في النفي والسؤال نستخدم did + الفعل الأصلي.",q:[["Yesterday I ___ to the market.",["go","went","gone"],1],["She ___ not call me.",["do","does","did"],2],["Did you ___ the movie?",["enjoyed","enjoy","enjoys"],1]]},
+{t:"المضارع التام Present Perfect",r:"have/has + التصريف الثالث. للتجربة أو حدث ماضٍ له أثر الآن: I have seen it. نستخدم for مع المدة وsince مع نقطة البداية.",q:[["I have ___ here for two years.",["live","lived","living"],1],["She ___ finished her homework.",["have","has","is"],1],["He has worked here ___ 2020.",["for","since","at"],1]]},
+{t:"المستقبل Will / Going to",r:"will للقرار اللحظي والتوقع: I'll help you. be going to للخطة المسبقة: I'm going to study medicine.",q:[["The phone is ringing. I ___ answer it.",["will","am going to","do"],0],["We ___ visit Cairo next week; we booked tickets.",["will","are going to","did"],1]]},
+{t:"الأفعال الناقصة Modal Verbs",r:"can للقدرة، must للضرورة، should للنصيحة، may للاحتمال والإذن. بعدها الفعل الأصلي بدون to وبدون s.",q:[["You ___ see a doctor. (نصيحة)",["should","can","did"],0],["He can ___ English well.",["speaks","speak","to speak"],1],["You ___ not smoke here. (ممنوع)",["must","may","would"],0]]},
+{t:"المقارنة Comparatives & Superlatives",r:"الصفة القصيرة: er / est (taller / tallest). الطويلة: more / most (more expensive / most expensive). نستخدم than بعد المقارنة.",q:[["This book is ___ than that one.",["interesting","more interesting","most interesting"],1],["He is the ___ student in class.",["tall","taller","tallest"],2],["My car is ___ than yours.",["fast","faster","fastest"],1]]},
+{t:"أدوات التنكير والتعريف a / an / the",r:"a قبل صوت ساكن (a book)، an قبل صوت متحرك (an apple). the للشيء المعروف أو المذكور سابقاً.",q:[["She is ___ engineer.",["a","an","the"],1],["I saw ___ dog. ___ dog was big.",["a / The","the / A","an / The"],0],["He eats ___ apple daily.",["a","an","the"],1]]},
+{t:"حروف الجر In / On / At",r:"at للوقت المحدد والمكان الدقيق (at 5, at the door). on للأيام والتواريخ (on Monday). in للشهور والسنوات والأماكن الكبيرة (in May, in Egypt).",q:[["The meeting is ___ Monday.",["in","on","at"],1],["I was born ___ 1990.",["in","on","at"],0],["See you ___ 6 o'clock.",["in","on","at"],2]]},
+{t:"الجمل الشرطية Conditionals",r:"النوع الأول (محتمل): If + مضارع، will + فعل. النوع الثاني (خيالي): If + ماضٍ، would + فعل. مثال: If I were rich, I would travel.",q:[["If it rains, we ___ at home.",["stay","will stay","would stay"],1],["If I ___ you, I would apologize.",["am","was","were"],2],["If she studies, she ___ pass.",["will","would","did"],0]]},
+{t:"المبني للمجهول Passive Voice",r:"be + التصريف الثالث. نستخدمه عندما يهمنا الحدث لا الفاعل: The window was broken.",q:[["English ___ all over the world.",["speaks","is spoken","spoke"],1],["The cake ___ by my mother yesterday.",["was made","made","is make"],0],["Many cars ___ in Japan.",["produce","is produced","are produced"],2]]}
+];
+
+// جمل مركبة: جملة بها فراغ للأداة الرابطة
+const C = [
+{en:"I was tired, ___ I kept working.",ar:"كنت متعباً لكنني واصلت العمل.",o:["but","so","because"],a:0,n:"but للتناقض"},
+{en:"It was raining, ___ we stayed home.",ar:"كان المطر ينزل، لذلك بقينا في البيت.",o:["so","but","or"],a:0,n:"so للنتيجة"},
+{en:"She passed the exam ___ she studied hard.",ar:"نجحت في الامتحان لأنها ذاكرت بجد.",o:["because","so","although"],a:0,n:"because للسبب"},
+{en:"___ he was sick, he went to work.",ar:"رغم أنه كان مريضاً ذهب للعمل.",o:["Although","Because","So"],a:0,n:"although للتضاد (مع جملة كاملة)"},
+{en:"You can have tea ___ coffee.",ar:"يمكنك أن تأخذ شاياً أو قهوة.",o:["or","and","but"],a:0,n:"or للاختيار"},
+{en:"He opened the door ___ walked in.",ar:"فتح الباب ودخل.",o:["and","but","if"],a:0,n:"and للإضافة"},
+{en:"I will call you ___ I arrive.",ar:"سأتصل بك عندما أصل.",o:["when","but","so"],a:0,n:"when للزمن"},
+{en:"Stay here ___ I come back.",ar:"ابقَ هنا حتى أعود.",o:["until","because","or"],a:0,n:"until لـ حتى"},
+{en:"___ you study, you will fail.",ar:"إن لم تذاكر ستفشل. (إن لم = unless)",o:["Unless","Because","While"],a:0,n:"unless = if ... not"},
+{en:"I read a book ___ she cooked dinner.",ar:"قرأت كتاباً بينما كانت تطبخ العشاء.",o:["while","unless","so"],a:0,n:"while لحدثين في نفس الوقت"},
+{en:"The man ___ lives next door is a doctor.",ar:"الرجل الذي يسكن بجوارنا طبيب.",o:["who","which","whose"],a:0,n:"who للأشخاص (جملة وصل)"},
+{en:"This is the book ___ I bought yesterday.",ar:"هذا هو الكتاب الذي اشتريته أمس.",o:["which","who","where"],a:0,n:"which للأشياء"},
+{en:"That is the school ___ I studied.",ar:"تلك هي المدرسة التي درست فيها.",o:["where","who","which"],a:0,n:"where للأماكن"},
+{en:"She is the girl ___ father is a pilot.",ar:"هي الفتاة التي أبوها طيار.",o:["whose","who","where"],a:0,n:"whose للملكية"},
+{en:"He was late ___ the traffic was heavy.",ar:"تأخر لأن الزحام كان شديداً.",o:["because","but","or"],a:0,n:"because + سبب"},
+{en:"It was cold; ___, we went swimming.",ar:"كان الجو بارداً؛ ومع ذلك ذهبنا للسباحة.",o:["however","because","and"],a:0,n:"however = ومع ذلك"},
+{en:"I studied hard ___ I could pass.",ar:"ذاكرت بجد حتى أنجح.",o:["so that","but","or"],a:0,n:"so that للغرض"},
+{en:"If I ___ time, I would help you.",ar:"لو كان عندي وقت لساعدتك.",o:["had","have","will have"],a:0,n:"شرطي من النوع الثاني"}
+];
+
+const mk=a=>({en:a[0],ar:a[1],ex:a[2],exAr:a[3]});
+function addUnique(list,items){const seen=new Set();const out=[];[...list,...items].forEach(x=>{if(!seen.has(x.en)){seen.add(x.en);out.push(x)}});list.length=0;out.forEach(x=>list.push(x));}
+
+addUnique(W,[
+["accept","يقبل","She accepted the job offer.","قبلت عرض العمل."],
+["admit","يعترف","He admitted his mistake.","اعترف بخطئه."],
+["advise","ينصح","The doctor advised me to rest.","نصحني الطبيب بالراحة."],
+["agree","يوافق","I agree with you.","أوافقك الرأي."],
+["allow","يسمح","They don't allow phones here.","لا يسمحون بالهواتف هنا."],
+["announce","يعلن","They announced the results.","أعلنوا النتائج."],
+["appear","يظهر","A sign appeared on the screen.","ظهرت علامة على الشاشة."],
+["apologize","يعتذر","I apologize for being late.","أعتذر عن التأخير."],
+["attend","يحضر","She attends English classes.","تحضر دروس الإنجليزية."],
+["believe","يؤمن / يصدق","I believe you.","أصدقك."],
+["cancel","يلغي","They cancelled the flight.","ألغوا الرحلة."],
+["celebrate","يحتفل","We celebrate every success.","نحتفل بكل نجاح."],
+["compare","يقارن","Compare the two prices.","قارن بين السعرين."],
+["complain","يشتكي","He complains about everything.","يشتكي من كل شيء."],
+["consider","يفكر في / يعتبر","Consider my offer.","فكر في عرضي."],
+["continue","يواصل","Please continue reading.","واصل القراءة من فضلك."],
+["describe","يصف","Describe your room.","صف غرفتك."],
+["develop","يطوّر","They develop new software.","يطورون برامج جديدة."],
+["discover","يكتشف","He discovered a new way.","اكتشف طريقة جديدة."],
+["encourage","يشجع","Teachers encourage students.","يشجع المعلمون الطلاب."],
+["explain","يشرح","Can you explain this rule?","هل تشرح هذه القاعدة؟"],
+["forget","ينسى","Don't forget your keys.","لا تنسَ مفاتيحك."],
+["forgive","يسامح","Please forgive me.","سامحني من فضلك."],
+["happen","يحدث","What happened?","ماذا حدث؟"],
+["hope","يأمل","I hope you feel better.","آمل أن تتحسن."],
+["imagine","يتخيل","Imagine a world without cars.","تخيل عالماً بلا سيارات."],
+["invite","يدعو","She invited us to dinner.","دعتنا إلى العشاء."],
+["join","ينضم","Join us for lunch.","انضم إلينا للغداء."],
+["knock","يطرق","Someone knocked on the door.","طرق أحدهم الباب."],
+["offer","يعرض","They offered me a job.","عرضوا عليّ وظيفة."],
+["prefer","يفضّل","I prefer tea to coffee.","أفضل الشاي على القهوة."],
+["prepare","يحضّر","Prepare for the exam.","استعد للامتحان."],
+["promise","يعد","I promise to help.","أعدك بالمساعدة."],
+["protect","يحمي","Helmets protect your head.","الخوذة تحمي رأسك."],
+["receive","يستلم","I received your message.","استلمت رسالتك."],
+["reduce","يقلل","Reduce the noise.","قلل الضجيج."],
+["refuse","يرفض","He refused to answer.","رفض أن يجيب."],
+["remind","يذكّر","Remind me to call him.","ذكّرني أن أتصل به."],
+["repeat","يكرر","Please repeat the question.","كرر السؤال من فضلك."],
+["succeed","ينجح","Hard work helps you succeed.","العمل الجاد يساعدك على النجاح."],
+["wonder","يتساءل","I wonder where he is.","أتساءل أين هو."],
+["ancient","قديم جداً","Egypt has ancient temples.","في مصر معابد قديمة."],
+["brave","شجاع","The firefighter was brave.","كان رجل الإطفاء شجاعاً."],
+["cheap","رخيص","This phone is cheap.","هذا الهاتف رخيص."],
+["curious","فضولي","Children are curious.","الأطفال فضوليون."],
+["defeat","هزيمة","They accepted the defeat.","تقبلوا الهزيمة."],
+["delicious","لذيذ","The soup is delicious.","الشوربة لذيذة."],
+["difficult","صعب","The test was difficult.","كان الاختبار صعباً."],
+["empty","فارغ","The room is empty.","الغرفة فارغة."],
+["flexible","مرن","My schedule is flexible.","جدولي مرن."],
+["generous","كريم","He is a generous man.","إنه رجل كريم."],
+["helpful","مفيد / متعاون","The staff were helpful.","كان الموظفون متعاونين."],
+["impossible","مستحيل","Nothing is impossible.","لا شيء مستحيل."],
+["lazy","كسول","Don't be lazy.","لا تكن كسولاً."],
+["modern","حديث","It's a modern building.","إنه مبنى حديث."],
+["nervous","متوتر","I felt nervous before the exam.","شعرت بالتوتر قبل الامتحان."],
+["polite","مهذب","Be polite to others.","كن مهذباً مع الآخرين."],
+["popular","شائع / مشهور","Football is popular.","كرة القدم شائعة."],
+["proud","فخور","I'm proud of you.","أنا فخور بك."],
+["quiet","هادئ","The library is quiet.","المكتبة هادئة."],
+["rude","وقح","It's rude to interrupt.","من الوقاحة أن تقاطع."],
+["safe","آمن","This area is safe.","هذه المنطقة آمنة."],
+["serious","جاد / خطير","It's a serious problem.","إنها مشكلة خطيرة."],
+["tidy","مرتب","Keep your room tidy.","أبقِ غرفتك مرتبة."],
+["useful","مفيد","This app is very useful.","هذا التطبيق مفيد جداً."],
+["wealthy","ثري","A wealthy family lives here.","تعيش هنا عائلة ثرية."],
+["ability","قدرة","She has the ability to learn fast.","لديها القدرة على التعلم بسرعة."],
+["article","مقال","I read an article about health.","قرأت مقالاً عن الصحة."],
+["attitude","موقف / سلوك","Keep a positive attitude.","حافظ على موقف إيجابي."],
+["benefit","فائدة","Exercise has many benefits.","للرياضة فوائد كثيرة."],
+["challenge","تحدٍّ","Learning a language is a challenge.","تعلم لغة تحدٍّ."],
+["choice","اختيار","You have two choices.","لديك خياران."],
+["competition","منافسة","There is strong competition.","هناك منافسة قوية."],
+["decision","قرار","It was a hard decision.","كان قراراً صعباً."],
+["difference","فرق","What's the difference?","ما الفرق؟"],
+["education","تعليم","Education is important.","التعليم مهم."],
+["effort","جهد","Make an effort.","ابذل جهداً."],
+["habit","عادة","Reading is a good habit.","القراءة عادة جيدة."],
+["journey","رحلة","It was a long journey.","كانت رحلة طويلة."],
+["lack","نقص","Lack of sleep is harmful.","نقص النوم مضر."],
+["method","طريقة","This method works well.","هذه الطريقة تعمل جيداً."],
+["pleasure","سرور","It's a pleasure to meet you.","يسعدني لقاؤك."],
+["reason","سبب","What's the reason?","ما السبب؟"],
+["result","نتيجة","The results were great.","كانت النتائج رائعة."],
+["society","مجتمع","Society is changing.","المجتمع يتغير."],
+["solution","حل","We need a solution.","نحتاج إلى حل."],
+["throughout","طوال / في كل أنحاء","It rained throughout the day.","أمطرت طوال اليوم."],
+["whether","سواء / إذا كان","I don't know whether he'll come.","لا أعرف إن كان سيأتي."],
+["otherwise","وإلا","Hurry up, otherwise we'll be late.","أسرع وإلا سنتأخر."],
+["nearly","تقريباً","I nearly missed the bus.","كدت أفوّت الحافلة."],
+["especially","خاصةً","I love fruit, especially mangoes.","أحب الفاكهة خاصة المانجو."],
+["therefore","لذلك","He was ill; therefore, he stayed home.","كان مريضاً؛ لذلك بقي في البيت."]
+].map(mk));
+
+addUnique(E,[
+["Long time no see!","مضى وقت طويل!","Long time no see! How are you?","مضى وقت طويل! كيف حالك؟"],
+["What's up?","ما الأخبار؟","Hey, what's up?","مرحباً، ما الأخبار؟"],
+["Nice to meet you.","تشرفت بمعرفتك.","Nice to meet you, Sara.","تشرفت بمعرفتك يا سارة."],
+["How have you been?","كيف كانت أحوالك؟","I haven't seen you. How have you been?","لم أرك منذ مدة. كيف حالك؟"],
+["Could you repeat that, please?","هل تعيد ذلك من فضلك؟","Could you repeat that, please?","هل تعيد ذلك من فضلك؟"],
+["I didn't catch that.","لم أفهم ما قلت.","Sorry, I didn't catch that.","آسف، لم أفهم ما قلت."],
+["What does this word mean?","ما معنى هذه الكلمة؟","What does this word mean?","ما معنى هذه الكلمة؟"],
+["How do you say it in English?","كيف تقولها بالإنجليزية؟","How do you say 'شكراً' in English?","كيف تقول شكراً بالإنجليزية؟"],
+["I'm just looking, thanks.","أنظر فقط، شكراً.","I'm just looking, thanks.","أنظر فقط، شكراً."],
+["How much is this?","بكم هذا؟","How much is this shirt?","بكم هذا القميص؟"],
+["Can I have the bill, please?","هل أحصل على الفاتورة؟","Can I have the bill, please?","هل أحصل على الفاتورة من فضلك؟"],
+["I'd like to book a table.","أود حجز طاولة.","I'd like to book a table for two.","أود حجز طاولة لشخصين."],
+["Could you give me directions?","هل تدلّني على الطريق؟","Could you give me directions to the station?","هل تدلني على الطريق للمحطة؟"],
+["I'm on my way.","أنا في الطريق.","Don't worry, I'm on my way.","لا تقلق، أنا في الطريق."],
+["I'll be right back.","سأعود حالاً.","Wait here, I'll be right back.","انتظر هنا، سأعود حالاً."],
+["Don't mention it.","لا شكر على واجب.","Thanks! — Don't mention it.","شكراً! — لا شكر على واجب."],
+["It's my pleasure.","يسعدني ذلك.","Thank you. — It's my pleasure.","شكراً. — يسعدني ذلك."],
+["Congratulations!","مبروك!","Congratulations on your new job!","مبروك الوظيفة الجديدة!"],
+["Good luck!","بالتوفيق!","Good luck with your exam!","بالتوفيق في امتحانك!"],
+["Bless you!","يرحمكم الله (عند العطس)","Achoo! — Bless you!","عطس — يرحمكم الله!"],
+["I'm in a hurry.","أنا مستعجل.","Sorry, I'm in a hurry.","آسف، أنا مستعجل."],
+["That sounds great!","يبدو ذلك رائعاً!","Dinner at eight? That sounds great!","عشاء الساعة الثامنة؟ يبدو رائعاً!"],
+["I have no idea.","ليس لدي أدنى فكرة.","Where is he? I have no idea.","أين هو؟ لا فكرة لدي."],
+["As far as I know,","على حد علمي،","As far as I know, he's abroad.","على حد علمي هو في الخارج."],
+["In my opinion,","في رأيي،","In my opinion, it's a good idea.","في رأيي هذه فكرة جيدة."],
+["To be honest,","بصراحة،","To be honest, I didn't like it.","بصراحة لم تعجبني."],
+["It depends.","يعتمد على الظروف.","Will you come? — It depends.","هل ستأتي؟ — يعتمد."],
+["Mind your own business.","لا تتدخل فيما لا يعنيك.","Mind your own business!","لا تتدخل فيما لا يعنيك!"],
+["I'm fed up with it.","لقد مللت منه.","I'm fed up with this noise.","لقد مللت من هذا الضجيج."],
+["It's a deal!","اتفقنا!","Fifty dollars? It's a deal!","خمسون دولاراً؟ اتفقنا!"],
+["Cheer up!","اِفرح! / ارفع معنوياتك!","Cheer up, things will get better.","ارفع معنوياتك، ستتحسن الأمور."],
+["Hold on a second.","انتظر لحظة.","Hold on a second, please.","انتظر لحظة من فضلك."],
+["Never mind.","لا تهتم / لا بأس.","I forgot it. — Never mind.","نسيته. — لا بأس."],
+["What's the matter?","ما المشكلة؟","You look sad. What's the matter?","تبدو حزيناً. ما المشكلة؟"],
+["I can't make it.","لا أستطيع الحضور.","I'm sorry, I can't make it tonight.","آسف، لا أستطيع الحضور الليلة."],
+["Let's get started.","لنبدأ.","Let's get started with the lesson.","لنبدأ الدرس."],
+["See you around.","أراك قريباً.","Bye! See you around.","وداعاً! أراك قريباً."],
+["Sorry for the delay.","آسف على التأخير.","Sorry for the delay in replying.","آسف على التأخير في الرد."],
+["Would you like some tea?","هل تود بعض الشاي؟","Would you like some tea?","هل تود بعض الشاي؟"],
+["I've got a headache.","عندي صداع.","I've got a terrible headache.","عندي صداع شديد."]
+].map(mk));
+
+addUnique(I,[
+["Add fuel to the fire","يزيد الطين بلة","His comment added fuel to the fire.","زاد تعليقه الطين بلة."],
+["Beat around the bush","يلف ويدور","Stop beating around the bush.","كفّ عن اللف والدوران."],
+["Cut corners","يتساهل في الجودة","Don't cut corners on safety.","لا تتساهل في السلامة."],
+["Face the music","يتحمل العواقب","He must face the music.","عليه أن يتحمل العواقب."],
+["Get cold feet","يتراجع خوفاً","He got cold feet before the wedding.","تراجع خوفاً قبل الزفاف."],
+["Go the extra mile","يبذل جهداً إضافياً","She always goes the extra mile.","هي دائماً تبذل جهداً إضافياً."],
+["Hang in there","اصبر وتماسك","Hang in there, it'll get better.","تماسك، ستتحسن الأمور."],
+["In hot water","في ورطة","He's in hot water with his boss.","هو في ورطة مع مديره."],
+["Jump the gun","يتسرع","Don't jump the gun, wait for results.","لا تتسرع، انتظر النتائج."],
+["Keep an eye on","يراقب / ينتبه لـ","Keep an eye on my bag.","انتبه لحقيبتي."],
+["Miss the boat","تفوته الفرصة","If you wait, you'll miss the boat.","إن انتظرت ستفوتك الفرصة."],
+["No pain, no gain","لا مكسب بلا تعب","Keep training. No pain, no gain.","واصل التدريب. لا مكسب بلا تعب."],
+["On thin ice","في موقف خطر","You're on thin ice with that attitude.","أنت في موقف خطر بهذا السلوك."],
+["Pull someone's leg","يمزح معه","Are you pulling my leg?","هل تمزح معي؟"],
+["Read between the lines","يفهم ما بين السطور","You have to read between the lines.","عليك أن تفهم ما بين السطور."],
+["See eye to eye","يتفقان في الرأي","We don't see eye to eye.","لا نتفق في الرأي."],
+["Sit on the fence","يقف على الحياد","Don't sit on the fence, decide.","لا تقف على الحياد، قرر."],
+["Steal the show","يخطف الأضواء","The little girl stole the show.","خطفت الطفلة الأضواء."],
+["Take it with a grain of salt","لا تأخذه على محمل الجد","Take his words with a grain of salt.","لا تأخذ كلامه على محمل الجد."],
+["The last straw","القشة التي قصمت ظهر البعير","His lateness was the last straw.","كان تأخره آخر ما أطاح بالصبر."],
+["Throw in the towel","يستسلم","Don't throw in the towel yet.","لا تستسلم بعد."],
+["Time flies","الوقت يمر سريعاً","Time flies when you're having fun.","الوقت يمر سريعاً عند المتعة."],
+["Under pressure","تحت ضغط","He works well under pressure.","يعمل جيداً تحت الضغط."],
+["Water under the bridge","انتهى الأمر ونُسي","Forget it; it's water under the bridge.","انسَ الأمر، لقد انتهى."],
+["When pigs fly","عندما يحمر الجمل / مستحيل","He'll apologize when pigs fly.","سيعتذر عندما يطير الخنزير!"],
+["Actions speak louder than words","الأفعال أبلغ من الأقوال","Show me. Actions speak louder than words.","أرني. الأفعال أبلغ من الأقوال."],
+["Don't judge a book by its cover","لا تحكم من المظهر","Don't judge a book by its cover.","لا تحكم من المظهر."],
+["Practice makes perfect","الممارسة تصنع الإتقان","Keep practicing. Practice makes perfect.","واصل التمرن. بالممارسة يأتي الإتقان."],
+["Rome wasn't built in a day","لا شيء يُنجز بين يوم وليلة","Be patient. Rome wasn't built in a day.","اصبر. لا شيء يتم بين يوم وليلة."],
+["The early bird catches the worm","من بكّر ظفر","Wake up early; the early bird catches the worm.","استيقظ مبكراً؛ من بكّر ظفر."],
+["Two heads are better than one","رأيان أفضل من رأي","Let's work together; two heads are better than one.","لنعمل معاً؛ رأيان أفضل من رأي."],
+["Out of the blue","فجأة ومن دون سابق إنذار","He called me out of the blue.","اتصل بي فجأة."],
+["Hit the sack","يذهب للنوم","I'm tired. I'm going to hit the sack.","أنا متعب. سأذهب للنوم."]
+].map(mk));
+
+G.push(
+{t:"الماضي المستمر Past Continuous",r:"was/were + فعل+ing. لحدث كان مستمراً في وقت معين في الماضي، أو قُوطع بحدث آخر: I was sleeping when you called.",q:[["I ___ watching TV when he came.",["am","was","were"],1],["They ___ playing at 5 o'clock.",["was","were","are"],1],["She was ___ when the phone rang.",["cook","cooking","cooked"],1]]},
+{t:"الماضي التام Past Perfect",r:"had + التصريف الثالث. لحدث وقع قبل حدث ماضٍ آخر: When I arrived, the train had left.",q:[["When we arrived, the film ___ started.",["has","had","have"],1],["She had ___ before I called.",["leave","left","leaving"],1],["I ___ eaten, so I wasn't hungry.",["had","was","have"],0]]},
+{t:"المضارع التام المستمر Present Perfect Continuous",r:"have/has been + فعل+ing. لحدث بدأ في الماضي ومازال مستمراً، مع التركيز على المدة: I have been studying for two hours.",q:[["He has been ___ since morning.",["work","working","worked"],1],["We ___ been waiting for an hour.",["has","have","had"],1],["How long have you been ___ English?",["learn","learning","learned"],1]]},
+{t:"الأسماء المعدودة وغير المعدودة Countable & Uncountable",r:"المعدود نستخدم معه many / a few (apples). غير المعدود نستخدم معه much / a little (water, money, time). some و any للاثنين.",q:[["How ___ water do you drink?",["many","much","few"],1],["I have a ___ friends here.",["little","few","much"],1],["There isn't ___ milk left.",["some","any","many"],1]]},
+{t:"الضمائر الموصولة Relative Pronouns",r:"who للأشخاص، which للأشياء، where للأماكن، whose للملكية، that للأشخاص والأشياء.",q:[["The woman ___ called you is my aunt.",["who","which","where"],0],["The car ___ he bought is red.",["who","which","whose"],1],["I know a man ___ son is a pilot.",["who","whose","where"],1]]},
+{t:"الكلام غير المباشر Reported Speech",r:"عند نقل الكلام نرجع زمناً للخلف: am/is → was، will → would، present → past. 'I am tired' → He said he was tired.",q:[["She said, 'I am happy.' → She said she ___ happy.",["is","was","were"],1],["He said, 'I will come.' → He said he ___ come.",["will","would","can"],1],["They said, 'We like it.' → They said they ___ it.",["like","liked","likes"],1]]},
+{t:"الفعل + مصدر أو ing (Gerund / Infinitive)",r:"بعد enjoy, avoid, finish, mind نستخدم فعل+ing. وبعد want, decide, hope, plan نستخدم to + فعل.",q:[["I enjoy ___ books.",["read","reading","to read"],1],["She decided ___ abroad.",["study","studying","to study"],2],["Do you mind ___ the window?",["open","opening","to open"],1]]},
+{t:"أسئلة الاستفهام Question Words",r:"What (ماذا)، Where (أين)، When (متى)، Why (لماذا)، Who (من)، How (كيف)، Which (أي)، How much / How many (كم).",q:[["___ is your birthday? — In May.",["Where","When","Who"],1],["___ do you live? — In Cairo.",["Where","Why","What"],0],["___ books do you have?",["How much","How many","How"],1]]}
+);
+
+C.push(
+{en:"She is smart ___ hard-working.",ar:"هي ذكية وكذلك مجتهدة.",o:["and","but","so"],a:0,n:"and للجمع"},
+{en:"He was hungry, ___ he ate a sandwich.",ar:"كان جائعاً فأكل ساندويتش.",o:["so","but","although"],a:0,n:"so للنتيجة"},
+{en:"I like tea, ___ my brother likes coffee.",ar:"أحب الشاي لكن أخي يحب القهوة.",o:["but","because","so"],a:0,n:"but للمقارنة والتناقض"},
+{en:"___ she was tired, she finished the work.",ar:"رغم تعبها أنهت العمل.",o:["Even though","Because","So"],a:0,n:"even though = although"},
+{en:"I'll go out ___ it stops raining.",ar:"سأخرج عندما يتوقف المطر.",o:["after","because","unless"],a:0,n:"after بعد أن"},
+{en:"Wash your hands ___ you eat.",ar:"اغسل يديك قبل أن تأكل.",o:["before","after","unless"],a:0,n:"before قبل أن"},
+{en:"I'll help you ___ you ask me.",ar:"سأساعدك إذا طلبت مني.",o:["if","but","who"],a:0,n:"if للشرط"},
+{en:"She speaks English ___ she lived in London.",ar:"تتحدث الإنجليزية لأنها عاشت في لندن.",o:["because","unless","or"],a:0,n:"because للسبب"},
+{en:"Neither Ali ___ Omar came.",ar:"لا علي ولا عمر جاء.",o:["nor","or","but"],a:0,n:"neither ... nor = لا ... ولا"},
+{en:"Either you study ___ you fail.",ar:"إما أن تذاكر أو ترسب.",o:["or","nor","and"],a:0,n:"either ... or = إما ... أو"},
+{en:"He is not only smart ___ also kind.",ar:"هو ليس ذكياً فقط بل لطيف أيضاً.",o:["but","and","so"],a:0,n:"not only ... but also"},
+{en:"I stayed home ___ of the rain.",ar:"بقيت في البيت بسبب المطر.",o:["because","so","while"],a:0,n:"because of + اسم، بينما because + جملة"},
+{en:"She left early ___ she wouldn't miss the bus.",ar:"غادرت مبكراً حتى لا تفوتها الحافلة.",o:["so that","unless","while"],a:0,n:"so that للغرض"},
+{en:"The film, ___ was long, was great.",ar:"الفيلم الذي كان طويلاً كان رائعاً.",o:["which","who","where"],a:0,n:"which تعود على شيء"},
+{en:"As soon as he ___ home, he called me.",ar:"حال وصوله إلى البيت اتصل بي.",o:["got","get","will get"],a:0,n:"بعد as soon as في الماضي نستخدم الماضي"},
+{en:"If I had known, I ___ helped you.",ar:"لو علمت لساعدتك.",o:["would have","will","would"],a:0,n:"الشرط من النوع الثالث: had + ثالث، would have + ثالث"}
+);
+
+const SECTIONS=[["words","كلمات",W],["expr","تعبيرات",E],["idioms","مصطلحات",I],["grammar","قواعد",G],["compound","جمل مركبة",C]];
+
+function store(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=0.9;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+
+function Options({opts,answer,onDone,en}){
+  const [pick,setPick]=useState(null);
+  return <div>{opts.map((o,i)=>{
+    let c="opt"+(en?" en2":"");
+    if(pick!==null){ if(i===answer)c+=" ok"; else if(i===pick)c+=" bad"; }
+    return <button key={i} className={c} disabled={pick!==null} onClick={()=>{setPick(i);onDone(i===answer)}}>{o}</button>
+  })}</div>;
+}
+
+// اختبار عام: قائمة أسئلة {q, opts, a, note, enOpts, sayText}
+function Quiz({qs,onFinish}){
+  const [i,setI]=useState(0);const [s,setS]=useState(0);const [done,setDone]=useState(false);const [ans,setAns]=useState(false);
+  if(i>=qs.length) return <div className="card score">النتيجة: {s} من {qs.length}<div><button className="next" onClick={onFinish}>رجوع</button></div></div>;
+  const q=qs[i];
+  return <div className="card">
+    <div className="small">سؤال {i+1} / {qs.length}</div>
+    <div className={q.enQ?"en":"ar"} style={{marginTop:6}}>{q.q}</div>
+    {q.sub&&<div className="small">{q.sub}</div>}
+    <Options key={i} opts={q.opts} answer={q.a} en={q.enOpts} onDone={ok=>{setAns(true);if(ok)setS(s+1)}}/>
+    {ans&&q.note&&<div className="rule">{q.note}</div>}
+    {ans&&<button className="next" onClick={()=>{setI(i+1);setAns(false)}}>{i+1===qs.length?"إنهاء":"التالي"}</button>}
+  </div>;
+}
+
+function vocabQuiz(list){
+  return shuffle(list).slice(0,10).map(it=>{
+    const wrong=shuffle(list.filter(x=>x.ar!==it.ar)).slice(0,3).map(x=>x.ar);
+    const opts=shuffle([it.ar,...wrong]);
+    return {q:it.en,enQ:true,opts,a:opts.indexOf(it.ar),note:it.ex+" — "+it.exAr};
+  });
+}
+function grammarQuiz(lesson){
+  return lesson.q.map(x=>({q:x[0],enQ:true,opts:x[1],a:x[2],enOpts:true,note:lesson.r}));
+}
+function compoundQuiz(){
+  return shuffle(C).slice(0,10).map(x=>({q:x.en,enQ:true,sub:x.ar,opts:x.o,a:x.a,enOpts:true,note:x.n}));
+}
+
+function VocabSection({id,list}){
+  const [known,setKnown]=useState(()=>store("k_"+id,[]));
+  const [mode,setMode]=useState("learn");
+  const [qs,setQs]=useState(null);
+  const [filter,setFilter]=useState("all");
+  useEffect(()=>save("k_"+id,known),[known]);
+  const toggle=en=>setKnown(k=>k.includes(en)?k.filter(x=>x!==en):[...k,en]);
+  const pct=Math.round(known.length/list.length*100);
+  if(qs) return <Quiz qs={qs} onFinish={()=>setQs(null)}/>;
+  const shown=list.filter(x=>filter==="all"||(filter==="known"?known.includes(x.en):!known.includes(x.en)));
+  return <div>
+    <div className="small">أتقنت {known.length} من {list.length}</div>
+    <div className="bar"><i style={{width:pct+"%"}}/></div>
+    <div className="row">
+      <button className="btn on" onClick={()=>setQs(vocabQuiz(list))}>ابدأ اختباراً</button>
+      <button className={"btn"+(filter==="all"?" on":"")} onClick={()=>setFilter("all")}>الكل</button>
+      <button className={"btn"+(filter==="new"?" on":"")} onClick={()=>setFilter("new")}>لم أتقنها</button>
+    </div>
+    {shown.map(it=><div className="card" key={it.en}>
+      <div className="top">
+        <div><div className="en">{it.en}</div><div className="ar">{it.ar}</div></div>
+        <div><button className="ic" onClick={()=>speak(it.en)} title="نطق">🔊</button> <button className="ic" onClick={()=>toggle(it.en)} title="أتقنتها">{known.includes(it.en)?"✅":"⬜"}</button></div>
+      </div>
+      <div className="ex">{it.ex}</div><div className="exar">{it.exAr}</div>
+    </div>)}
+  </div>;
+}
+
+function GrammarSection(){
+  const [open,setOpen]=useState(null);
+  const [qs,setQs]=useState(null);
+  const [done,setDone]=useState(()=>store("k_grammar",[]));
+  useEffect(()=>save("k_grammar",done),[done]);
+  if(qs) return <Quiz qs={qs.q} onFinish={()=>{setDone(d=>d.includes(qs.t)?d:[...d,qs.t]);setQs(null)}}/>;
+  return <div>
+    <div className="small">أنهيت {done.length} من {G.length} درساً</div>
+    <div className="bar"><i style={{width:done.length/G.length*100+"%"}}/></div>
+    {G.map((l,i)=><div className="card" key={i}>
+      <div className="top" onClick={()=>setOpen(open===i?null:i)} style={{cursor:"pointer"}}>
+        <div className="ar" style={{fontWeight:700}}>{l.t}</div><div>{done.includes(l.t)?"✅":"›"}</div>
+      </div>
+      {open===i&&<div><div className="rule">{l.r}</div><button className="next" onClick={()=>setQs({t:l.t,q:grammarQuiz(l)})}>تمرين</button></div>}
+    </div>)}
+  </div>;
+}
+
+function CompoundSection(){
+  const [qs,setQs]=useState(null);
+  const [best,setBest]=useState(()=>store("k_compound",0));
+  const [open,setOpen]=useState(false);
+  if(qs) return <Quiz qs={qs} onFinish={()=>setQs(null)}/>;
+  return <div>
+    <div className="row"><button className="btn on" onClick={()=>setQs(compoundQuiz())}>ابدأ اختباراً</button>
+    <button className="btn" onClick={()=>setOpen(!open)}>{open?"أخفِ الأدوات":"أدوات الربط"}</button></div>
+    {open&&<div className="card rule">and: إضافة · but: تناقض · so: نتيجة · because: سبب · or: اختيار · although: رغم أن · however: ومع ذلك · when/while/until: زمن · who/which/where/whose: جمل وصل · if/unless: شرط</div>}
+    {C.map((x,i)=><div className="card" key={i}>
+      <div className="en">{x.en.replace("___","____")}</div>
+      <div className="ar">{x.ar}</div>
+      <div className="small">الأداة: <b style={{direction:"ltr",display:"inline-block"}}>{x.o[x.a]}</b> — {x.n}</div>
+    </div>)}
+  </div>;
+}
+
+function App(){
+  const [tab,setTab]=useState(()=>store("tab","words"));
+  useEffect(()=>save("tab",tab),[tab]);
+  return <div>
+    <h1>English Made Easy</h1>
+    <div className="sub">كلمات · تعبيرات · مصطلحات · قواعد · جمل مركبة</div>
+    <div className="tabs">{SECTIONS.map(s=><button key={s[0]} className={"tab"+(tab===s[0]?" on":"")} onClick={()=>setTab(s[0])}>{s[1]}</button>)}</div>
+    <div style={{marginTop:10}}>
+      {tab==="words"&&<VocabSection key="w" id="words" list={W}/>}
+      {tab==="expr"&&<VocabSection key="e" id="expr" list={E}/>}
+      {tab==="idioms"&&<VocabSection key="i" id="idioms" list={I}/>}
+      {tab==="grammar"&&<GrammarSection/>}
+      {tab==="compound"&&<CompoundSection/>}
+    </div>
+  </div>;
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>

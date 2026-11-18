@@ -1,0 +1,2487 @@
+{
+ "source": "legacy/English Made Easy.v1.html",
+ "counts": {
+  "words": 131,
+  "expressions": 60,
+  "idioms": 53,
+  "grammar": 19,
+  "grammarQuestions": 56,
+  "compound": 34
+ },
+ "droppedByV1Dedupe": [
+  {
+   "en": "improve",
+   "ar": "يتحسن",
+   "ex": "His health is improving.",
+   "exAr": "صحته تتحسن."
+  }
+ ],
+ "v1": {
+  "words": [
+   {
+    "en": "achieve",
+    "ar": "يحقق",
+    "ex": "She worked hard to achieve her goal.",
+    "exAr": "عملت بجد لتحقق هدفها."
+   },
+   {
+    "en": "improve",
+    "ar": "يُحسّن",
+    "ex": "I want to improve my English.",
+    "exAr": "أريد تحسين لغتي الإنجليزية."
+   },
+   {
+    "en": "decide",
+    "ar": "يقرر",
+    "ex": "We decided to travel by train.",
+    "exAr": "قررنا السفر بالقطار."
+   },
+   {
+    "en": "suggest",
+    "ar": "يقترح",
+    "ex": "I suggest we leave early.",
+    "exAr": "أقترح أن نغادر مبكراً."
+   },
+   {
+    "en": "avoid",
+    "ar": "يتجنب",
+    "ex": "Try to avoid fast food.",
+    "exAr": "حاول تجنب الوجبات السريعة."
+   },
+   {
+    "en": "borrow",
+    "ar": "يستعير",
+    "ex": "Can I borrow your pen?",
+    "exAr": "هل أستعير قلمك؟"
+   },
+   {
+    "en": "lend",
+    "ar": "يُعير / يُقرض",
+    "ex": "Could you lend me some money?",
+    "exAr": "هل تقرضني بعض المال؟"
+   },
+   {
+    "en": "recommend",
+    "ar": "يوصي بـ",
+    "ex": "I recommend this book.",
+    "exAr": "أوصي بهذا الكتاب."
+   },
+   {
+    "en": "manage",
+    "ar": "ينجح في / يدير",
+    "ex": "He managed to finish on time.",
+    "exAr": "نجح في الانتهاء في الوقت."
+   },
+   {
+    "en": "notice",
+    "ar": "يلاحظ",
+    "ex": "Did you notice the sign?",
+    "exAr": "هل لاحظت اللافتة؟"
+   },
+   {
+    "en": "afford",
+    "ar": "يتحمل ثمن",
+    "ex": "I can't afford a new car.",
+    "exAr": "لا أستطيع تحمل ثمن سيارة جديدة."
+   },
+   {
+    "en": "require",
+    "ar": "يتطلب",
+    "ex": "This job requires experience.",
+    "exAr": "هذه الوظيفة تتطلب خبرة."
+   },
+   {
+    "en": "arrange",
+    "ar": "ينظّم / يرتب",
+    "ex": "I'll arrange a meeting.",
+    "exAr": "سأرتب اجتماعاً."
+   },
+   {
+    "en": "belong",
+    "ar": "ينتمي / يخص",
+    "ex": "This book belongs to me.",
+    "exAr": "هذا الكتاب يخصني."
+   },
+   {
+    "en": "careful",
+    "ar": "حذر",
+    "ex": "Be careful on the road.",
+    "exAr": "كن حذراً على الطريق."
+   },
+   {
+    "en": "comfortable",
+    "ar": "مريح",
+    "ex": "This chair is very comfortable.",
+    "exAr": "هذا الكرسي مريح جداً."
+   },
+   {
+    "en": "dangerous",
+    "ar": "خطير",
+    "ex": "Smoking is dangerous.",
+    "exAr": "التدخين خطير."
+   },
+   {
+    "en": "enough",
+    "ar": "كافٍ",
+    "ex": "We have enough time.",
+    "exAr": "لدينا وقت كافٍ."
+   },
+   {
+    "en": "familiar",
+    "ar": "مألوف",
+    "ex": "Her face looks familiar.",
+    "exAr": "وجهها يبدو مألوفاً."
+   },
+   {
+    "en": "honest",
+    "ar": "صادق",
+    "ex": "He is an honest man.",
+    "exAr": "إنه رجل صادق."
+   },
+   {
+    "en": "necessary",
+    "ar": "ضروري",
+    "ex": "It is necessary to rest.",
+    "exAr": "من الضروري أن ترتاح."
+   },
+   {
+    "en": "patient",
+    "ar": "صبور",
+    "ex": "Be patient with children.",
+    "exAr": "كن صبوراً مع الأطفال."
+   },
+   {
+    "en": "reliable",
+    "ar": "يُعتمد عليه",
+    "ex": "She is a reliable friend.",
+    "exAr": "هي صديقة يُعتمد عليها."
+   },
+   {
+    "en": "ordinary",
+    "ar": "عادي",
+    "ex": "It was an ordinary day.",
+    "exAr": "كان يوماً عادياً."
+   },
+   {
+    "en": "knowledge",
+    "ar": "معرفة",
+    "ex": "Knowledge is power.",
+    "exAr": "المعرفة قوة."
+   },
+   {
+    "en": "opportunity",
+    "ar": "فرصة",
+    "ex": "This is a great opportunity.",
+    "exAr": "هذه فرصة رائعة."
+   },
+   {
+    "en": "experience",
+    "ar": "خبرة / تجربة",
+    "ex": "He has ten years of experience.",
+    "exAr": "لديه عشر سنوات خبرة."
+   },
+   {
+    "en": "environment",
+    "ar": "بيئة",
+    "ex": "We must protect the environment.",
+    "exAr": "يجب أن نحمي البيئة."
+   },
+   {
+    "en": "advantage",
+    "ar": "ميزة",
+    "ex": "Speed is an advantage.",
+    "exAr": "السرعة ميزة."
+   },
+   {
+    "en": "suddenly",
+    "ar": "فجأة",
+    "ex": "Suddenly, it started to rain.",
+    "exAr": "فجأة بدأ المطر."
+   },
+   {
+    "en": "actually",
+    "ar": "في الواقع",
+    "ex": "Actually, I disagree.",
+    "exAr": "في الواقع، أنا لا أوافق."
+   },
+   {
+    "en": "probably",
+    "ar": "على الأرجح",
+    "ex": "He will probably come.",
+    "exAr": "سيأتي على الأرجح."
+   },
+   {
+    "en": "although",
+    "ar": "رغم أن",
+    "ex": "Although it was late, we stayed.",
+    "exAr": "رغم أن الوقت تأخر، بقينا."
+   },
+   {
+    "en": "however",
+    "ar": "ومع ذلك",
+    "ex": "However, I still like it.",
+    "exAr": "ومع ذلك ما زلت أحبه."
+   },
+   {
+    "en": "instead",
+    "ar": "بدلاً من ذلك",
+    "ex": "Take tea instead.",
+    "exAr": "خذ شاياً بدلاً من ذلك."
+   },
+   {
+    "en": "maybe",
+    "ar": "ربما",
+    "ex": "Maybe we can meet tomorrow.",
+    "exAr": "ربما نلتقي غداً."
+   },
+   {
+    "en": "already",
+    "ar": "بالفعل",
+    "ex": "I have already eaten.",
+    "exAr": "لقد أكلت بالفعل."
+   },
+   {
+    "en": "recently",
+    "ar": "مؤخراً",
+    "ex": "I recently moved here.",
+    "exAr": "انتقلت إلى هنا مؤخراً."
+   },
+   {
+    "en": "rarely",
+    "ar": "نادراً",
+    "ex": "He rarely complains.",
+    "exAr": "نادراً ما يشتكي."
+   },
+   {
+    "en": "accept",
+    "ar": "يقبل",
+    "ex": "She accepted the job offer.",
+    "exAr": "قبلت عرض العمل."
+   },
+   {
+    "en": "admit",
+    "ar": "يعترف",
+    "ex": "He admitted his mistake.",
+    "exAr": "اعترف بخطئه."
+   },
+   {
+    "en": "advise",
+    "ar": "ينصح",
+    "ex": "The doctor advised me to rest.",
+    "exAr": "نصحني الطبيب بالراحة."
+   },
+   {
+    "en": "agree",
+    "ar": "يوافق",
+    "ex": "I agree with you.",
+    "exAr": "أوافقك الرأي."
+   },
+   {
+    "en": "allow",
+    "ar": "يسمح",
+    "ex": "They don't allow phones here.",
+    "exAr": "لا يسمحون بالهواتف هنا."
+   },
+   {
+    "en": "announce",
+    "ar": "يعلن",
+    "ex": "They announced the results.",
+    "exAr": "أعلنوا النتائج."
+   },
+   {
+    "en": "appear",
+    "ar": "يظهر",
+    "ex": "A sign appeared on the screen.",
+    "exAr": "ظهرت علامة على الشاشة."
+   },
+   {
+    "en": "apologize",
+    "ar": "يعتذر",
+    "ex": "I apologize for being late.",
+    "exAr": "أعتذر عن التأخير."
+   },
+   {
+    "en": "attend",
+    "ar": "يحضر",
+    "ex": "She attends English classes.",
+    "exAr": "تحضر دروس الإنجليزية."
+   },
+   {
+    "en": "believe",
+    "ar": "يؤمن / يصدق",
+    "ex": "I believe you.",
+    "exAr": "أصدقك."
+   },
+   {
+    "en": "cancel",
+    "ar": "يلغي",
+    "ex": "They cancelled the flight.",
+    "exAr": "ألغوا الرحلة."
+   },
+   {
+    "en": "celebrate",
+    "ar": "يحتفل",
+    "ex": "We celebrate every success.",
+    "exAr": "نحتفل بكل نجاح."
+   },
+   {
+    "en": "compare",
+    "ar": "يقارن",
+    "ex": "Compare the two prices.",
+    "exAr": "قارن بين السعرين."
+   },
+   {
+    "en": "complain",
+    "ar": "يشتكي",
+    "ex": "He complains about everything.",
+    "exAr": "يشتكي من كل شيء."
+   },
+   {
+    "en": "consider",
+    "ar": "يفكر في / يعتبر",
+    "ex": "Consider my offer.",
+    "exAr": "فكر في عرضي."
+   },
+   {
+    "en": "continue",
+    "ar": "يواصل",
+    "ex": "Please continue reading.",
+    "exAr": "واصل القراءة من فضلك."
+   },
+   {
+    "en": "describe",
+    "ar": "يصف",
+    "ex": "Describe your room.",
+    "exAr": "صف غرفتك."
+   },
+   {
+    "en": "develop",
+    "ar": "يطوّر",
+    "ex": "They develop new software.",
+    "exAr": "يطورون برامج جديدة."
+   },
+   {
+    "en": "discover",
+    "ar": "يكتشف",
+    "ex": "He discovered a new way.",
+    "exAr": "اكتشف طريقة جديدة."
+   },
+   {
+    "en": "encourage",
+    "ar": "يشجع",
+    "ex": "Teachers encourage students.",
+    "exAr": "يشجع المعلمون الطلاب."
+   },
+   {
+    "en": "explain",
+    "ar": "يشرح",
+    "ex": "Can you explain this rule?",
+    "exAr": "هل تشرح هذه القاعدة؟"
+   },
+   {
+    "en": "forget",
+    "ar": "ينسى",
+    "ex": "Don't forget your keys.",
+    "exAr": "لا تنسَ مفاتيحك."
+   },
+   {
+    "en": "forgive",
+    "ar": "يسامح",
+    "ex": "Please forgive me.",
+    "exAr": "سامحني من فضلك."
+   },
+   {
+    "en": "happen",
+    "ar": "يحدث",
+    "ex": "What happened?",
+    "exAr": "ماذا حدث؟"
+   },
+   {
+    "en": "hope",
+    "ar": "يأمل",
+    "ex": "I hope you feel better.",
+    "exAr": "آمل أن تتحسن."
+   },
+   {
+    "en": "imagine",
+    "ar": "يتخيل",
+    "ex": "Imagine a world without cars.",
+    "exAr": "تخيل عالماً بلا سيارات."
+   },
+   {
+    "en": "invite",
+    "ar": "يدعو",
+    "ex": "She invited us to dinner.",
+    "exAr": "دعتنا إلى العشاء."
+   },
+   {
+    "en": "join",
+    "ar": "ينضم",
+    "ex": "Join us for lunch.",
+    "exAr": "انضم إلينا للغداء."
+   },
+   {
+    "en": "knock",
+    "ar": "يطرق",
+    "ex": "Someone knocked on the door.",
+    "exAr": "طرق أحدهم الباب."
+   },
+   {
+    "en": "offer",
+    "ar": "يعرض",
+    "ex": "They offered me a job.",
+    "exAr": "عرضوا عليّ وظيفة."
+   },
+   {
+    "en": "prefer",
+    "ar": "يفضّل",
+    "ex": "I prefer tea to coffee.",
+    "exAr": "أفضل الشاي على القهوة."
+   },
+   {
+    "en": "prepare",
+    "ar": "يحضّر",
+    "ex": "Prepare for the exam.",
+    "exAr": "استعد للامتحان."
+   },
+   {
+    "en": "promise",
+    "ar": "يعد",
+    "ex": "I promise to help.",
+    "exAr": "أعدك بالمساعدة."
+   },
+   {
+    "en": "protect",
+    "ar": "يحمي",
+    "ex": "Helmets protect your head.",
+    "exAr": "الخوذة تحمي رأسك."
+   },
+   {
+    "en": "receive",
+    "ar": "يستلم",
+    "ex": "I received your message.",
+    "exAr": "استلمت رسالتك."
+   },
+   {
+    "en": "reduce",
+    "ar": "يقلل",
+    "ex": "Reduce the noise.",
+    "exAr": "قلل الضجيج."
+   },
+   {
+    "en": "refuse",
+    "ar": "يرفض",
+    "ex": "He refused to answer.",
+    "exAr": "رفض أن يجيب."
+   },
+   {
+    "en": "remind",
+    "ar": "يذكّر",
+    "ex": "Remind me to call him.",
+    "exAr": "ذكّرني أن أتصل به."
+   },
+   {
+    "en": "repeat",
+    "ar": "يكرر",
+    "ex": "Please repeat the question.",
+    "exAr": "كرر السؤال من فضلك."
+   },
+   {
+    "en": "succeed",
+    "ar": "ينجح",
+    "ex": "Hard work helps you succeed.",
+    "exAr": "العمل الجاد يساعدك على النجاح."
+   },
+   {
+    "en": "wonder",
+    "ar": "يتساءل",
+    "ex": "I wonder where he is.",
+    "exAr": "أتساءل أين هو."
+   },
+   {
+    "en": "ancient",
+    "ar": "قديم جداً",
+    "ex": "Egypt has ancient temples.",
+    "exAr": "في مصر معابد قديمة."
+   },
+   {
+    "en": "brave",
+    "ar": "شجاع",
+    "ex": "The firefighter was brave.",
+    "exAr": "كان رجل الإطفاء شجاعاً."
+   },
+   {
+    "en": "cheap",
+    "ar": "رخيص",
+    "ex": "This phone is cheap.",
+    "exAr": "هذا الهاتف رخيص."
+   },
+   {
+    "en": "curious",
+    "ar": "فضولي",
+    "ex": "Children are curious.",
+    "exAr": "الأطفال فضوليون."
+   },
+   {
+    "en": "defeat",
+    "ar": "هزيمة",
+    "ex": "They accepted the defeat.",
+    "exAr": "تقبلوا الهزيمة."
+   },
+   {
+    "en": "delicious",
+    "ar": "لذيذ",
+    "ex": "The soup is delicious.",
+    "exAr": "الشوربة لذيذة."
+   },
+   {
+    "en": "difficult",
+    "ar": "صعب",
+    "ex": "The test was difficult.",
+    "exAr": "كان الاختبار صعباً."
+   },
+   {
+    "en": "empty",
+    "ar": "فارغ",
+    "ex": "The room is empty.",
+    "exAr": "الغرفة فارغة."
+   },
+   {
+    "en": "flexible",
+    "ar": "مرن",
+    "ex": "My schedule is flexible.",
+    "exAr": "جدولي مرن."
+   },
+   {
+    "en": "generous",
+    "ar": "كريم",
+    "ex": "He is a generous man.",
+    "exAr": "إنه رجل كريم."
+   },
+   {
+    "en": "helpful",
+    "ar": "مفيد / متعاون",
+    "ex": "The staff were helpful.",
+    "exAr": "كان الموظفون متعاونين."
+   },
+   {
+    "en": "impossible",
+    "ar": "مستحيل",
+    "ex": "Nothing is impossible.",
+    "exAr": "لا شيء مستحيل."
+   },
+   {
+    "en": "lazy",
+    "ar": "كسول",
+    "ex": "Don't be lazy.",
+    "exAr": "لا تكن كسولاً."
+   },
+   {
+    "en": "modern",
+    "ar": "حديث",
+    "ex": "It's a modern building.",
+    "exAr": "إنه مبنى حديث."
+   },
+   {
+    "en": "nervous",
+    "ar": "متوتر",
+    "ex": "I felt nervous before the exam.",
+    "exAr": "شعرت بالتوتر قبل الامتحان."
+   },
+   {
+    "en": "polite",
+    "ar": "مهذب",
+    "ex": "Be polite to others.",
+    "exAr": "كن مهذباً مع الآخرين."
+   },
+   {
+    "en": "popular",
+    "ar": "شائع / مشهور",
+    "ex": "Football is popular.",
+    "exAr": "كرة القدم شائعة."
+   },
+   {
+    "en": "proud",
+    "ar": "فخور",
+    "ex": "I'm proud of you.",
+    "exAr": "أنا فخور بك."
+   },
+   {
+    "en": "quiet",
+    "ar": "هادئ",
+    "ex": "The library is quiet.",
+    "exAr": "المكتبة هادئة."
+   },
+   {
+    "en": "rude",
+    "ar": "وقح",
+    "ex": "It's rude to interrupt.",
+    "exAr": "من الوقاحة أن تقاطع."
+   },
+   {
+    "en": "safe",
+    "ar": "آمن",
+    "ex": "This area is safe.",
+    "exAr": "هذه المنطقة آمنة."
+   },
+   {
+    "en": "serious",
+    "ar": "جاد / خطير",
+    "ex": "It's a serious problem.",
+    "exAr": "إنها مشكلة خطيرة."
+   },
+   {
+    "en": "tidy",
+    "ar": "مرتب",
+    "ex": "Keep your room tidy.",
+    "exAr": "أبقِ غرفتك مرتبة."
+   },
+   {
+    "en": "useful",
+    "ar": "مفيد",
+    "ex": "This app is very useful.",
+    "exAr": "هذا التطبيق مفيد جداً."
+   },
+   {
+    "en": "wealthy",
+    "ar": "ثري",
+    "ex": "A wealthy family lives here.",
+    "exAr": "تعيش هنا عائلة ثرية."
+   },
+   {
+    "en": "ability",
+    "ar": "قدرة",
+    "ex": "She has the ability to learn fast.",
+    "exAr": "لديها القدرة على التعلم بسرعة."
+   },
+   {
+    "en": "article",
+    "ar": "مقال",
+    "ex": "I read an article about health.",
+    "exAr": "قرأت مقالاً عن الصحة."
+   },
+   {
+    "en": "attitude",
+    "ar": "موقف / سلوك",
+    "ex": "Keep a positive attitude.",
+    "exAr": "حافظ على موقف إيجابي."
+   },
+   {
+    "en": "benefit",
+    "ar": "فائدة",
+    "ex": "Exercise has many benefits.",
+    "exAr": "للرياضة فوائد كثيرة."
+   },
+   {
+    "en": "challenge",
+    "ar": "تحدٍّ",
+    "ex": "Learning a language is a challenge.",
+    "exAr": "تعلم لغة تحدٍّ."
+   },
+   {
+    "en": "choice",
+    "ar": "اختيار",
+    "ex": "You have two choices.",
+    "exAr": "لديك خياران."
+   },
+   {
+    "en": "competition",
+    "ar": "منافسة",
+    "ex": "There is strong competition.",
+    "exAr": "هناك منافسة قوية."
+   },
+   {
+    "en": "decision",
+    "ar": "قرار",
+    "ex": "It was a hard decision.",
+    "exAr": "كان قراراً صعباً."
+   },
+   {
+    "en": "difference",
+    "ar": "فرق",
+    "ex": "What's the difference?",
+    "exAr": "ما الفرق؟"
+   },
+   {
+    "en": "education",
+    "ar": "تعليم",
+    "ex": "Education is important.",
+    "exAr": "التعليم مهم."
+   },
+   {
+    "en": "effort",
+    "ar": "جهد",
+    "ex": "Make an effort.",
+    "exAr": "ابذل جهداً."
+   },
+   {
+    "en": "habit",
+    "ar": "عادة",
+    "ex": "Reading is a good habit.",
+    "exAr": "القراءة عادة جيدة."
+   },
+   {
+    "en": "journey",
+    "ar": "رحلة",
+    "ex": "It was a long journey.",
+    "exAr": "كانت رحلة طويلة."
+   },
+   {
+    "en": "lack",
+    "ar": "نقص",
+    "ex": "Lack of sleep is harmful.",
+    "exAr": "نقص النوم مضر."
+   },
+   {
+    "en": "method",
+    "ar": "طريقة",
+    "ex": "This method works well.",
+    "exAr": "هذه الطريقة تعمل جيداً."
+   },
+   {
+    "en": "pleasure",
+    "ar": "سرور",
+    "ex": "It's a pleasure to meet you.",
+    "exAr": "يسعدني لقاؤك."
+   },
+   {
+    "en": "reason",
+    "ar": "سبب",
+    "ex": "What's the reason?",
+    "exAr": "ما السبب؟"
+   },
+   {
+    "en": "result",
+    "ar": "نتيجة",
+    "ex": "The results were great.",
+    "exAr": "كانت النتائج رائعة."
+   },
+   {
+    "en": "society",
+    "ar": "مجتمع",
+    "ex": "Society is changing.",
+    "exAr": "المجتمع يتغير."
+   },
+   {
+    "en": "solution",
+    "ar": "حل",
+    "ex": "We need a solution.",
+    "exAr": "نحتاج إلى حل."
+   },
+   {
+    "en": "throughout",
+    "ar": "طوال / في كل أنحاء",
+    "ex": "It rained throughout the day.",
+    "exAr": "أمطرت طوال اليوم."
+   },
+   {
+    "en": "whether",
+    "ar": "سواء / إذا كان",
+    "ex": "I don't know whether he'll come.",
+    "exAr": "لا أعرف إن كان سيأتي."
+   },
+   {
+    "en": "otherwise",
+    "ar": "وإلا",
+    "ex": "Hurry up, otherwise we'll be late.",
+    "exAr": "أسرع وإلا سنتأخر."
+   },
+   {
+    "en": "nearly",
+    "ar": "تقريباً",
+    "ex": "I nearly missed the bus.",
+    "exAr": "كدت أفوّت الحافلة."
+   },
+   {
+    "en": "especially",
+    "ar": "خاصةً",
+    "ex": "I love fruit, especially mangoes.",
+    "exAr": "أحب الفاكهة خاصة المانجو."
+   },
+   {
+    "en": "therefore",
+    "ar": "لذلك",
+    "ex": "He was ill; therefore, he stayed home.",
+    "exAr": "كان مريضاً؛ لذلك بقي في البيت."
+   }
+  ],
+  "expressions": [
+   {
+    "en": "How come?",
+    "ar": "كيف ذلك؟ / لماذا؟",
+    "ex": "How come you didn't call me?",
+    "exAr": "لماذا لم تتصل بي؟"
+   },
+   {
+    "en": "Take your time.",
+    "ar": "خذ وقتك.",
+    "ex": "Take your time, there's no rush.",
+    "exAr": "خذ وقتك، لا يوجد استعجال."
+   },
+   {
+    "en": "I'm looking forward to it.",
+    "ar": "أتطلع إليه بشوق.",
+    "ex": "I'm looking forward to the trip.",
+    "exAr": "أتطلع للرحلة بشوق."
+   },
+   {
+    "en": "It's up to you.",
+    "ar": "الأمر عائد إليك.",
+    "ex": "Pizza or pasta? It's up to you.",
+    "exAr": "بيتزا أم مكرونة؟ القرار لك."
+   },
+   {
+    "en": "I couldn't agree more.",
+    "ar": "أوافق تماماً.",
+    "ex": "That's true. I couldn't agree more.",
+    "exAr": "هذا صحيح، أوافقك تماماً."
+   },
+   {
+    "en": "No wonder.",
+    "ar": "لا عجب.",
+    "ex": "He didn't sleep. No wonder he's tired.",
+    "exAr": "لم ينم. لا عجب أنه متعب."
+   },
+   {
+    "en": "Make yourself at home.",
+    "ar": "اعتبر نفسك في بيتك.",
+    "ex": "Come in and make yourself at home.",
+    "exAr": "تفضل واعتبر نفسك في بيتك."
+   },
+   {
+    "en": "Keep in touch.",
+    "ar": "ابقَ على تواصل.",
+    "ex": "Let's keep in touch.",
+    "exAr": "لنبقَ على تواصل."
+   },
+   {
+    "en": "What do you do for a living?",
+    "ar": "ماذا تعمل؟",
+    "ex": "What do you do for a living?",
+    "exAr": "ما هو عملك؟"
+   },
+   {
+    "en": "I'm afraid I can't.",
+    "ar": "للأسف لا أستطيع.",
+    "ex": "I'm afraid I can't come tonight.",
+    "exAr": "للأسف لا أستطيع القدوم الليلة."
+   },
+   {
+    "en": "Do you mind if I sit here?",
+    "ar": "هل تمانع لو جلست هنا؟",
+    "ex": "Do you mind if I sit here?",
+    "exAr": "هل تمانع أن أجلس هنا؟"
+   },
+   {
+    "en": "Excuse me, could you help me?",
+    "ar": "عفواً، هل تساعدني؟",
+    "ex": "Excuse me, could you help me?",
+    "exAr": "عفواً، هل يمكنك مساعدتي؟"
+   },
+   {
+    "en": "That makes sense.",
+    "ar": "هذا منطقي.",
+    "ex": "Oh, that makes sense now.",
+    "exAr": "آه، هذا منطقي الآن."
+   },
+   {
+    "en": "I'll get back to you.",
+    "ar": "سأعود إليك بالرد.",
+    "ex": "I'll get back to you tomorrow.",
+    "exAr": "سأرد عليك غداً."
+   },
+   {
+    "en": "It doesn't matter.",
+    "ar": "لا يهم.",
+    "ex": "Don't worry, it doesn't matter.",
+    "exAr": "لا تقلق، لا يهم."
+   },
+   {
+    "en": "Sorry to bother you.",
+    "ar": "آسف على الإزعاج.",
+    "ex": "Sorry to bother you, but I'm lost.",
+    "exAr": "آسف على الإزعاج، لكني تائه."
+   },
+   {
+    "en": "Let me think about it.",
+    "ar": "دعني أفكر في الأمر.",
+    "ex": "Let me think about it.",
+    "exAr": "دعني أفكر في الأمر."
+   },
+   {
+    "en": "What a pity!",
+    "ar": "يا للأسف!",
+    "ex": "You missed the party? What a pity!",
+    "exAr": "فاتتك الحفلة؟ يا للأسف!"
+   },
+   {
+    "en": "Just in case.",
+    "ar": "تحسباً.",
+    "ex": "Take an umbrella just in case.",
+    "exAr": "خذ مظلة تحسباً."
+   },
+   {
+    "en": "By the way,",
+    "ar": "على فكرة،",
+    "ex": "By the way, did you call him?",
+    "exAr": "على فكرة، هل اتصلت به؟"
+   },
+   {
+    "en": "Long time no see!",
+    "ar": "مضى وقت طويل!",
+    "ex": "Long time no see! How are you?",
+    "exAr": "مضى وقت طويل! كيف حالك؟"
+   },
+   {
+    "en": "What's up?",
+    "ar": "ما الأخبار؟",
+    "ex": "Hey, what's up?",
+    "exAr": "مرحباً، ما الأخبار؟"
+   },
+   {
+    "en": "Nice to meet you.",
+    "ar": "تشرفت بمعرفتك.",
+    "ex": "Nice to meet you, Sara.",
+    "exAr": "تشرفت بمعرفتك يا سارة."
+   },
+   {
+    "en": "How have you been?",
+    "ar": "كيف كانت أحوالك؟",
+    "ex": "I haven't seen you. How have you been?",
+    "exAr": "لم أرك منذ مدة. كيف حالك؟"
+   },
+   {
+    "en": "Could you repeat that, please?",
+    "ar": "هل تعيد ذلك من فضلك؟",
+    "ex": "Could you repeat that, please?",
+    "exAr": "هل تعيد ذلك من فضلك؟"
+   },
+   {
+    "en": "I didn't catch that.",
+    "ar": "لم أفهم ما قلت.",
+    "ex": "Sorry, I didn't catch that.",
+    "exAr": "آسف، لم أفهم ما قلت."
+   },
+   {
+    "en": "What does this word mean?",
+    "ar": "ما معنى هذه الكلمة؟",
+    "ex": "What does this word mean?",
+    "exAr": "ما معنى هذه الكلمة؟"
+   },
+   {
+    "en": "How do you say it in English?",
+    "ar": "كيف تقولها بالإنجليزية؟",
+    "ex": "How do you say 'شكراً' in English?",
+    "exAr": "كيف تقول شكراً بالإنجليزية؟"
+   },
+   {
+    "en": "I'm just looking, thanks.",
+    "ar": "أنظر فقط، شكراً.",
+    "ex": "I'm just looking, thanks.",
+    "exAr": "أنظر فقط، شكراً."
+   },
+   {
+    "en": "How much is this?",
+    "ar": "بكم هذا؟",
+    "ex": "How much is this shirt?",
+    "exAr": "بكم هذا القميص؟"
+   },
+   {
+    "en": "Can I have the bill, please?",
+    "ar": "هل أحصل على الفاتورة؟",
+    "ex": "Can I have the bill, please?",
+    "exAr": "هل أحصل على الفاتورة من فضلك؟"
+   },
+   {
+    "en": "I'd like to book a table.",
+    "ar": "أود حجز طاولة.",
+    "ex": "I'd like to book a table for two.",
+    "exAr": "أود حجز طاولة لشخصين."
+   },
+   {
+    "en": "Could you give me directions?",
+    "ar": "هل تدلّني على الطريق؟",
+    "ex": "Could you give me directions to the station?",
+    "exAr": "هل تدلني على الطريق للمحطة؟"
+   },
+   {
+    "en": "I'm on my way.",
+    "ar": "أنا في الطريق.",
+    "ex": "Don't worry, I'm on my way.",
+    "exAr": "لا تقلق، أنا في الطريق."
+   },
+   {
+    "en": "I'll be right back.",
+    "ar": "سأعود حالاً.",
+    "ex": "Wait here, I'll be right back.",
+    "exAr": "انتظر هنا، سأعود حالاً."
+   },
+   {
+    "en": "Don't mention it.",
+    "ar": "لا شكر على واجب.",
+    "ex": "Thanks! — Don't mention it.",
+    "exAr": "شكراً! — لا شكر على واجب."
+   },
+   {
+    "en": "It's my pleasure.",
+    "ar": "يسعدني ذلك.",
+    "ex": "Thank you. — It's my pleasure.",
+    "exAr": "شكراً. — يسعدني ذلك."
+   },
+   {
+    "en": "Congratulations!",
+    "ar": "مبروك!",
+    "ex": "Congratulations on your new job!",
+    "exAr": "مبروك الوظيفة الجديدة!"
+   },
+   {
+    "en": "Good luck!",
+    "ar": "بالتوفيق!",
+    "ex": "Good luck with your exam!",
+    "exAr": "بالتوفيق في امتحانك!"
+   },
+   {
+    "en": "Bless you!",
+    "ar": "يرحمكم الله (عند العطس)",
+    "ex": "Achoo! — Bless you!",
+    "exAr": "عطس — يرحمكم الله!"
+   },
+   {
+    "en": "I'm in a hurry.",
+    "ar": "أنا مستعجل.",
+    "ex": "Sorry, I'm in a hurry.",
+    "exAr": "آسف، أنا مستعجل."
+   },
+   {
+    "en": "That sounds great!",
+    "ar": "يبدو ذلك رائعاً!",
+    "ex": "Dinner at eight? That sounds great!",
+    "exAr": "عشاء الساعة الثامنة؟ يبدو رائعاً!"
+   },
+   {
+    "en": "I have no idea.",
+    "ar": "ليس لدي أدنى فكرة.",
+    "ex": "Where is he? I have no idea.",
+    "exAr": "أين هو؟ لا فكرة لدي."
+   },
+   {
+    "en": "As far as I know,",
+    "ar": "على حد علمي،",
+    "ex": "As far as I know, he's abroad.",
+    "exAr": "على حد علمي هو في الخارج."
+   },
+   {
+    "en": "In my opinion,",
+    "ar": "في رأيي،",
+    "ex": "In my opinion, it's a good idea.",
+    "exAr": "في رأيي هذه فكرة جيدة."
+   },
+   {
+    "en": "To be honest,",
+    "ar": "بصراحة،",
+    "ex": "To be honest, I didn't like it.",
+    "exAr": "بصراحة لم تعجبني."
+   },
+   {
+    "en": "It depends.",
+    "ar": "يعتمد على الظروف.",
+    "ex": "Will you come? — It depends.",
+    "exAr": "هل ستأتي؟ — يعتمد."
+   },
+   {
+    "en": "Mind your own business.",
+    "ar": "لا تتدخل فيما لا يعنيك.",
+    "ex": "Mind your own business!",
+    "exAr": "لا تتدخل فيما لا يعنيك!"
+   },
+   {
+    "en": "I'm fed up with it.",
+    "ar": "لقد مللت منه.",
+    "ex": "I'm fed up with this noise.",
+    "exAr": "لقد مللت من هذا الضجيج."
+   },
+   {
+    "en": "It's a deal!",
+    "ar": "اتفقنا!",
+    "ex": "Fifty dollars? It's a deal!",
+    "exAr": "خمسون دولاراً؟ اتفقنا!"
+   },
+   {
+    "en": "Cheer up!",
+    "ar": "اِفرح! / ارفع معنوياتك!",
+    "ex": "Cheer up, things will get better.",
+    "exAr": "ارفع معنوياتك، ستتحسن الأمور."
+   },
+   {
+    "en": "Hold on a second.",
+    "ar": "انتظر لحظة.",
+    "ex": "Hold on a second, please.",
+    "exAr": "انتظر لحظة من فضلك."
+   },
+   {
+    "en": "Never mind.",
+    "ar": "لا تهتم / لا بأس.",
+    "ex": "I forgot it. — Never mind.",
+    "exAr": "نسيته. — لا بأس."
+   },
+   {
+    "en": "What's the matter?",
+    "ar": "ما المشكلة؟",
+    "ex": "You look sad. What's the matter?",
+    "exAr": "تبدو حزيناً. ما المشكلة؟"
+   },
+   {
+    "en": "I can't make it.",
+    "ar": "لا أستطيع الحضور.",
+    "ex": "I'm sorry, I can't make it tonight.",
+    "exAr": "آسف، لا أستطيع الحضور الليلة."
+   },
+   {
+    "en": "Let's get started.",
+    "ar": "لنبدأ.",
+    "ex": "Let's get started with the lesson.",
+    "exAr": "لنبدأ الدرس."
+   },
+   {
+    "en": "See you around.",
+    "ar": "أراك قريباً.",
+    "ex": "Bye! See you around.",
+    "exAr": "وداعاً! أراك قريباً."
+   },
+   {
+    "en": "Sorry for the delay.",
+    "ar": "آسف على التأخير.",
+    "ex": "Sorry for the delay in replying.",
+    "exAr": "آسف على التأخير في الرد."
+   },
+   {
+    "en": "Would you like some tea?",
+    "ar": "هل تود بعض الشاي؟",
+    "ex": "Would you like some tea?",
+    "exAr": "هل تود بعض الشاي؟"
+   },
+   {
+    "en": "I've got a headache.",
+    "ar": "عندي صداع.",
+    "ex": "I've got a terrible headache.",
+    "exAr": "عندي صداع شديد."
+   }
+  ],
+  "idioms": [
+   {
+    "en": "Break the ice",
+    "ar": "يكسر الجمود",
+    "ex": "He told a joke to break the ice.",
+    "exAr": "حكى نكتة ليكسر الجمود."
+   },
+   {
+    "en": "Piece of cake",
+    "ar": "شيء سهل جداً",
+    "ex": "The exam was a piece of cake.",
+    "exAr": "كان الامتحان في غاية السهولة."
+   },
+   {
+    "en": "Once in a blue moon",
+    "ar": "نادراً جداً",
+    "ex": "We eat out once in a blue moon.",
+    "exAr": "نأكل بالخارج نادراً جداً."
+   },
+   {
+    "en": "Under the weather",
+    "ar": "متوعك الصحة",
+    "ex": "I'm feeling under the weather.",
+    "exAr": "أشعر بتوعك."
+   },
+   {
+    "en": "Hit the books",
+    "ar": "يذاكر بجد",
+    "ex": "I have to hit the books tonight.",
+    "exAr": "يجب أن أذاكر بجد الليلة."
+   },
+   {
+    "en": "Spill the beans",
+    "ar": "يفشي السر",
+    "ex": "Don't spill the beans about the party.",
+    "exAr": "لا تفشِ سر الحفلة."
+   },
+   {
+    "en": "Cost an arm and a leg",
+    "ar": "غالٍ جداً",
+    "ex": "That watch costs an arm and a leg.",
+    "exAr": "تلك الساعة غالية جداً."
+   },
+   {
+    "en": "Let the cat out of the bag",
+    "ar": "يكشف السر دون قصد",
+    "ex": "She let the cat out of the bag.",
+    "exAr": "كشفت السر دون قصد."
+   },
+   {
+    "en": "Bite the bullet",
+    "ar": "يتحمل أمراً صعباً",
+    "ex": "I'll just bite the bullet and do it.",
+    "exAr": "سأتحمل وأفعلها."
+   },
+   {
+    "en": "Call it a day",
+    "ar": "ينهي العمل لهذا اليوم",
+    "ex": "We're tired. Let's call it a day.",
+    "exAr": "نحن متعبون. لننهِ اليوم."
+   },
+   {
+    "en": "On the same page",
+    "ar": "متفقون في الفهم",
+    "ex": "Let's make sure we're on the same page.",
+    "exAr": "لنتأكد أننا متفقون."
+   },
+   {
+    "en": "Get out of hand",
+    "ar": "يخرج عن السيطرة",
+    "ex": "The party got out of hand.",
+    "exAr": "خرجت الحفلة عن السيطرة."
+   },
+   {
+    "en": "Hit the nail on the head",
+    "ar": "يصيب كبد الحقيقة",
+    "ex": "You hit the nail on the head.",
+    "exAr": "لقد أصبت كبد الحقيقة."
+   },
+   {
+    "en": "Better late than never",
+    "ar": "أن تأتي متأخراً خير من ألا تأتي",
+    "ex": "Better late than never!",
+    "exAr": "أن تأتي متأخراً خير من ألا تأتي!"
+   },
+   {
+    "en": "Back to square one",
+    "ar": "العودة إلى نقطة البداية",
+    "ex": "The plan failed; we're back to square one.",
+    "exAr": "فشلت الخطة، عدنا للبداية."
+   },
+   {
+    "en": "A blessing in disguise",
+    "ar": "نعمة في ثوب نقمة",
+    "ex": "Losing that job was a blessing in disguise.",
+    "exAr": "كان فقدان الوظيفة نعمة مخفية."
+   },
+   {
+    "en": "Speak of the devil",
+    "ar": "يا مسهّل (عند ظهور من نتحدث عنه)",
+    "ex": "Speak of the devil, here he comes!",
+    "exAr": "ها هو قد وصل!"
+   },
+   {
+    "en": "The ball is in your court",
+    "ar": "الكرة في ملعبك",
+    "ex": "I've made my offer. The ball is in your court.",
+    "exAr": "قدمت عرضي. القرار بيدك."
+   },
+   {
+    "en": "Kill two birds with one stone",
+    "ar": "عصفوران بحجر",
+    "ex": "Let's kill two birds with one stone.",
+    "exAr": "لنحقق هدفين بخطوة واحدة."
+   },
+   {
+    "en": "Burn the midnight oil",
+    "ar": "يسهر للعمل",
+    "ex": "He burned the midnight oil to finish.",
+    "exAr": "سهر ليكمل العمل."
+   },
+   {
+    "en": "Add fuel to the fire",
+    "ar": "يزيد الطين بلة",
+    "ex": "His comment added fuel to the fire.",
+    "exAr": "زاد تعليقه الطين بلة."
+   },
+   {
+    "en": "Beat around the bush",
+    "ar": "يلف ويدور",
+    "ex": "Stop beating around the bush.",
+    "exAr": "كفّ عن اللف والدوران."
+   },
+   {
+    "en": "Cut corners",
+    "ar": "يتساهل في الجودة",
+    "ex": "Don't cut corners on safety.",
+    "exAr": "لا تتساهل في السلامة."
+   },
+   {
+    "en": "Face the music",
+    "ar": "يتحمل العواقب",
+    "ex": "He must face the music.",
+    "exAr": "عليه أن يتحمل العواقب."
+   },
+   {
+    "en": "Get cold feet",
+    "ar": "يتراجع خوفاً",
+    "ex": "He got cold feet before the wedding.",
+    "exAr": "تراجع خوفاً قبل الزفاف."
+   },
+   {
+    "en": "Go the extra mile",
+    "ar": "يبذل جهداً إضافياً",
+    "ex": "She always goes the extra mile.",
+    "exAr": "هي دائماً تبذل جهداً إضافياً."
+   },
+   {
+    "en": "Hang in there",
+    "ar": "اصبر وتماسك",
+    "ex": "Hang in there, it'll get better.",
+    "exAr": "تماسك، ستتحسن الأمور."
+   },
+   {
+    "en": "In hot water",
+    "ar": "في ورطة",
+    "ex": "He's in hot water with his boss.",
+    "exAr": "هو في ورطة مع مديره."
+   },
+   {
+    "en": "Jump the gun",
+    "ar": "يتسرع",
+    "ex": "Don't jump the gun, wait for results.",
+    "exAr": "لا تتسرع، انتظر النتائج."
+   },
+   {
+    "en": "Keep an eye on",
+    "ar": "يراقب / ينتبه لـ",
+    "ex": "Keep an eye on my bag.",
+    "exAr": "انتبه لحقيبتي."
+   },
+   {
+    "en": "Miss the boat",
+    "ar": "تفوته الفرصة",
+    "ex": "If you wait, you'll miss the boat.",
+    "exAr": "إن انتظرت ستفوتك الفرصة."
+   },
+   {
+    "en": "No pain, no gain",
+    "ar": "لا مكسب بلا تعب",
+    "ex": "Keep training. No pain, no gain.",
+    "exAr": "واصل التدريب. لا مكسب بلا تعب."
+   },
+   {
+    "en": "On thin ice",
+    "ar": "في موقف خطر",
+    "ex": "You're on thin ice with that attitude.",
+    "exAr": "أنت في موقف خطر بهذا السلوك."
+   },
+   {
+    "en": "Pull someone's leg",
+    "ar": "يمزح معه",
+    "ex": "Are you pulling my leg?",
+    "exAr": "هل تمزح معي؟"
+   },
+   {
+    "en": "Read between the lines",
+    "ar": "يفهم ما بين السطور",
+    "ex": "You have to read between the lines.",
+    "exAr": "عليك أن تفهم ما بين السطور."
+   },
+   {
+    "en": "See eye to eye",
+    "ar": "يتفقان في الرأي",
+    "ex": "We don't see eye to eye.",
+    "exAr": "لا نتفق في الرأي."
+   },
+   {
+    "en": "Sit on the fence",
+    "ar": "يقف على الحياد",
+    "ex": "Don't sit on the fence, decide.",
+    "exAr": "لا تقف على الحياد، قرر."
+   },
+   {
+    "en": "Steal the show",
+    "ar": "يخطف الأضواء",
+    "ex": "The little girl stole the show.",
+    "exAr": "خطفت الطفلة الأضواء."
+   },
+   {
+    "en": "Take it with a grain of salt",
+    "ar": "لا تأخذه على محمل الجد",
+    "ex": "Take his words with a grain of salt.",
+    "exAr": "لا تأخذ كلامه على محمل الجد."
+   },
+   {
+    "en": "The last straw",
+    "ar": "القشة التي قصمت ظهر البعير",
+    "ex": "His lateness was the last straw.",
+    "exAr": "كان تأخره آخر ما أطاح بالصبر."
+   },
+   {
+    "en": "Throw in the towel",
+    "ar": "يستسلم",
+    "ex": "Don't throw in the towel yet.",
+    "exAr": "لا تستسلم بعد."
+   },
+   {
+    "en": "Time flies",
+    "ar": "الوقت يمر سريعاً",
+    "ex": "Time flies when you're having fun.",
+    "exAr": "الوقت يمر سريعاً عند المتعة."
+   },
+   {
+    "en": "Under pressure",
+    "ar": "تحت ضغط",
+    "ex": "He works well under pressure.",
+    "exAr": "يعمل جيداً تحت الضغط."
+   },
+   {
+    "en": "Water under the bridge",
+    "ar": "انتهى الأمر ونُسي",
+    "ex": "Forget it; it's water under the bridge.",
+    "exAr": "انسَ الأمر، لقد انتهى."
+   },
+   {
+    "en": "When pigs fly",
+    "ar": "عندما يحمر الجمل / مستحيل",
+    "ex": "He'll apologize when pigs fly.",
+    "exAr": "سيعتذر عندما يطير الخنزير!"
+   },
+   {
+    "en": "Actions speak louder than words",
+    "ar": "الأفعال أبلغ من الأقوال",
+    "ex": "Show me. Actions speak louder than words.",
+    "exAr": "أرني. الأفعال أبلغ من الأقوال."
+   },
+   {
+    "en": "Don't judge a book by its cover",
+    "ar": "لا تحكم من المظهر",
+    "ex": "Don't judge a book by its cover.",
+    "exAr": "لا تحكم من المظهر."
+   },
+   {
+    "en": "Practice makes perfect",
+    "ar": "الممارسة تصنع الإتقان",
+    "ex": "Keep practicing. Practice makes perfect.",
+    "exAr": "واصل التمرن. بالممارسة يأتي الإتقان."
+   },
+   {
+    "en": "Rome wasn't built in a day",
+    "ar": "لا شيء يُنجز بين يوم وليلة",
+    "ex": "Be patient. Rome wasn't built in a day.",
+    "exAr": "اصبر. لا شيء يتم بين يوم وليلة."
+   },
+   {
+    "en": "The early bird catches the worm",
+    "ar": "من بكّر ظفر",
+    "ex": "Wake up early; the early bird catches the worm.",
+    "exAr": "استيقظ مبكراً؛ من بكّر ظفر."
+   },
+   {
+    "en": "Two heads are better than one",
+    "ar": "رأيان أفضل من رأي",
+    "ex": "Let's work together; two heads are better than one.",
+    "exAr": "لنعمل معاً؛ رأيان أفضل من رأي."
+   },
+   {
+    "en": "Out of the blue",
+    "ar": "فجأة ومن دون سابق إنذار",
+    "ex": "He called me out of the blue.",
+    "exAr": "اتصل بي فجأة."
+   },
+   {
+    "en": "Hit the sack",
+    "ar": "يذهب للنوم",
+    "ex": "I'm tired. I'm going to hit the sack.",
+    "exAr": "أنا متعب. سأذهب للنوم."
+   }
+  ],
+  "grammar": [
+   {
+    "t": "المضارع البسيط Present Simple",
+    "r": "نستخدمه للعادات والحقائق. مع he/she/it نضيف s للفعل: She works. وللنفي والسؤال نستخدم do/does.",
+    "q": [
+     [
+      "He ___ to school every day.",
+      [
+       "go",
+       "goes",
+       "going"
+      ],
+      1
+     ],
+     [
+      "She ___ like coffee.",
+      [
+       "don't",
+       "doesn't",
+       "isn't"
+      ],
+      1
+     ],
+     [
+      "___ you play football?",
+      [
+       "Do",
+       "Does",
+       "Are"
+      ],
+      0
+     ]
+    ]
+   },
+   {
+    "t": "المضارع المستمر Present Continuous",
+    "r": "للحدث الجاري الآن: am/is/are + فعل+ing. مثال: I am reading now.",
+    "q": [
+     [
+      "They ___ watching TV now.",
+      [
+       "is",
+       "are",
+       "do"
+      ],
+      1
+     ],
+     [
+      "I am ___ a letter.",
+      [
+       "write",
+       "writes",
+       "writing"
+      ],
+      2
+     ],
+     [
+      "Look! It ___ raining.",
+      [
+       "is",
+       "are",
+       "does"
+      ],
+      0
+     ]
+    ]
+   },
+   {
+    "t": "الماضي البسيط Past Simple",
+    "r": "للحدث انتهى في الماضي. الفعل المنتظم + ed (worked)، وغير المنتظم يتغير (go → went). في النفي والسؤال نستخدم did + الفعل الأصلي.",
+    "q": [
+     [
+      "Yesterday I ___ to the market.",
+      [
+       "go",
+       "went",
+       "gone"
+      ],
+      1
+     ],
+     [
+      "She ___ not call me.",
+      [
+       "do",
+       "does",
+       "did"
+      ],
+      2
+     ],
+     [
+      "Did you ___ the movie?",
+      [
+       "enjoyed",
+       "enjoy",
+       "enjoys"
+      ],
+      1
+     ]
+    ]
+   },
+   {
+    "t": "المضارع التام Present Perfect",
+    "r": "have/has + التصريف الثالث. للتجربة أو حدث ماضٍ له أثر الآن: I have seen it. نستخدم for مع المدة وsince مع نقطة البداية.",
+    "q": [
+     [
+      "I have ___ here for two years.",
+      [
+       "live",
+       "lived",
+       "living"
+      ],
+      1
+     ],
+     [
+      "She ___ finished her homework.",
+      [
+       "have",
+       "has",
+       "is"
+      ],
+      1
+     ],
+     [
+      "He has worked here ___ 2020.",
+      [
+       "for",
+       "since",
+       "at"
+      ],
+      1
+     ]
+    ]
+   },
+   {
+    "t": "المستقبل Will / Going to",
+    "r": "will للقرار اللحظي والتوقع: I'll help you. be going to للخطة المسبقة: I'm going to study medicine.",
+    "q": [
+     [
+      "The phone is ringing. I ___ answer it.",
+      [
+       "will",
+       "am going to",
+       "do"
+      ],
+      0
+     ],
+     [
+      "We ___ visit Cairo next week; we booked tickets.",
+      [
+       "will",
+       "are going to",
+       "did"
+      ],
+      1
+     ]
+    ]
+   },
+   {
+    "t": "الأفعال الناقصة Modal Verbs",
+    "r": "can للقدرة، must للضرورة، should للنصيحة، may للاحتمال والإذن. بعدها الفعل الأصلي بدون to وبدون s.",
+    "q": [
+     [
+      "You ___ see a doctor. (نصيحة)",
+      [
+       "should",
+       "can",
+       "did"
+      ],
+      0
+     ],
+     [
+      "He can ___ English well.",
+      [
+       "speaks",
+       "speak",
+       "to speak"
+      ],
+      1
+     ],
+     [
+      "You ___ not smoke here. (ممنوع)",
+      [
+       "must",
+       "may",
+       "would"
+      ],
+      0
+     ]
+    ]
+   },
+   {
+    "t": "المقارنة Comparatives & Superlatives",
+    "r": "الصفة القصيرة: er / est (taller / tallest). الطويلة: more / most (more expensive / most expensive). نستخدم than بعد المقارنة.",
+    "q": [
+     [
+      "This book is ___ than that one.",
+      [
+       "interesting",
+       "more interesting",
+       "most interesting"
+      ],
+      1
+     ],
+     [
+      "He is the ___ student in class.",
+      [
+       "tall",
+       "taller",
+       "tallest"
+      ],
+      2
+     ],
+     [
+      "My car is ___ than yours.",
+      [
+       "fast",
+       "faster",
+       "fastest"
+      ],
+      1
+     ]
+    ]
+   },
+   {
+    "t": "أدوات التنكير والتعريف a / an / the",
+    "r": "a قبل صوت ساكن (a book)، an قبل صوت متحرك (an apple). the للشيء المعروف أو المذكور سابقاً.",
+    "q": [
+     [
+      "She is ___ engineer.",
+      [
+       "a",
+       "an",
+       "the"
+      ],
+      1
+     ],
+     [
+      "I saw ___ dog. ___ dog was big.",
+      [
+       "a / The",
+       "the / A",
+       "an / The"
+      ],
+      0
+     ],
+     [
+      "He eats ___ apple daily.",
+      [
+       "a",
+       "an",
+       "the"
+      ],
+      1
+     ]
+    ]
+   },
+   {
+    "t": "حروف الجر In / On / At",
+    "r": "at للوقت المحدد والمكان الدقيق (at 5, at the door). on للأيام والتواريخ (on Monday). in للشهور والسنوات والأماكن الكبيرة (in May, in Egypt).",
+    "q": [
+     [
+      "The meeting is ___ Monday.",
+      [
+       "in",
+       "on",
+       "at"
+      ],
+      1
+     ],
+     [
+      "I was born ___ 1990.",
+      [
+       "in",
+       "on",
+       "at"
+      ],
+      0
+     ],
+     [
+      "See you ___ 6 o'clock.",
+      [
+       "in",
+       "on",
+       "at"
+      ],
+      2
+     ]
+    ]
+   },
+   {
+    "t": "الجمل الشرطية Conditionals",
+    "r": "النوع الأول (محتمل): If + مضارع، will + فعل. النوع الثاني (خيالي): If + ماضٍ، would + فعل. مثال: If I were rich, I would travel.",
+    "q": [
+     [
+      "If it rains, we ___ at home.",
+      [
+       "stay",
+       "will stay",
+       "would stay"
+      ],
+      1
+     ],
+     [
+      "If I ___ you, I would apologize.",
+      [
+       "am",
+       "was",
+       "were"
+      ],
+      2
+     ],
+     [
+      "If she studies, she ___ pass.",
+      [
+       "will",
+       "would",
+       "did"
+      ],
+      0
+     ]
+    ]
+   },
+   {
+    "t": "المبني للمجهول Passive Voice",
+    "r": "be + التصريف الثالث. نستخدمه عندما يهمنا الحدث لا الفاعل: The window was broken.",
+    "q": [
+     [
+      "English ___ all over the world.",
+      [
+       "speaks",
+       "is spoken",
+       "spoke"
+      ],
+      1
+     ],
+     [
+      "The cake ___ by my mother yesterday.",
+      [
+       "was made",
+       "made",
+       "is make"
+      ],
+      0
+     ],
+     [
+      "Many cars ___ in Japan.",
+      [
+       "produce",
+       "is produced",
+       "are produced"
+      ],
+      2
+     ]
+    ]
+   },
+   {
+    "t": "الماضي المستمر Past Continuous",
+    "r": "was/were + فعل+ing. لحدث كان مستمراً في وقت معين في الماضي، أو قُوطع بحدث آخر: I was sleeping when you called.",
+    "q": [
+     [
+      "I ___ watching TV when he came.",
+      [
+       "am",
+       "was",
+       "were"
+      ],
+      1
+     ],
+     [
+      "They ___ playing at 5 o'clock.",
+      [
+       "was",
+       "were",
+       "are"
+      ],
+      1
+     ],
+     [
+      "She was ___ when the phone rang.",
+      [
+       "cook",
+       "cooking",
+       "cooked"
+      ],
+      1
+     ]
+    ]
+   },
+   {
+    "t": "الماضي التام Past Perfect",
+    "r": "had + التصريف الثالث. لحدث وقع قبل حدث ماضٍ آخر: When I arrived, the train had left.",
+    "q": [
+     [
+      "When we arrived, the film ___ started.",
+      [
+       "has",
+       "had",
+       "have"
+      ],
+      1
+     ],
+     [
+      "She had ___ before I called.",
+      [
+       "leave",
+       "left",
+       "leaving"
+      ],
+      1
+     ],
+     [
+      "I ___ eaten, so I wasn't hungry.",
+      [
+       "had",
+       "was",
+       "have"
+      ],
+      0
+     ]
+    ]
+   },
+   {
+    "t": "المضارع التام المستمر Present Perfect Continuous",
+    "r": "have/has been + فعل+ing. لحدث بدأ في الماضي ومازال مستمراً، مع التركيز على المدة: I have been studying for two hours.",
+    "q": [
+     [
+      "He has been ___ since morning.",
+      [
+       "work",
+       "working",
+       "worked"
+      ],
+      1
+     ],
+     [
+      "We ___ been waiting for an hour.",
+      [
+       "has",
+       "have",
+       "had"
+      ],
+      1
+     ],
+     [
+      "How long have you been ___ English?",
+      [
+       "learn",
+       "learning",
+       "learned"
+      ],
+      1
+     ]
+    ]
+   },
+   {
+    "t": "الأسماء المعدودة وغير المعدودة Countable & Uncountable",
+    "r": "المعدود نستخدم معه many / a few (apples). غير المعدود نستخدم معه much / a little (water, money, time). some و any للاثنين.",
+    "q": [
+     [
+      "How ___ water do you drink?",
+      [
+       "many",
+       "much",
+       "few"
+      ],
+      1
+     ],
+     [
+      "I have a ___ friends here.",
+      [
+       "little",
+       "few",
+       "much"
+      ],
+      1
+     ],
+     [
+      "There isn't ___ milk left.",
+      [
+       "some",
+       "any",
+       "many"
+      ],
+      1
+     ]
+    ]
+   },
+   {
+    "t": "الضمائر الموصولة Relative Pronouns",
+    "r": "who للأشخاص، which للأشياء، where للأماكن، whose للملكية، that للأشخاص والأشياء.",
+    "q": [
+     [
+      "The woman ___ called you is my aunt.",
+      [
+       "who",
+       "which",
+       "where"
+      ],
+      0
+     ],
+     [
+      "The car ___ he bought is red.",
+      [
+       "who",
+       "which",
+       "whose"
+      ],
+      1
+     ],
+     [
+      "I know a man ___ son is a pilot.",
+      [
+       "who",
+       "whose",
+       "where"
+      ],
+      1
+     ]
+    ]
+   },
+   {
+    "t": "الكلام غير المباشر Reported Speech",
+    "r": "عند نقل الكلام نرجع زمناً للخلف: am/is → was، will → would، present → past. 'I am tired' → He said he was tired.",
+    "q": [
+     [
+      "She said, 'I am happy.' → She said she ___ happy.",
+      [
+       "is",
+       "was",
+       "were"
+      ],
+      1
+     ],
+     [
+      "He said, 'I will come.' → He said he ___ come.",
+      [
+       "will",
+       "would",
+       "can"
+      ],
+      1
+     ],
+     [
+      "They said, 'We like it.' → They said they ___ it.",
+      [
+       "like",
+       "liked",
+       "likes"
+      ],
+      1
+     ]
+    ]
+   },
+   {
+    "t": "الفعل + مصدر أو ing (Gerund / Infinitive)",
+    "r": "بعد enjoy, avoid, finish, mind نستخدم فعل+ing. وبعد want, decide, hope, plan نستخدم to + فعل.",
+    "q": [
+     [
+      "I enjoy ___ books.",
+      [
+       "read",
+       "reading",
+       "to read"
+      ],
+      1
+     ],
+     [
+      "She decided ___ abroad.",
+      [
+       "study",
+       "studying",
+       "to study"
+      ],
+      2
+     ],
+     [
+      "Do you mind ___ the window?",
+      [
+       "open",
+       "opening",
+       "to open"
+      ],
+      1
+     ]
+    ]
+   },
+   {
+    "t": "أسئلة الاستفهام Question Words",
+    "r": "What (ماذا)، Where (أين)، When (متى)، Why (لماذا)، Who (من)، How (كيف)، Which (أي)، How much / How many (كم).",
+    "q": [
+     [
+      "___ is your birthday? — In May.",
+      [
+       "Where",
+       "When",
+       "Who"
+      ],
+      1
+     ],
+     [
+      "___ do you live? — In Cairo.",
+      [
+       "Where",
+       "Why",
+       "What"
+      ],
+      0
+     ],
+     [
+      "___ books do you have?",
+      [
+       "How much",
+       "How many",
+       "How"
+      ],
+      1
+     ]
+    ]
+   }
+  ],
+  "compound": [
+   {
+    "en": "I was tired, ___ I kept working.",
+    "ar": "كنت متعباً لكنني واصلت العمل.",
+    "o": [
+     "but",
+     "so",
+     "because"
+    ],
+    "a": 0,
+    "n": "but للتناقض"
+   },
+   {
+    "en": "It was raining, ___ we stayed home.",
+    "ar": "كان المطر ينزل، لذلك بقينا في البيت.",
+    "o": [
+     "so",
+     "but",
+     "or"
+    ],
+    "a": 0,
+    "n": "so للنتيجة"
+   },
+   {
+    "en": "She passed the exam ___ she studied hard.",
+    "ar": "نجحت في الامتحان لأنها ذاكرت بجد.",
+    "o": [
+     "because",
+     "so",
+     "although"
+    ],
+    "a": 0,
+    "n": "because للسبب"
+   },
+   {
+    "en": "___ he was sick, he went to work.",
+    "ar": "رغم أنه كان مريضاً ذهب للعمل.",
+    "o": [
+     "Although",
+     "Because",
+     "So"
+    ],
+    "a": 0,
+    "n": "although للتضاد (مع جملة كاملة)"
+   },
+   {
+    "en": "You can have tea ___ coffee.",
+    "ar": "يمكنك أن تأخذ شاياً أو قهوة.",
+    "o": [
+     "or",
+     "and",
+     "but"
+    ],
+    "a": 0,
+    "n": "or للاختيار"
+   },
+   {
+    "en": "He opened the door ___ walked in.",
+    "ar": "فتح الباب ودخل.",
+    "o": [
+     "and",
+     "but",
+     "if"
+    ],
+    "a": 0,
+    "n": "and للإضافة"
+   },
+   {
+    "en": "I will call you ___ I arrive.",
+    "ar": "سأتصل بك عندما أصل.",
+    "o": [
+     "when",
+     "but",
+     "so"
+    ],
+    "a": 0,
+    "n": "when للزمن"
+   },
+   {
+    "en": "Stay here ___ I come back.",
+    "ar": "ابقَ هنا حتى أعود.",
+    "o": [
+     "until",
+     "because",
+     "or"
+    ],
+    "a": 0,
+    "n": "until لـ حتى"
+   },
+   {
+    "en": "___ you study, you will fail.",
+    "ar": "إن لم تذاكر ستفشل. (إن لم = unless)",
+    "o": [
+     "Unless",
+     "Because",
+     "While"
+    ],
+    "a": 0,
+    "n": "unless = if ... not"
+   },
+   {
+    "en": "I read a book ___ she cooked dinner.",
+    "ar": "قرأت كتاباً بينما كانت تطبخ العشاء.",
+    "o": [
+     "while",
+     "unless",
+     "so"
+    ],
+    "a": 0,
+    "n": "while لحدثين في نفس الوقت"
+   },
+   {
+    "en": "The man ___ lives next door is a doctor.",
+    "ar": "الرجل الذي يسكن بجوارنا طبيب.",
+    "o": [
+     "who",
+     "which",
+     "whose"
+    ],
+    "a": 0,
+    "n": "who للأشخاص (جملة وصل)"
+   },
+   {
+    "en": "This is the book ___ I bought yesterday.",
+    "ar": "هذا هو الكتاب الذي اشتريته أمس.",
+    "o": [
+     "which",
+     "who",
+     "where"
+    ],
+    "a": 0,
+    "n": "which للأشياء"
+   },
+   {
+    "en": "That is the school ___ I studied.",
+    "ar": "تلك هي المدرسة التي درست فيها.",
+    "o": [
+     "where",
+     "who",
+     "which"
+    ],
+    "a": 0,
+    "n": "where للأماكن"
+   },
+   {
+    "en": "She is the girl ___ father is a pilot.",
+    "ar": "هي الفتاة التي أبوها طيار.",
+    "o": [
+     "whose",
+     "who",
+     "where"
+    ],
+    "a": 0,
+    "n": "whose للملكية"
+   },
+   {
+    "en": "He was late ___ the traffic was heavy.",
+    "ar": "تأخر لأن الزحام كان شديداً.",
+    "o": [
+     "because",
+     "but",
+     "or"
+    ],
+    "a": 0,
+    "n": "because + سبب"
+   },
+   {
+    "en": "It was cold; ___, we went swimming.",
+    "ar": "كان الجو بارداً؛ ومع ذلك ذهبنا للسباحة.",
+    "o": [
+     "however",
+     "because",
+     "and"
+    ],
+    "a": 0,
+    "n": "however = ومع ذلك"
+   },
+   {
+    "en": "I studied hard ___ I could pass.",
+    "ar": "ذاكرت بجد حتى أنجح.",
+    "o": [
+     "so that",
+     "but",
+     "or"
+    ],
+    "a": 0,
+    "n": "so that للغرض"
+   },
+   {
+    "en": "If I ___ time, I would help you.",
+    "ar": "لو كان عندي وقت لساعدتك.",
+    "o": [
+     "had",
+     "have",
+     "will have"
+    ],
+    "a": 0,
+    "n": "شرطي من النوع الثاني"
+   },
+   {
+    "en": "She is smart ___ hard-working.",
+    "ar": "هي ذكية وكذلك مجتهدة.",
+    "o": [
+     "and",
+     "but",
+     "so"
+    ],
+    "a": 0,
+    "n": "and للجمع"
+   },
+   {
+    "en": "He was hungry, ___ he ate a sandwich.",
+    "ar": "كان جائعاً فأكل ساندويتش.",
+    "o": [
+     "so",
+     "but",
+     "although"
+    ],
+    "a": 0,
+    "n": "so للنتيجة"
+   },
+   {
+    "en": "I like tea, ___ my brother likes coffee.",
+    "ar": "أحب الشاي لكن أخي يحب القهوة.",
+    "o": [
+     "but",
+     "because",
+     "so"
+    ],
+    "a": 0,
+    "n": "but للمقارنة والتناقض"
+   },
+   {
+    "en": "___ she was tired, she finished the work.",
+    "ar": "رغم تعبها أنهت العمل.",
+    "o": [
+     "Even though",
+     "Because",
+     "So"
+    ],
+    "a": 0,
+    "n": "even though = although"
+   },
+   {
+    "en": "I'll go out ___ it stops raining.",
+    "ar": "سأخرج عندما يتوقف المطر.",
+    "o": [
+     "after",
+     "because",
+     "unless"
+    ],
+    "a": 0,
+    "n": "after بعد أن"
+   },
+   {
+    "en": "Wash your hands ___ you eat.",
+    "ar": "اغسل يديك قبل أن تأكل.",
+    "o": [
+     "before",
+     "after",
+     "unless"
+    ],
+    "a": 0,
+    "n": "before قبل أن"
+   },
+   {
+    "en": "I'll help you ___ you ask me.",
+    "ar": "سأساعدك إذا طلبت مني.",
+    "o": [
+     "if",
+     "but",
+     "who"
+    ],
+    "a": 0,
+    "n": "if للشرط"
+   },
+   {
+    "en": "She speaks English ___ she lived in London.",
+    "ar": "تتحدث الإنجليزية لأنها عاشت في لندن.",
+    "o": [
+     "because",
+     "unless",
+     "or"
+    ],
+    "a": 0,
+    "n": "because للسبب"
+   },
+   {
+    "en": "Neither Ali ___ Omar came.",
+    "ar": "لا علي ولا عمر جاء.",
+    "o": [
+     "nor",
+     "or",
+     "but"
+    ],
+    "a": 0,
+    "n": "neither ... nor = لا ... ولا"
+   },
+   {
+    "en": "Either you study ___ you fail.",
+    "ar": "إما أن تذاكر أو ترسب.",
+    "o": [
+     "or",
+     "nor",
+     "and"
+    ],
+    "a": 0,
+    "n": "either ... or = إما ... أو"
+   },
+   {
+    "en": "He is not only smart ___ also kind.",
+    "ar": "هو ليس ذكياً فقط بل لطيف أيضاً.",
+    "o": [
+     "but",
+     "and",
+     "so"
+    ],
+    "a": 0,
+    "n": "not only ... but also"
+   },
+   {
+    "en": "I stayed home ___ of the rain.",
+    "ar": "بقيت في البيت بسبب المطر.",
+    "o": [
+     "because",
+     "so",
+     "while"
+    ],
+    "a": 0,
+    "n": "because of + اسم، بينما because + جملة"
+   },
+   {
+    "en": "She left early ___ she wouldn't miss the bus.",
+    "ar": "غادرت مبكراً حتى لا تفوتها الحافلة.",
+    "o": [
+     "so that",
+     "unless",
+     "while"
+    ],
+    "a": 0,
+    "n": "so that للغرض"
+   },
+   {
+    "en": "The film, ___ was long, was great.",
+    "ar": "الفيلم الذي كان طويلاً كان رائعاً.",
+    "o": [
+     "which",
+     "who",
+     "where"
+    ],
+    "a": 0,
+    "n": "which تعود على شيء"
+   },
+   {
+    "en": "As soon as he ___ home, he called me.",
+    "ar": "حال وصوله إلى البيت اتصل بي.",
+    "o": [
+     "got",
+     "get",
+     "will get"
+    ],
+    "a": 0,
+    "n": "بعد as soon as في الماضي نستخدم الماضي"
+   },
+   {
+    "en": "If I had known, I ___ helped you.",
+    "ar": "لو علمت لساعدتك.",
+    "o": [
+     "would have",
+     "will",
+     "would"
+    ],
+    "a": 0,
+    "n": "الشرط من النوع الثالث: had + ثالث، would have + ثالث"
+   }
+  ]
+ }
+}

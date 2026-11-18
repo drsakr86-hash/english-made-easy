@@ -1,0 +1,63 @@
+import { useState } from 'react';
+import * as content from '../data/legacy-content/index.js';
+import VocabSection from '../components/VocabSection.jsx';
+import GrammarSection from '../components/GrammarSection.jsx';
+import CompoundSection from '../components/CompoundSection.jsx';
+import BackupBar from '../components/BackupBar.jsx';
+import { loadProgress, saveProgress, loadTab, saveTab } from '../storage/progress.js';
+
+const TABS = [
+  ['words', 'كلمات'],
+  ['expressions', 'تعبيرات'],
+  ['idioms', 'مصطلحات'],
+  ['grammar', 'قواعد'],
+  ['compound', 'جمل مركبة'],
+];
+
+export default function App({ backend, migration }) {
+  const readOnly = migration.state === 'failed';
+  const [progress, setProgress] = useState(() => (readOnly ? loadProgress({ getItem: () => null }) : loadProgress(backend)));
+  const [tab, setTab] = useState(() => (readOnly ? 'words' : loadTab(backend)));
+  const [saveFailed, setSaveFailed] = useState(false);
+
+  // الحفظ يتم عند الحدث نفسه (لا داخل effect) ويُظهر تنبيهاً إن فشل.
+  const commit = (next) => {
+    setProgress(next);
+    if (!readOnly) setSaveFailed(!saveProgress(backend, next));
+  };
+  const changeTab = (k) => {
+    setTab(k);
+    if (!readOnly) saveTab(backend, k);
+  };
+  const toggle = (section) => (id) =>
+    commit({ ...progress, [section]: progress[section].includes(id) ? progress[section].filter((x) => x !== id) : [...progress[section], id] });
+  const complete = (id) => {
+    if (!progress.grammar.includes(id)) commit({ ...progress, grammar: [...progress.grammar, id] });
+  };
+
+  return (
+    <div>
+      <h1>English Made Easy</h1>
+      <div className="sub">كلمات · تعبيرات · مصطلحات · قواعد · جمل مركبة</div>
+      {readOnly && (
+        <div className="notice err">
+          تعذر ترحيل بياناتك القديمة ({migration.reason}). لن يُحفظ أي تقدم في هذه الجلسة حتى لا تضيع بياناتك. بياناتك القديمة سليمة ولم تُمسّ.
+        </div>
+      )}
+      {saveFailed && <div className="notice">تعذر حفظ التقدم في المتصفح (قد تكون المساحة ممتلئة أو التصفح خاصاً).</div>}
+      <div className="tabs">
+        {TABS.map(([k, label]) => (
+          <button key={k} className={'tab' + (tab === k ? ' on' : '')} onClick={() => changeTab(k)}>{label}</button>
+        ))}
+      </div>
+      <div style={{ marginTop: 10 }}>
+        {['words', 'expressions', 'idioms'].includes(tab) && (
+          <VocabSection key={tab} list={content[tab]} known={progress[tab]} onToggle={toggle(tab)} />
+        )}
+        {tab === 'grammar' && <GrammarSection lessons={content.grammar} done={progress.grammar} onComplete={complete} />}
+        {tab === 'compound' && <CompoundSection items={content.compound} />}
+      </div>
+      <BackupBar backend={backend} />
+    </div>
+  );
+}
