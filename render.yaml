@@ -6,7 +6,7 @@ services:
     plan: free
     buildCommand: "true"
     startCommand: node server/index.mjs
-    healthCheckPath: /health
+    healthCheckPath: /api/tutor/health
     envVars:
       - key: AI_PROVIDER
         value: anthropic
