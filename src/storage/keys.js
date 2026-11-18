@@ -22,6 +22,7 @@ export const KEYS = {
   skills: 'eme.skills',
   userwords: 'eme.userwords',
   tutor: 'eme.tutor',
+  basics: 'eme.basics',
 };
 
 export const SCHEMA_VERSION = 2;

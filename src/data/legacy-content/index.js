@@ -3,3 +3,4 @@ export { expressions } from './expressions.js';
 export { idioms } from './idioms.js';
 export { grammar } from './grammar.js';
 export { compound } from './compound.js';
+export { basics } from '../basics/basics.js'; // محتوى جديد V3.6 (ليس من V1)

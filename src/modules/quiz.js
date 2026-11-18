@@ -55,8 +55,8 @@ export function reviewQuiz(dueIds, content, rng = Math.random) {
   const out = [];
   for (const id of dueIds) {
     const kind = id[0];
-    if (kind === 'g') {
-      const lesson = content.grammar.find((g) => g.id === id);
+    if (kind === 'g' || kind === 'b') {
+      const lesson = (kind === 'g' ? content.grammar : content.basics || []).find((g) => g.id === id);
       if (!lesson) continue;
       const x = lesson.questions[Math.floor(rng() * lesson.questions.length)];
       out.push({ q: x.q, enQ: true, sub: lesson.title, opts: x.options, a: x.answer, enOpts: true, note: lesson.rule, itemId: id });

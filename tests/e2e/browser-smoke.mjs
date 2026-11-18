@@ -332,6 +332,18 @@ await page.waitForSelector('.rule:has-text("I went to school.")', { timeout: 800
 ok('الكتابة الحرة: تصحيح المدرس بالجملة كاملة مع تنبيه التقدير', (await page.locator('.rule:has-text("I went to school.")').count()) >= 1 && (await page.locator('#root').innerText()).includes('وقد يخطئ'));
 await page.click('.tab:has-text("الرئيسية")');
 
+// V3.6: تبويب الأساسيات للمبتدئين
+await goLearn('أساسيات');
+ok('الأساسيات: 14 درساً', (await page.locator('.card.lesson').count()) === 14);
+await page.locator('.card.lesson').first().locator('.top').click();
+ok('الأساسيات: الحروف 26 مع زر نطق لكل حرف', (await page.locator('.card.lesson .item').count()) === 26 && (await page.locator('.card.lesson .item .ic').count()) === 26);
+await page.locator('.card.lesson button.next:has-text("تمرين")').click();
+for (let i = 0; i < 4; i++) { await page.locator('.opt').first().click(); await page.click('.next'); }
+await page.click('.score .next');
+const bRev = await page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('eme.review')).items).filter((k) => k[0] === 'b'));
+ok('الأساسيات: إجابات التمرين تدخل المراجعة بمعرّف b-001', bRev.includes('b-001'), JSON.stringify(bRev));
+await page.click('.tab:has-text("الرئيسية")');
+
 // الجمل المركبة: إصلاح F1
 await goLearn('جمل مركبة');
 let firstCorrect = 0, total = 0;

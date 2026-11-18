@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import Quiz from './Quiz.jsx';
 import { grammarQuiz, passed } from '../modules/quiz.js';
+import { speak } from './speech.js';
 
 // إصلاح F2: لا يكتمل الدرس إلا بنتيجة 60% فأكثر (V1 كان يكمله دائماً).
-export default function GrammarSection({ lessons, done, onComplete, onResult }) {
+export default function GrammarSection({ lessons, done, onComplete, onResult, unit = 'درساً' }) {
   const [open, setOpen] = useState(null);
   const [active, setActive] = useState(null);
   if (active)
@@ -16,7 +17,7 @@ export default function GrammarSection({ lessons, done, onComplete, onResult }) 
     );
   return (
     <div>
-      <div className="small">أنهيت {done.length} من {lessons.length} درساً</div>
+      <div className="small">أنهيت {done.length} من {lessons.length} {unit}</div>
       <div className="bar"><i style={{ width: (done.length / lessons.length) * 100 + '%' }} /></div>
       {lessons.map((l, i) => (
         <div className={'card lesson' + (done.includes(l.id) ? ' known' : '')} key={l.id}>
@@ -27,6 +28,16 @@ export default function GrammarSection({ lessons, done, onComplete, onResult }) 
           {open === i && (
             <div>
               <div className="rule">{l.rule}</div>
+              {l.items && (
+                <div className="items">
+                  {l.items.map((x) => (
+                    <div className="item" key={x.en}>
+                      <button className="ic sm" onClick={() => speak(x.say)} title="نطق">🔊</button>
+                      <div><div className="en">{x.en}</div><div className="small">{x.ar}</div></div>
+                    </div>
+                  ))}
+                </div>
+              )}
               <button className="next" onClick={() => setActive(l)}>تمرين</button>
             </div>
           )}

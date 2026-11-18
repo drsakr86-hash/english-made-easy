@@ -21,6 +21,7 @@ import { buildDailyPlan, markTaskDone, closeSession, tasksDone } from '../engine
 import { loadPlans, savePlans, loadPlanMinutes, savePlanMinutes } from '../storage/plans.js';
 import { loadActivity, saveActivity } from '../storage/activity.js';
 import { loadPlacements, addPlacement, latestPlacement } from '../storage/placement.js';
+import { loadBasics, saveBasics } from '../storage/basics.js';
 import { loadReview, saveReview } from '../storage/review.js';
 import { loadProgress, saveProgress, loadTab, saveTab } from '../storage/progress.js';
 
@@ -35,6 +36,7 @@ const TABS = [
   ['placement', 'مستواي'],
 ];
 const LEARN = [
+  ['basics', 'أساسيات'],
   ['words', 'كلمات'],
   ['expressions', 'تعبيرات'],
   ['idioms', 'مصطلحات'],
@@ -59,6 +61,7 @@ export default function App({ backend, migration }) {
   const skillsRef = useRef(skills);
   const [userwords, setUserwords] = useState(() => (readOnly ? { items: {}, next: 1 } : loadUserWords(backend)));
   const userwordsRef = useRef(userwords);
+  const [basics, setBasics] = useState(() => (readOnly ? { done: [] } : loadBasics(backend)));
   const [placements, setPlacements] = useState(() => (readOnly ? [] : loadPlacements(backend)));
 
   // الحفظ يتم عند الحدث نفسه (لا داخل effect) ويُظهر تنبيهاً إن فشل.
@@ -79,7 +82,7 @@ export default function App({ backend, migration }) {
     reviewRef.current = next;
     setReview(next);
     if (!readOnly) setSaveFailed(!saveReview(backend, next));
-    log(itemId[0] === 'g' ? 'lesson' : 'answer', itemId);
+    log(itemId[0] === 'g' || itemId[0] === 'b' ? 'lesson' : 'answer', itemId);
   };
   // يبدأ تتبّع عنصر في المراجعة دون احتساب إجابة (لا يغيّر عنصراً متتبَّعاً)
   const track = (itemId) => {
@@ -175,6 +178,12 @@ export default function App({ backend, migration }) {
     }
     commit({ ...progress, [section]: progress[section].includes(id) ? progress[section].filter((x) => x !== id) : [...progress[section], id] });
   };
+  const completeBasic = (id) => {
+    if (basics.done.includes(id)) return;
+    const next = { done: [...basics.done, id] };
+    setBasics(next);
+    if (!readOnly) setSaveFailed((f) => f || !saveBasics(backend, next));
+  };
   const complete = (id) => {
     if (!progress.grammar.includes(id)) commit({ ...progress, grammar: [...progress.grammar, id] });
   };
@@ -206,6 +215,7 @@ export default function App({ backend, migration }) {
         {['words', 'expressions', 'idioms'].includes(tab) && (
           <VocabSection key={tab} list={content[tab]} known={progress[tab]} onToggle={toggle(tab)} onAnswer={(q, ok) => record(q.itemId, ok)} />
         )}
+        {tab === 'basics' && <GrammarSection lessons={content.basics} done={basics.done} onComplete={completeBasic} onResult={record} unit="درساً" />}
         {tab === 'grammar' && <GrammarSection lessons={content.grammar} done={progress.grammar} onComplete={complete} onResult={record} />}
         {tab === 'plan' && <PlanSection userwords={userwords} plan={plans[today] || null} minutes={planMinutes} onMinutes={changeMinutes} onCreate={createPlan} onTaskDone={planTaskDone} onClose={endSession} onAnswer={(q, ok) => record(q.itemId, ok)} onGrammarResult={grammarFinish} />}
         {tab === 'skills' && <SkillsSection skills={skills} onAttempt={skillAttempt} onSaveVocab={saveWord} onFixedResult={fixedResult} onSaveWriting={saveWriting} getClient={getClient} level={level()} />}
