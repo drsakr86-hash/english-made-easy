@@ -1,0 +1,22 @@
+# إعداد نشر خادم المدرس على Render (لا يحوي أي مفتاح؛ المفتاح يُدخل يدوياً في لوحة Render).
+services:
+  - type: web
+    name: eme-tutor
+    runtime: node
+    plan: free
+    buildCommand: "true"
+    startCommand: node server/index.mjs
+    healthCheckPath: /health
+    envVars:
+      - key: AI_PROVIDER
+        value: anthropic
+      - key: AI_MODEL
+        value: claude-haiku-5-5
+      - key: ALLOWED_ORIGIN
+        value: https://drsakr86-hash.github.io
+      - key: RATE_PER_MINUTE
+        value: "20"
+      - key: DAILY_CAP
+        value: "300"
+      - key: ANTHROPIC_API_KEY
+        sync: false

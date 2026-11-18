@@ -8,6 +8,7 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
+    "start:server": "node server/index.mjs",
     "test": "vitest run",
     "extract:v1": "node scripts/extract-v1.mjs"
   },
