@@ -13,7 +13,7 @@ export function vocabQuiz(list, rng = Math.random) {
   return shuffle(list, rng)
     .slice(0, 10)
     .map((it) => {
-      const wrong = shuffle(list.filter((x) => x.ar !== it.ar), rng).slice(0, 3).map((x) => x.ar);
+      const wrong = shuffle(list.filter((x) => x.ar !== it.ar && x.en !== it.en), rng).slice(0, 3).map((x) => x.ar);
       const opts = shuffle([it.ar, ...wrong], rng);
       return { q: it.en, enQ: true, opts, a: opts.indexOf(it.ar), note: it.ex + ' — ' + it.exAr };
     });
@@ -42,3 +42,7 @@ export function compoundQuiz(list, rng = Math.random, count = 10) {
       return { q: x.en, enQ: true, sub: x.ar, opts, a: opts.indexOf(correct), enOpts: true, note: x.note };
     });
 }
+
+// إصلاح F2: كان V1 يعلّم الدرس مكتملاً بغض النظر عن النتيجة. الحد الآن 60% (2 من 3، و2 من 2).
+export const PASS_RATIO = 0.6;
+export const passed = (score, total) => total > 0 && score / total >= PASS_RATIO;

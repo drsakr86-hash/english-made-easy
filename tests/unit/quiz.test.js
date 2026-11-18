@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { compoundQuiz, vocabQuiz, grammarQuiz, shuffle } from '../../src/modules/quiz.js';
+import { compoundQuiz, vocabQuiz, grammarQuiz, shuffle, passed } from '../../src/modules/quiz.js';
 import * as content from '../../src/data/legacy-content/index.js';
 
 // مولّد عشوائي ثابت للاختبار
@@ -69,5 +69,27 @@ describe('سلوك V1 المحفوظ', () => {
     const b = shuffle(a, lcg(9));
     expect(a).toEqual([1, 2, 3, 4, 5]);
     expect([...b].sort()).toEqual(a);
+  });
+});
+
+describe('إصلاح F2 وتحسين الكلمات', () => {
+  it('حد إكمال الدرس 60%', () => {
+    expect(passed(3, 3)).toBe(true);
+    expect(passed(2, 3)).toBe(true);
+    expect(passed(1, 3)).toBe(false);
+    expect(passed(0, 3)).toBe(false);
+    expect(passed(2, 2)).toBe(true);
+    expect(passed(1, 2)).toBe(false);
+    expect(passed(0, 0)).toBe(false);
+  });
+
+  it('مشتتات الكلمات لا تضم المعنى الآخر لنفس الكلمة (improve)', () => {
+    for (let n = 0; n < 300; n++) {
+      for (const q of vocabQuiz(content.words, lcg(n + 1))) {
+        if (q.q !== 'improve') continue;
+        const both = ['يُحسّن', 'يتحسن'].filter((m) => q.opts.includes(m));
+        expect(both).toHaveLength(1);
+      }
+    }
   });
 });

@@ -130,5 +130,6 @@ export const words = [
   {"id":"w-128","legacyKey":"otherwise","en":"otherwise","ar":"وإلا","ex":"Hurry up, otherwise we'll be late.","exAr":"أسرع وإلا سنتأخر."},
   {"id":"w-129","legacyKey":"nearly","en":"nearly","ar":"تقريباً","ex":"I nearly missed the bus.","exAr":"كدت أفوّت الحافلة."},
   {"id":"w-130","legacyKey":"especially","en":"especially","ar":"خاصةً","ex":"I love fruit, especially mangoes.","exAr":"أحب الفاكهة خاصة المانجو."},
-  {"id":"w-131","legacyKey":"therefore","en":"therefore","ar":"لذلك","ex":"He was ill; therefore, he stayed home.","exAr":"كان مريضاً؛ لذلك بقي في البيت."}
+  {"id":"w-131","legacyKey":"therefore","en":"therefore","ar":"لذلك","ex":"He was ill; therefore, he stayed home.","exAr":"كان مريضاً؛ لذلك بقي في البيت."},
+  {"id":"w-132","legacyKey":null,"en":"improve","ar":"يتحسن","ex":"His health is improving.","exAr":"صحته تتحسن."}
 ];

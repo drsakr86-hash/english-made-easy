@@ -21,6 +21,9 @@ const simple = (prefix, list) =>
   list.map((x, i) => ({ id: `${prefix}-${pad(i + 1)}`, legacyKey: x.en, en: x.en, ar: x.ar, ex: x.ex, exAr: x.exAr }));
 
 const words = simple('w', v1.words);
+// V1 كان يُسقط كلمة improve الثانية (يتحسن) بصمت. تُستعاد هنا بمعرّف جديد في آخر القائمة
+// حتى لا تتغير معرّفات العناصر الأخرى. لا legacyKey لها لأن V1 لم يحفظ لها تقدماً أبداً.
+dropped.forEach((d, i) => words.push({ id: `w-${pad(v1.words.length + i + 1)}`, legacyKey: null, en: d.en, ar: d.ar, ex: d.ex, exAr: d.exAr }));
 const expressions = simple('e', v1.expressions);
 const idioms = simple('i', v1.idioms);
 const grammar = v1.grammar.map((g, i) => ({
@@ -48,7 +51,7 @@ write('compound.js', 'compound', compound);
 const snapshot = {
   source: 'legacy/English Made Easy.v1.html',
   counts: {
-    words: words.length,
+    words: v1.words.length,
     expressions: expressions.length,
     idioms: idioms.length,
     grammar: grammar.length,

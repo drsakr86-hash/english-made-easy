@@ -30,8 +30,8 @@ await page.waitForSelector('.tabs');
 const cards = () => page.locator('.card').count();
 ok('الصفحة تفتح بلا أخطاء JS', errors.length === 0, errors.join(' | '));
 ok('RTL مفعّل', (await page.evaluate(() => document.documentElement.dir)) === 'rtl');
-ok('كلمات: 131 بطاقة', (await cards()) === 131, String(await cards()));
-ok('الترحيل: أتقنت 3 من 131', (await page.locator('.small').first().innerText()).includes('3'), await page.locator('.small').first().innerText());
+ok('كلمات: 132 بطاقة', (await cards()) === 132, String(await cards()));
+ok('الترحيل: أتقنت 3 من 132', (await page.locator('.small').first().innerText()).includes('3'), await page.locator('.small').first().innerText());
 const mig = await page.evaluate(() => JSON.parse(localStorage.getItem('eme.migration')));
 ok('حالة الترحيل done', mig.state === 'done', JSON.stringify(mig.counts.after));
 ok('مفاتيح V1 لم تُمسّ', (await page.evaluate(() => localStorage.getItem('k_words'))) === JSON.stringify(['achieve', 'improve', 'therefore']));
@@ -86,14 +86,24 @@ for (let r = 0; r < 4; r++) {
 const ratio = firstCorrect / total;
 ok('الجمل المركبة: الخيار الأول ليس الصحيح دائماً', ratio > 0.1 && ratio < 0.65, `${firstCorrect}/${total} = ${(ratio * 100).toFixed(0)}%`);
 
-// قواعد: تمرين وإكمال
+// قواعد: F2 — لا يكتمل الدرس بنتيجة ضعيفة، ويكتمل بنتيجة جيدة
 await page.click('.tab:has-text("قواعد")');
-await page.locator('.card .top').first().click();
-await page.click('text=تمرين');
-for (let i = 0; i < 3; i++) { await page.locator('.opt').first().click(); await page.click('.next'); }
-await page.click('.next');
-const g = await page.evaluate(() => JSON.parse(localStorage.getItem('eme.progress')).grammar);
-ok('إكمال درس قواعد يُحفظ بالمعرّف', g.includes('g-001') && g.includes('g-003'), JSON.stringify(g));
+const doLesson = async (idx, picks) => {
+  const btn = page.locator('.card').nth(idx).locator('text=تمرين');
+  if (!(await btn.count())) await page.locator('.card .top').nth(idx).click(); // الدرس قد يبقى مفتوحاً
+  await page.locator('.card').nth(idx).locator('text=تمرين').click();
+  for (const p of picks) { await page.locator('.opt').nth(p).click(); await page.click('.next'); }
+  const note = await page.locator('.score .small').innerText();
+  await page.click('.score .next');
+  return note;
+};
+// الدرس الأول إجاباته الصحيحة [1,1,0]؛ نجيب خطأً في الثلاثة
+const failNote = await doLesson(0, [0, 0, 1]);
+const g1 = await page.evaluate(() => JSON.parse(localStorage.getItem('eme.progress')).grammar);
+ok('نتيجة 0/3 لا تُكمل الدرس', !g1.includes('g-001') && failNote.includes('60%'), failNote + ' ' + JSON.stringify(g1));
+const passNote = await doLesson(0, [1, 1, 0]);
+const g2 = await page.evaluate(() => JSON.parse(localStorage.getItem('eme.progress')).grammar);
+ok('نتيجة 3/3 تُكمل الدرس بالمعرّف', g2.includes('g-001') && g2.includes('g-003') && passNote.includes('اكتمل'), passNote + ' ' + JSON.stringify(g2));
 
 // تجاوب الهاتف
 for (const t of ['كلمات', 'جمل مركبة', 'قواعد']) {
@@ -114,6 +124,17 @@ await page.waitForSelector('text=تمت الاستعادة');
 await page.reload(); await page.waitForSelector('.tabs');
 const restored = await page.evaluate(() => JSON.parse(localStorage.getItem('eme.progress')).words.length);
 ok('الاستعادة من الملف بعد مسح التخزين', restored === 4, String(restored));
+
+// استيراد V1: بعد المسح والاستعادة نستورد لقطة V1 جديدة (تحتوي therefore)
+const kBefore = await page.evaluate(() => localStorage.getItem('k_words'));
+await page.click('text=استيراد بيانات V1');
+const dump = JSON.stringify({ k_words: JSON.stringify(['achieve', 'borrow', 'lend']), k_expr: JSON.stringify(['Keep in touch.']) });
+await page.fill('textarea', dump);
+await page.click('.card >> text=استيراد');
+await page.waitForSelector('text=تم الاستيراد');
+const imp = await page.evaluate(() => JSON.parse(localStorage.getItem('eme.progress')));
+ok('استيراد V1 يدمج دون مسح (achieve وborrow موجودتان فلا تتكرران)', imp.words.length === 5 && imp.expressions.length === 2, JSON.stringify([imp.words.length, imp.expressions.length]));
+ok('استيراد V1 لم يغيّر مفاتيح V1', (await page.evaluate(() => localStorage.getItem('k_words'))) === kBefore);
 
 ok('لا أخطاء JS طوال الجلسة', errors.length === 0, errors.join(' | '));
 await page.screenshot({ path: '/tmp/e2e/shot.png' });

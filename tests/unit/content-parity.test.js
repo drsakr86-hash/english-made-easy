@@ -10,7 +10,8 @@ const live = extractV1(html);
 
 describe('تكافؤ المحتوى مع V1', () => {
   it('الأعداد مطابقة للقطة', () => {
-    expect(content.words.length).toBe(snapshot.counts.words);
+    // V1 يعرض 131؛ الدفعة 2 تستعيد improve الثانية بمعرّف جديد في آخر القائمة فيصبح 132
+    expect(content.words.length).toBe(snapshot.counts.words + snapshot.droppedByV1Dedupe.length);
     expect(content.expressions.length).toBe(snapshot.counts.expressions);
     expect(content.idioms.length).toBe(snapshot.counts.idioms);
     expect(content.grammar.length).toBe(snapshot.counts.grammar);
@@ -18,14 +19,16 @@ describe('تكافؤ المحتوى مع V1', () => {
     expect(content.compound.length).toBe(snapshot.counts.compound);
   });
 
-  it('أعداد V1 الموثقة في تقرير المرحلة صفر', () => {
-    expect([content.words.length, content.expressions.length, content.idioms.length, content.grammar.length, content.compound.length])
+  it('أعداد V1 الموثقة في تقرير المرحلة صفر (الكلمات 131 + المستعادة)', () => {
+    expect([content.words.length - 1, content.expressions.length, content.idioms.length, content.grammar.length, content.compound.length])
       .toEqual([131, 60, 53, 19, 34]);
   });
 
   for (const key of ['words', 'expressions', 'idioms']) {
     it(`${key}: النصوص والترتيب مطابقة لملف V1 مباشرة`, () => {
-      expect(content[key].map(({ en, ar, ex, exAr }) => ({ en, ar, ex, exAr }))).toEqual(live[key]);
+      const items = content[key].slice(0, live[key].length);
+      expect(items.map(({ en, ar, ex, exAr }) => ({ en, ar, ex, exAr }))).toEqual(live[key]);
+      expect(content[key].length - live[key].length).toBe(key === 'words' ? 1 : 0);
     });
   }
 
@@ -43,11 +46,12 @@ describe('تكافؤ المحتوى مع V1', () => {
     const ids = all.map((x) => x.id);
     expect(new Set(ids).size).toBe(ids.length);
     for (const key of ['words', 'expressions', 'idioms', 'grammar']) {
-      const keys = content[key].map((x) => x.legacyKey);
+      const keys = content[key].map((x) => x.legacyKey).filter((k) => k !== null);
       expect(new Set(keys).size).toBe(keys.length);
     }
     expect(content.words[0].id).toBe('w-001');
-    expect(content.words.at(-1).id).toBe('w-131');
+    expect(content.words[130].id).toBe('w-131');
+    expect(content.words[131].id).toBe('w-132');
   });
 
   it('كل سؤال قواعد وجمل مركبة إجابته داخل نطاق الخيارات، والخيارات غير مكررة', () => {
@@ -58,9 +62,15 @@ describe('تكافؤ المحتوى مع V1', () => {
     }
   });
 
+  it('improve الثانية (يتحسن) مستعادة بمعرّف جديد وبلا legacyKey ولا تغيّر الأولى', () => {
+    const [a, b] = content.words.filter((w) => w.en === 'improve');
+    expect([a.id, a.ar, a.legacyKey]).toEqual(['w-002', 'يُحسّن', 'improve']);
+    expect([b.id, b.ar, b.legacyKey, b.ex]).toEqual(['w-132', 'يتحسن', null, 'His health is improving.']);
+  });
+
   it('العنصر الوحيد الذي أسقطه V1 مسجّل: improve / يتحسن', () => {
     expect(findDroppedDuplicates(html).map((d) => d.ar)).toEqual(['يتحسن']);
     expect(snapshot.droppedByV1Dedupe.map((d) => d.en)).toEqual(['improve']);
-    expect(content.words.filter((w) => w.en === 'improve')).toHaveLength(1);
+    expect(content.words.filter((w) => w.en === 'improve')).toHaveLength(2);
   });
 });

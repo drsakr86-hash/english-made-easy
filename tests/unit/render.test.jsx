@@ -15,7 +15,7 @@ const cards = (html) => (html.match(/class="card/g) || []).length;
 
 describe('العرض الأولي لكل وحدة', () => {
   const cases = [
-    ['words', 131],
+    ['words', 132],
     ['expr', 60],
     ['idioms', 53],
     ['grammar', 19],
@@ -27,9 +27,9 @@ describe('العرض الأولي لكل وحدة', () => {
     });
   }
 
-  it('يعرض التقدم المرحَّل من V1 (3 من 131 كلمة)', () => {
+  it('يعرض التقدم المرحَّل من V1 (3 من 132 كلمة)', () => {
     const html = render({ k_words: JSON.stringify(['achieve', 'improve', 'therefore']) });
-    expect(html).toContain('أتقنت 3 من 131');
+    expect(html).toContain('أتقنت 3 من 132');
     expect((html.match(/✅/g) || []).length).toBe(3);
   });
 

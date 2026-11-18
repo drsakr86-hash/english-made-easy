@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import * as content from '../../src/data/legacy-content/index.js';
-import { runMigration, restoreLegacyFromBackup, readMigrationState } from '../../src/storage/migration.js';
+import { runMigration, restoreLegacyFromBackup, readMigrationState, importLegacyDump } from '../../src/storage/migration.js';
 import { createMemoryStorage } from '../../src/storage/localStorage.js';
 import { KEYS } from '../../src/storage/keys.js';
 import { loadProgress, saveProgress } from '../../src/storage/progress.js';
@@ -141,5 +141,67 @@ describe('النسخ الاحتياطي الخارجي', () => {
     expect(importBackup(t, JSON.stringify({ format: 'other' })).ok).toBe(false);
     expect(importBackup(t, JSON.stringify({ format: 'eme-backup', entries: { evil: 'x' } })).ok).toBe(false);
     expect(t.dump()).toEqual({});
+  });
+});
+
+describe('استيراد لقطة V1 المصدَّرة', () => {
+  const dump = () => JSON.stringify(v1State());
+
+  it('يدمج مع التقدم الحالي ولا يمسح شيئاً، ولا يكتب مفاتيح V1', () => {
+    const s = createMemoryStorage(); // مستخدم جديد شغّل V2 أولاً
+    runMigration(s, content);
+    const p = loadProgress(s);
+    p.words = ['w-010'];
+    saveProgress(s, p);
+    const r = importLegacyDump(s, dump(), content);
+    expect(r.ok).toBe(true);
+    expect(r.added.words).toBe(3);
+    expect(loadProgress(s).words).toEqual(['w-010', 'w-001', 'w-002', content.words.find((w) => w.en === 'therefore').id]);
+    expect(s.getItem('k_words')).toBeNull();
+  });
+
+  it('استيراد نفس اللقطة مرتين لا يضيف شيئاً', () => {
+    const s = createMemoryStorage();
+    runMigration(s, content);
+    importLegacyDump(s, dump(), content);
+    const once = s.getItem(KEYS.progress);
+    const r2 = importLegacyDump(s, dump(), content);
+    expect(r2.added).toEqual({ words: 0, expressions: 0, idioms: 0, grammar: 0 });
+    expect(s.getItem(KEYS.progress)).toBe(once);
+  });
+
+  it('يحفظ حالة ما قبل الاستيراد', () => {
+    const s = createMemoryStorage();
+    runMigration(s, content);
+    const before = s.getItem(KEYS.progress);
+    importLegacyDump(s, dump(), content);
+    expect(s.getItem(KEYS.preimport)).toBe(before);
+  });
+
+  it('يرفض نصاً تالفاً أو بلا بيانات V1 أو بشكل خاطئ دون كتابة', () => {
+    const s = createMemoryStorage();
+    runMigration(s, content);
+    const before = s.getItem(KEYS.progress);
+    expect(importLegacyDump(s, 'x{', content).ok).toBe(false);
+    expect(importLegacyDump(s, JSON.stringify({ other: '1' }), content).ok).toBe(false);
+    expect(importLegacyDump(s, JSON.stringify([1]), content).ok).toBe(false);
+    expect(importLegacyDump(s, JSON.stringify({ k_words: '{bad' }), content).ok).toBe(false);
+    expect(importLegacyDump(s, JSON.stringify({ k_words: JSON.stringify([1]) }), content).ok).toBe(false);
+    expect(s.getItem(KEYS.progress)).toBe(before);
+  });
+
+  it('يقبل لقطة تحتوي مفاتيح أخرى من نفس النطاق ويتجاهلها', () => {
+    const s = createMemoryStorage();
+    runMigration(s, content);
+    const r = importLegacyDump(s, JSON.stringify({ ...v1State(), other_app: 'x', 'iapp.data': '{}' }), content);
+    expect(r.ok).toBe(true);
+    expect(s.getItem('other_app')).toBeNull();
+  });
+
+  it('النصوص غير المطابقة تُدمج في unmatched', () => {
+    const s = createMemoryStorage();
+    runMigration(s, content);
+    importLegacyDump(s, JSON.stringify({ k_words: JSON.stringify(['xx']) }), content);
+    expect(JSON.parse(s.getItem(KEYS.progress)).unmatched.words).toEqual(['xx']);
   });
 });

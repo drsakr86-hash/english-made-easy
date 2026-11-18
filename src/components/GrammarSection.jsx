@@ -1,12 +1,19 @@
 import { useState } from 'react';
 import Quiz from './Quiz.jsx';
-import { grammarQuiz } from '../modules/quiz.js';
+import { grammarQuiz, passed } from '../modules/quiz.js';
 
-// سلوك V1 محفوظ عمداً: إنهاء التمرين يعلّم الدرس مكتملاً بغض النظر عن النتيجة (الخلل F2 بانتظار قرار).
+// إصلاح F2: لا يكتمل الدرس إلا بنتيجة 60% فأكثر (V1 كان يكمله دائماً).
 export default function GrammarSection({ lessons, done, onComplete }) {
   const [open, setOpen] = useState(null);
   const [active, setActive] = useState(null);
-  if (active) return <Quiz qs={grammarQuiz(active)} onFinish={() => { onComplete(active.id); setActive(null); }} />;
+  if (active)
+    return (
+      <Quiz
+        qs={grammarQuiz(active)}
+        resultNote={(s, t) => (passed(s, t) ? 'أحسنت، اكتمل الدرس ✅' : 'تحتاج 60% على الأقل لإكمال الدرس. أعد المحاولة.')}
+        onFinish={(s, t) => { if (passed(s, t)) onComplete(active.id); setActive(null); }}
+      />
+    );
   return (
     <div>
       <div className="small">أنهيت {done.length} من {lessons.length} درساً</div>

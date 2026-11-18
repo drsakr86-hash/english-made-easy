@@ -14,6 +14,7 @@ export const KEYS = {
   settings: 'eme.settings',
   migration: 'eme.migration',
   backup: 'eme.backup.v1',
+  preimport: 'eme.backup.preimport',
 };
 
 export const SCHEMA_VERSION = 2;

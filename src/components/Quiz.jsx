@@ -20,7 +20,7 @@ function Options({ opts, answer, onDone, en }) {
   );
 }
 
-export default function Quiz({ qs, onFinish }) {
+export default function Quiz({ qs, onFinish, resultNote }) {
   const [i, setI] = useState(0);
   const [s, setS] = useState(0);
   const [ans, setAns] = useState(false);
@@ -28,7 +28,8 @@ export default function Quiz({ qs, onFinish }) {
     return (
       <div className="card score">
         النتيجة: {s} من {qs.length}
-        <div><button className="next" onClick={onFinish}>رجوع</button></div>
+        {resultNote && <div className="small" style={{ marginTop: 8 }}>{resultNote(s, qs.length)}</div>}
+        <div><button className="next" onClick={() => onFinish(s, qs.length)}>رجوع</button></div>
       </div>
     );
   const q = qs[i];
