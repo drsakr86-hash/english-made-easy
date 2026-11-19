@@ -5,7 +5,7 @@ import { createTutorClient, errorText, validEndpoint, DEFAULT_ENDPOINT } from '.
 import { addAssistant, addUser, bumpUsage, canSend, contextFor, endConversation, markSaved, startConversation, DAILY_USER_CAP } from '../engines/ai/conversation.js';
 import { compareSpoken, PRONUNCIATION_NOTE } from '../engines/ai/pronunciation.js';
 import { checkFixed } from '../engines/skills/skills.js';
-import { loadTutor, saveTutor, loadEndpoint, saveEndpoint } from '../storage/tutor.js';
+import { loadTutor, saveTutor, loadEndpoint, saveEndpoint, loadToken, saveToken } from '../storage/tutor.js';
 import { speak } from './speech.js';
 import { AdviceList } from './ReportSection.jsx';
 import { weeklyReport } from '../engines/progress/intelligence.js';
@@ -98,13 +98,14 @@ export default function TutorSection({ backend, readOnly, level, onSaveVocab, lo
   const tutorRef = useRef(tutor);
   const [endpoint, setEndpoint] = useState(() => (readOnly ? DEFAULT_ENDPOINT : loadEndpoint(backend, DEFAULT_ENDPOINT)));
   const [epDraft, setEpDraft] = useState(endpoint);
+  const [token, setToken] = useState(() => (readOnly ? '' : loadToken(backend)));
   const [health, setHealth] = useState(null);
   const [openId, setOpenId] = useState(null);
   const [setup, setSetup] = useState({ mode: 'conversation', scenarioId: 'airport', topicId: 'daily', level: LEVELS.includes(level) ? level : level === 'Pre-A1' ? 'A1' : 'A2', correctionMode: 'instant' });
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
-  const client = useMemo(() => injected || createTutorClient({ endpoint }), [injected, endpoint]);
+  const client = useMemo(() => injected || createTutorClient({ endpoint, token }), [injected, endpoint, token]);
 
   const put = (next) => {
     tutorRef.current = next;
@@ -142,6 +143,7 @@ export default function TutorSection({ backend, readOnly, level, onSaveVocab, lo
     <div className="card">
       <div className="small">عنوان الخادم الوسيط للمدرس الذكي. المفاتيح تبقى في الخادم ولا تُوضع هنا. لا تكتب بياناتك الشخصية في المحادثة.</div>
       <input className="inp" placeholder="https://your-server.example" value={epDraft} onChange={(e) => setEpDraft(e.target.value)} />
+      <input className="inp" dir="ltr" type="password" autoComplete="off" placeholder="رمز الدخول (يسلّمه لك المسؤول)" value={token} onChange={(e) => { const v = e.target.value.trim(); setToken(v); if (!readOnly) saveToken(backend, v); }} />
       <div className="row" style={{ marginTop: 6 }}>
         <button className="btn" disabled={!!epDraft && !validEndpoint(epDraft)} onClick={() => { const v = epDraft.trim(); setEndpoint(v); if (!readOnly) saveEndpoint(backend, v); setHealth(null); }}>حفظ العنوان</button>
         <button className="btn" disabled={!client.configured} onClick={async () => setHealth(await client.health())}>اختبار الاتصال</button>

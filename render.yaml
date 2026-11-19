@@ -8,6 +8,8 @@ services:
     startCommand: node server/index.mjs
     healthCheckPath: /api/tutor/health
     envVars:
+      - key: NODE_ENV
+        value: production
       - key: AI_PROVIDER
         value: anthropic
       - key: AI_MODEL
@@ -16,7 +18,12 @@ services:
         value: https://drsakr86-hash.github.io
       - key: RATE_PER_MINUTE
         value: "20"
+      - key: PER_USER_DAILY
+        value: "50"
       - key: DAILY_CAP
         value: "300"
       - key: ANTHROPIC_API_KEY
+        sync: false
+      # سر توقيع رموز الدعوة (32 حرفاً عشوائياً أو أكثر). يُدخل يدوياً في لوحة Render. بدونه يرفض الخادم البدء.
+      - key: TUTOR_TOKEN_SECRET
         sync: false

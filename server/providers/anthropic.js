@@ -3,8 +3,10 @@ export function createAnthropicProvider({ apiKey, model = 'claude-haiku-5-5', ti
   if (!apiKey) throw new Error('ANTHROPIC_API_KEY is required');
   return {
     name: 'anthropic',
-    async complete({ system, messages }) {
+    async complete({ system, messages, signal }) {
       const ctl = new AbortController();
+      // انقطاع العميل يوقف الطلب إلى المزود
+      if (signal) { if (signal.aborted) ctl.abort(); else signal.addEventListener('abort', () => ctl.abort(), { once: true }); }
       const t = setTimeout(() => ctl.abort(), timeoutMs);
       try {
         const res = await fetchImpl('https://api.anthropic.com/v1/messages', {

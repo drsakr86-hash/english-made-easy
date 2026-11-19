@@ -87,7 +87,7 @@ describe('الخادم الوسيط (HTTP حقيقي)', () => {
   let srv;
   afterEach(() => new Promise((r) => (srv ? srv.close(r) : r())));
   const boot = async (opts) => {
-    srv = createTutorServer({ log: () => {}, ...opts });
+    srv = createTutorServer({ log: () => {}, insecureNoAuth: true, ...opts });
     srv.listen(0, '127.0.0.1');
     await once(srv, 'listening');
     return `http://127.0.0.1:${srv.address().port}`;
