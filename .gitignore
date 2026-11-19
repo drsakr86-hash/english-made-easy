@@ -6,3 +6,5 @@ dist
 
 .limits-state.json
 .limits-state.json.tmp
+learners.json
+learners.json.tmp
