@@ -13,7 +13,7 @@ import ReviewSection from '../components/ReviewSection.jsx';
 import BackupBar from '../components/BackupBar.jsx';
 import { applyResult, startTracking } from '../engines/review/review.js';
 import { recordAttempt, recordFixed, addSubmission, saveVocab } from '../engines/skills/skills.js';
-import { loadTutor, loadEndpoint } from '../storage/tutor.js';
+import { loadTutor, loadEndpoint, loadToken } from '../storage/tutor.js';
 import { createTutorClient, DEFAULT_ENDPOINT } from '../engines/ai/client.js';
 import { loadSkills, saveSkills, loadUserWords, saveUserWords } from '../storage/skills.js';
 import { logActivity, dayKey } from '../engines/progress/progress.js';
@@ -121,7 +121,7 @@ export default function App({ backend, migration }) {
     }
     return r.status;
   };
-  const getClient = () => createTutorClient({ endpoint: readOnly ? DEFAULT_ENDPOINT : loadEndpoint(backend, DEFAULT_ENDPOINT) });
+  const getClient = () => createTutorClient({ endpoint: readOnly ? DEFAULT_ENDPOINT : loadEndpoint(backend, DEFAULT_ENDPOINT), token: readOnly ? '' : loadToken(backend) });
   const finishPlacement = (result) => {
     setPlacements((p) => [...p, result]);
     if (!readOnly) setSaveFailed(!addPlacement(backend, result));

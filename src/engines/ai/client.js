@@ -12,6 +12,11 @@ export const ERROR_TEXT = {
   forbidden_origin: 'الخادم لا يسمح بهذا الموقع.',
   network: 'تعذر الوصول إلى الخادم.',
   server_error: 'حدث خطأ في الخادم. أعد المحاولة.',
+  missing_token: 'المدرس يحتاج رمز دخول. أدخل الرمز الذي سلّمه لك المسؤول في إعدادات المدرس.',
+  invalid_token: 'رمز الدخول غير صحيح. تأكد من نسخه كاملاً.',
+  expired_token: 'انتهت صلاحية رمز الدخول. اطلب رمزاً جديداً.',
+  revoked_token: 'تم إيقاف رمز الدخول هذا. اطلب رمزاً جديداً.',
+  user_daily_cap: 'وصلت إلى حدك اليومي من رسائل المدرس. حاول غداً.',
 };
 export const DEFAULT_ENDPOINT = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_AI_ENDPOINT) || '';
 export const errorText = (code) => ERROR_TEXT[code] || ERROR_TEXT.server_error;
@@ -26,7 +31,7 @@ export function validEndpoint(url) {
   }
 }
 
-export function createTutorClient({ endpoint, fetchImpl = (...a) => fetch(...a), timeoutMs = 25000, isOnline = () => (typeof navigator === 'undefined' ? true : navigator.onLine !== false) }) {
+export function createTutorClient({ endpoint, token = '', fetchImpl = (...a) => fetch(...a), timeoutMs = 25000, isOnline = () => (typeof navigator === 'undefined' ? true : navigator.onLine !== false) }) {
   const base = String(endpoint || '').replace(/\/+$/, '');
   return {
     configured: !!base && validEndpoint(base),
@@ -36,10 +41,10 @@ export function createTutorClient({ endpoint, fetchImpl = (...a) => fetch(...a),
       const ctl = new AbortController();
       const t = setTimeout(() => ctl.abort(), timeoutMs);
       try {
-        const res = await fetchImpl(base + '/api/tutor/chat', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload), signal: ctl.signal });
+        const res = await fetchImpl(base + '/api/tutor/chat', { method: 'POST', headers: { 'content-type': 'application/json', ...(token ? { authorization: 'Bearer ' + token } : {}) }, body: JSON.stringify(payload), signal: ctl.signal });
         let data = null;
         try { data = await res.json(); } catch { data = null; }
-        if (!res.ok) return { ok: false, error: (data && typeof data.error === 'string' && ERROR_TEXT[data.error] ? data.error : res.status === 429 ? 'rate_limited' : 'server_error') };
+        if (!res.ok) return { ok: false, error: (data && typeof data.error === 'string' && ERROR_TEXT[data.error] ? data.error : res.status === 429 ? 'rate_limited' : res.status === 401 ? 'invalid_token' : 'server_error') };
         if (!data || typeof data.reply !== 'string') return { ok: false, error: 'bad_response' };
         const r = parseTutorReply(JSON.stringify({ reply: data.reply, corrections: data.corrections, newWords: data.newWords }), 5);
         return { ok: true, ...r };

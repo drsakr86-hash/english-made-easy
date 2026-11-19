@@ -32,3 +32,18 @@ export function saveEndpoint(backend, endpoint) {
   try { s = JSON.parse(getRaw(backend, KEYS.settings) || '{}'); } catch { /* نبدأ من فارغ */ }
   return setRaw(backend, KEYS.settings, JSON.stringify({ ...s, aiEndpoint: endpoint }));
 }
+
+/** رمز دخول المدرس (يُسلَّم من المسؤول). يُحفظ في الإعدادات على هذا الجهاز فقط ويدخل في النسخة الاحتياطية. */
+export function loadToken(backend) {
+  try {
+    const t = JSON.parse(getRaw(backend, KEYS.settings) || '{}').aiToken;
+    return typeof t === 'string' ? t : '';
+  } catch {
+    return '';
+  }
+}
+export function saveToken(backend, token) {
+  let s = {};
+  try { s = JSON.parse(getRaw(backend, KEYS.settings) || '{}'); } catch { /* نبدأ من فارغ */ }
+  return setRaw(backend, KEYS.settings, JSON.stringify({ ...s, aiToken: token }));
+}
