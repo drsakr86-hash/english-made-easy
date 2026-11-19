@@ -396,6 +396,7 @@ const file = fs.readFileSync(path, 'utf8');
 ok('تصدير النسخة الاحتياطية يعمل', JSON.parse(file).format === 'eme-backup', dl.suggestedFilename());
 await page.evaluate(() => localStorage.clear());
 await page.setInputFiles('input[type=file]', { name: 'b.json', mimeType: 'application/json', buffer: Buffer.from(file) });
+await page.click('button:has-text("استعادة كاملة")'); // الواجهة تطلب اختيار الدمج أو الاستعادة الكاملة صراحةً
 await page.waitForSelector('text=تمت الاستعادة');
 await page.reload(); await page.waitForSelector('.tabs');
 const restored = await page.evaluate(() => JSON.parse(localStorage.getItem('eme.progress')).words.length);

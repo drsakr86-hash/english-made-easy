@@ -8,6 +8,18 @@ export function getRaw(backend, key) {
   }
 }
 
+/**
+ * قراءة صارمة: تميّز بين "المفتاح غير موجود" ({ok:true,value:null}) و"تعذرت القراءة" ({ok:false}).
+ * ضرورية قبل أي كتابة تعتمد على القيمة السابقة، فالخلط بينهما يحوّل خطأ قراءة إلى حذف بيانات.
+ */
+export function readStrict(backend, key) {
+  try {
+    return { ok: true, value: backend.getItem(key) };
+  } catch {
+    return { ok: false, value: null };
+  }
+}
+
 export function setRaw(backend, key, value) {
   try {
     backend.setItem(key, value);

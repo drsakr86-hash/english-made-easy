@@ -1,5 +1,6 @@
-import { getRaw, setRaw, removeKey } from './localStorage.js';
+import { getRaw, setRaw, readStrict } from './localStorage.js';
 import { KEYS, LEGACY_KEYS, SCHEMA_VERSION, PROGRESS_SECTIONS } from './keys.js';
+import { applyWrites, snapshotOp } from './transaction.js';
 
 const TAB_VALUES = ['words', 'expr', 'idioms', 'grammar', 'compound'];
 const TAB_V1_TO_V2 = { words: 'words', expr: 'expressions', idioms: 'idioms', grammar: 'grammar', compound: 'compound' };
@@ -9,16 +10,34 @@ function indexByLegacyKey(items) {
   return new Map(items.filter((x) => x.legacyKey !== null).map((x) => [x.legacyKey, x.id]));
 }
 
-function fail(backend, reason) {
-  // لا نكتب أي تقدم جزئي عند الفشل، ونترك مفاتيح V1 كما هي.
-  removeKey(backend, KEYS.progress);
-  removeKey(backend, KEYS.settings);
-  removeKey(backend, KEYS.schema);
-  const info = { state: 'failed', reason };
-  setRaw(backend, KEYS.migration, JSON.stringify({ ...info, at: new Date().toISOString() }));
+/**
+ * يسجّل حالة الفشل/التعارض في مفتاح الحالة المستقل eme.migration فقط.
+ * لا يحذف ولا يعدّل أي بيانات مستخدم (تقدم V2 أو إعداداته أو مفاتيح V1) تحت أي ظرف.
+ * لا يعيد كتابة العلامة إن كانت تحمل الحالة والسبب نفسيهما، فيبقى التخزين ثابتاً عند التكرار.
+ */
+function fail(backend, reason, state = 'failed', extra = {}) {
+  const info = { state, reason, ...extra };
+  const prev = readMigrationState(backend);
+  if (!(prev && prev.state === state && prev.reason === reason)) {
+    setRaw(backend, KEYS.migration, JSON.stringify({ state, reason, at: new Date().toISOString() }));
+  }
   return info;
 }
 
+/** هل نص eme.progress بشكل صالح (كائن، وكل قسم معروف مصفوفة نصوص)؟ */
+export function isValidProgressText(text) {
+  let v;
+  try {
+    v = JSON.parse(text);
+  } catch {
+    return false;
+  }
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return false;
+  for (const s of PROGRESS_SECTIONS) {
+    if (s in v && !(Array.isArray(v[s]) && v[s].every((x) => typeof x === 'string'))) return false;
+  }
+  return !('unmatched' in v) || (v.unmatched !== null && typeof v.unmatched === 'object' && !Array.isArray(v.unmatched));
+}
 
 /**
  * دالة نقية: تحوّل قيم V1 الخام (نصوص JSON لكل مفتاح) إلى معرّفات.
@@ -154,55 +173,121 @@ export function readMigrationState(backend) {
 /**
  * ترحيل آمن وقابل للتكرار من مفاتيح V1 إلى eme.progress بالمعرّفات الثابتة.
  * - لا يمسّ مفاتيح V1 إطلاقاً.
- * - يكتب نسخة احتياطية خاماً قبل أي شيء.
+ * - لا يكتب فوق أي مفتاح V2 موجود: وجود eme.progress بلا علامة done يعني تعارضاً أو تبنّياً، لا استبدالاً.
+ * - يقرأ بصرامة: فشل القراءة يوقف العملية ولا يُفسَّر على أنه "لا توجد بيانات".
+ * - يكتب كل شيء في معاملة واحدة (نسخة خام ← تقدم ← إعدادات ← مخطط ← علامة done أخيراً)
+ *   مع تحقق بعد الكتابة وتراجع كامل عند أي فشل.
  * - أي نص غير مطابق يُحفظ في unmatched ولا يُحذف.
- * - يتوقف عند أي شكل غير متوقع دون كتابة نتيجة جزئية.
+ * الحالات المُرجعة: done | skipped | conflict | failed.
  */
 export function runMigration(backend, content) {
   const prev = readMigrationState(backend);
   if (prev && prev.state === 'done') return { ...prev, state: 'skipped' };
 
-  const legacyKeyList = Object.values(LEGACY_KEYS);
+  const keyList = [...Object.values(LEGACY_KEYS), KEYS.progress, KEYS.settings, KEYS.schema, KEYS.backup];
   const raw = {};
-  for (const k of legacyKeyList) raw[k] = getRaw(backend, k);
+  for (const k of keyList) {
+    const r = readStrict(backend, k);
+    if (!r.ok) return fail(backend, 'تعذرت قراءة التخزين، لم يُغيَّر أي شيء');
+    raw[k] = r.value;
+  }
+  const legacyRaw = Object.fromEntries(Object.values(LEGACY_KEYS).map((k) => [k, raw[k]]));
+  const hasLegacyProgress = PROGRESS_SECTIONS.some((sec) => raw[LEGACY_KEYS[sec]] !== null);
 
-  // 1) النسخة الاحتياطية الخام. إن وُجدت من محاولة سابقة فمفاتيح V1 لم تتغير فنبقيها كما هي.
-  if (getRaw(backend, KEYS.backup) === null) {
-    const ok = setRaw(backend, KEYS.backup, JSON.stringify({ at: new Date().toISOString(), keys: raw }));
-    if (!ok) return fail(backend, 'تعذر كتابة النسخة الاحتياطية (التخزين ممتلئ أو غير متاح)');
+  // تقدم V2 موجود: لا استبدال أبداً.
+  if (raw[KEYS.progress] !== null) {
+    if (!isValidProgressText(raw[KEYS.progress])) {
+      return fail(backend, 'تقدم النسخة الجديدة الحالي تالف الشكل؛ لم يُغيَّر شيء. استعد نسخة احتياطية.');
+    }
+    if (hasLegacyProgress) {
+      return fail(
+        backend,
+        'وُجد تقدم محفوظ في النسخة الجديدة وبيانات قديمة معاً؛ لم يُدمجا تلقائياً حتى لا يتغير تقدمك. يمكنك دمج بيانات V1 يدوياً.',
+        'conflict',
+      );
+    }
+    // لا شيء من V1 يُرحَّل: نتبنّى التقدم الحالي كما هو ونسجّل الإنجاز.
+    const r = { state: 'done', at: new Date().toISOString(), adopted: true };
+    setRaw(backend, KEYS.migration, JSON.stringify(r));
+    return r;
   }
 
-  // 2+3) قراءة وفحص الشكل ثم التحويل
-  const conv = convertLegacy(raw, content);
+  // 2+3) فحص الشكل والتحويل (دالة نقية بلا كتابة)
+  const conv = convertLegacy(legacyRaw, content);
   if (!conv.ok) return fail(backend, conv.reason);
   const { progress, unmatched, counts, tab } = conv;
 
-  // 4) الكتابة: التقدم أولاً، وعلامة الإنجاز أخيراً
-  const okWrites =
-    setRaw(backend, KEYS.progress, JSON.stringify({ ...progress, unmatched })) &&
-    setRaw(backend, KEYS.settings, JSON.stringify({ tab })) &&
-    setRaw(backend, KEYS.schema, String(SCHEMA_VERSION));
-  if (!okWrites) return fail(backend, 'تعذر كتابة مفاتيح V2');
-
+  // النسخة الخام: نحتفظ بنسخة سابقة سليمة، ونعيد كتابتها فقط إن كانت غائبة أو تالفة.
+  let backupOk = false;
+  if (raw[KEYS.backup] !== null) {
+    try {
+      const b = JSON.parse(raw[KEYS.backup]);
+      backupOk = !!b && typeof b.keys === 'object' && b.keys !== null && !Array.isArray(b.keys);
+    } catch {
+      backupOk = false;
+    }
+  }
   const result = { state: 'done', at: new Date().toISOString(), counts };
-  if (!setRaw(backend, KEYS.migration, JSON.stringify(result))) return fail(backend, 'تعذر كتابة علامة الإنجاز');
+  const ops = [];
+  if (!backupOk) ops.push({ key: KEYS.backup, value: JSON.stringify({ at: new Date().toISOString(), keys: legacyRaw }) });
+  ops.push({ key: KEYS.progress, value: JSON.stringify({ ...progress, unmatched }) });
+  // الإعدادات والمخطط لا تُستبدل إن كانت موجودة (قد تحوي تفضيلات المستخدم)
+  if (raw[KEYS.settings] === null) ops.push({ key: KEYS.settings, value: JSON.stringify({ tab }) });
+  if (raw[KEYS.schema] === null) ops.push({ key: KEYS.schema, value: String(SCHEMA_VERSION) });
+  ops.push({ key: KEYS.migration, value: JSON.stringify(result) }); // علامة الإنجاز أخيراً
+
+  const w = applyWrites(backend, ops);
+  if (!w.ok) {
+    return fail(
+      backend,
+      w.rolledBack ? `تعذرت الكتابة (${w.reason}) وأُعيدت الحالة السابقة كاملة` : `تعذرت الكتابة ولم يكتمل التراجع (${w.rollbackFailed.join('، ')})`,
+      'failed',
+      { rollbackFailed: w.rollbackFailed },
+    );
+  }
   return result;
 }
 
-/** استعادة مفاتيح V1 من النسخة الداخلية وإلغاء مفاتيح V2. لا تحذف النسخة الاحتياطية نفسها. */
+const LEGACY_SET = new Set(Object.values(LEGACY_KEYS));
+const V2_RESET_KEYS = [KEYS.progress, KEYS.settings, KEYS.schema, KEYS.migration];
+
+/**
+ * استعادة مفاتيح V1 من النسخة الداخلية ثم إلغاء مفاتيح V2.
+ * - تتحقق من بنية النسخة (مفاتيح V1 فقط، قيم نصية أو null) قبل أي كتابة.
+ * - كل شيء في معاملة واحدة: كتابات V1 أولاً ثم حذف V2، مع تحقق وتراجع كامل عند أي فشل،
+ *   فلا يُحذف V2 ما لم تنجح استعادة V1 بالكامل.
+ * - تحفظ قبل البدء لقطة بقيم المفاتيح المتأثرة (بما فيها تقدم V2) في eme.backup.prerestore،
+ *   ويمكن الرجوع إليها بـ restoreFromSnapshot. لا تُحذف النسخة الاحتياطية نفسها.
+ * تُرجع { ok, restored, removed, snapshotSaved } أو { ok:false, reason, rolledBack }.
+ */
 export function restoreLegacyFromBackup(backend) {
-  const text = getRaw(backend, KEYS.backup);
-  if (!text) return { ok: false, reason: 'لا توجد نسخة احتياطية' };
+  const t = readStrict(backend, KEYS.backup);
+  if (!t.ok) return { ok: false, reason: 'تعذرت قراءة التخزين' };
+  if (!t.value) return { ok: false, reason: 'لا توجد نسخة احتياطية' };
   let b;
   try {
-    b = JSON.parse(text);
+    b = JSON.parse(t.value);
   } catch {
     return { ok: false, reason: 'النسخة الاحتياطية تالفة' };
   }
-  for (const [k, v] of Object.entries(b.keys || {})) {
-    if (v === null) removeKey(backend, k);
-    else setRaw(backend, k, v);
+  const keys = b && b.keys;
+  if (!keys || typeof keys !== 'object' || Array.isArray(keys)) return { ok: false, reason: 'بنية النسخة الاحتياطية غير صالحة' };
+  for (const [k, v] of Object.entries(keys)) {
+    if (!LEGACY_SET.has(k)) return { ok: false, reason: 'النسخة الاحتياطية تحتوي مفاتيح غير مقبولة' };
+    if (v !== null && typeof v !== 'string') return { ok: false, reason: 'النسخة الاحتياطية تحتوي قيماً غير صالحة' };
   }
-  [KEYS.progress, KEYS.settings, KEYS.schema, KEYS.migration].forEach((k) => removeKey(backend, k));
-  return { ok: true };
+  const ops = [
+    ...Object.entries(keys).map(([key, value]) => ({ key, value })),
+    ...V2_RESET_KEYS.map((key) => ({ key, value: null })),
+  ];
+  const snap = snapshotOp(backend, KEYS.prerestore, ops, 'restore-legacy');
+  if (snap && !snap.ok) return { ok: false, reason: snap.reason, rolledBack: true };
+  const w = applyWrites(backend, snap ? [snap.op, ...ops] : ops);
+  if (!w.ok) return { ok: false, reason: w.reason, rolledBack: w.rolledBack, rollbackFailed: w.rollbackFailed };
+  return {
+    ok: true,
+    restored: Object.keys(keys).length,
+    removed: V2_RESET_KEYS.length,
+    snapshotSaved: !!snap,
+  };
 }

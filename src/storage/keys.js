@@ -15,6 +15,7 @@ export const KEYS = {
   migration: 'eme.migration',
   backup: 'eme.backup.v1',
   preimport: 'eme.backup.preimport',
+  prerestore: 'eme.backup.prerestore', // لقطة مؤقتة بما كان قبل آخر استعادة (لا تُصدَّر)
   review: 'eme.review',
   activity: 'eme.activity',
   placement: 'eme.placement',
