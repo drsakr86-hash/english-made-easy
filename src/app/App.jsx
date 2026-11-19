@@ -197,6 +197,9 @@ export default function App({ backend, migration }) {
           تعذر ترحيل بياناتك القديمة ({migration.reason}). لن يُحفظ أي تقدم في هذه الجلسة حتى لا تضيع بياناتك. بياناتك القديمة سليمة ولم تُمسّ.
         </div>
       )}
+      {migration.state === 'conflict' && (
+        <div className="notice">{migration.reason}</div>
+      )}
       {saveFailed && <div className="notice">تعذر حفظ التقدم في المتصفح (قد تكون المساحة ممتلئة أو التصفح خاصاً).</div>}
       <div className="tabs">
         {TABS.map(([k, label]) => (
