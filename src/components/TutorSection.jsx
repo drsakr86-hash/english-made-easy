@@ -92,6 +92,34 @@ function Pronunciation({ phrases }) {
   );
 }
 
+function Dictate({ onText }) {
+  const [listening, setListening] = useState(false);
+  const [err, setErr] = useState('');
+  const SR = typeof window !== 'undefined' ? window.SpeechRecognition || window.webkitSpeechRecognition : null;
+  if (!SR) return null;
+  const start = () => {
+    setErr('');
+    try {
+      const r = new SR();
+      r.lang = 'en-US'; r.interimResults = false; r.maxAlternatives = 1;
+      r.onresult = (e) => { const t = e.results[0][0].transcript; if (t) onText(t); };
+      r.onerror = (e) => setErr(e.error === 'not-allowed' ? 'لم يُسمح باستخدام الميكروفون. فعّله من إعدادات المتصفح.' : 'تعذر التعرف على الصوت. أعد المحاولة.');
+      r.onend = () => setListening(false);
+      setListening(true);
+      r.start();
+    } catch {
+      setListening(false);
+      setErr('تعذر تشغيل الميكروفون.');
+    }
+  };
+  return (
+    <>
+      <button className="btn" disabled={listening} onClick={start} aria-label="تحدث بالإنجليزية">{listening ? 'أستمع…' : '🎤'}</button>
+      {err && <div className="notice err" style={{ width: '100%' }}>{err}</div>}
+    </>
+  );
+}
+
 export default function TutorSection({ backend, readOnly, level, onSaveVocab, log, client: injected, getIntel, onGo }) {
   const [sub, setSub] = useState('chat');
   const [tutor, setTutor] = useState(() => (readOnly ? loadTutor({ getItem: () => null }) : loadTutor(backend)));
@@ -190,6 +218,7 @@ export default function TutorSection({ backend, readOnly, level, onSaveVocab, lo
             <textarea className="inp" style={{ minHeight: 70 }} placeholder="Type your answer…" value={text} onChange={(e) => setText(e.target.value)} />
             <div className="row" style={{ marginTop: 6 }}>
               <button className="btn on" disabled={busy || !text.trim()} onClick={send}>إرسال</button>
+              <Dictate onText={(t) => setText((prev) => (prev.trim() ? prev.trim() + ' ' : '') + t)} />
               <button className="btn" onClick={() => put(endConversation(tutorRef.current, conv.id, new Date()))}>أنهِ المحادثة</button>
             </div>
           </div>
