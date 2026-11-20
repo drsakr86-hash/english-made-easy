@@ -47,3 +47,21 @@ export function saveToken(backend, token) {
   try { s = JSON.parse(getRaw(backend, KEYS.settings) || '{}'); } catch { /* نبدأ من فارغ */ }
   return setRaw(backend, KEYS.settings, JSON.stringify({ ...s, aiToken: token }));
 }
+
+/**
+ * رابط دعوة: ‎#t=<الرمز>. الجزء بعد # لا يُرسل إلى أي خادم. يُحفظ الرمز إن كان بالشكل الصحيح ثم يُمحى من شريط العنوان.
+ * يعيد true فقط إذا حُفظ رمز.
+ */
+const INVITE_RE = /^eme1\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/;
+export function consumeInviteFromHash(backend, loc, hist) {
+  try {
+    const m = /^#t=([^&]*)$/.exec((loc && loc.hash) || '');
+    if (!m) return false;
+    const t = decodeURIComponent(m[1]).trim();
+    const ok = INVITE_RE.test(t) && saveToken(backend, t);
+    if (hist && typeof hist.replaceState === 'function') hist.replaceState(null, '', loc.pathname + (loc.search || ''));
+    return !!ok;
+  } catch {
+    return false;
+  }
+}

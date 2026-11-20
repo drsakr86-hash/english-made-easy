@@ -13,7 +13,7 @@ import ReviewSection from '../components/ReviewSection.jsx';
 import BackupBar from '../components/BackupBar.jsx';
 import { applyResult, startTracking } from '../engines/review/review.js';
 import { recordAttempt, recordFixed, addSubmission, saveVocab } from '../engines/skills/skills.js';
-import { loadTutor, loadEndpoint, loadToken } from '../storage/tutor.js';
+import { loadTutor, loadEndpoint, loadToken, consumeInviteFromHash } from '../storage/tutor.js';
 import { createTutorClient, DEFAULT_ENDPOINT } from '../engines/ai/client.js';
 import { loadSkills, saveSkills, loadUserWords, saveUserWords } from '../storage/skills.js';
 import { logActivity, dayKey } from '../engines/progress/progress.js';
@@ -47,6 +47,7 @@ const inLearn = (t) => LEARN.some(([k]) => k === t);
 
 export default function App({ backend, migration }) {
   const readOnly = migration.state === 'failed';
+  const [inviteSaved] = useState(() => !readOnly && typeof window !== 'undefined' && consumeInviteFromHash(backend, window.location, window.history));
   const [progress, setProgress] = useState(() => (readOnly ? loadProgress({ getItem: () => null }) : loadProgress(backend)));
   const [tab, setTab] = useState(() => (readOnly ? 'words' : loadTab(backend)));
   const [saveFailed, setSaveFailed] = useState(false);
@@ -192,6 +193,7 @@ export default function App({ backend, migration }) {
     <div>
       <h1>English Made Easy</h1>
       <div className="sub">كلمات · تعبيرات · مصطلحات · قواعد · جمل مركبة</div>
+      {inviteSaved && <div className="notice">تم حفظ رمز الدخول على هذا الجهاز. افتح تبويب المدرس وابدأ.</div>}
       {readOnly && (
         <div className="notice err">
           تعذر ترحيل بياناتك القديمة ({migration.reason}). لن يُحفظ أي تقدم في هذه الجلسة حتى لا تضيع بياناتك. بياناتك القديمة سليمة ولم تُمسّ.
