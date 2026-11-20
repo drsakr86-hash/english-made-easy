@@ -10,6 +10,7 @@ import ReportSection from '../components/ReportSection.jsx';
 import TutorSection from '../components/TutorSection.jsx';
 import PlacementSection from '../components/PlacementSection.jsx';
 import ReviewSection from '../components/ReviewSection.jsx';
+import PrintSection from '../components/PrintSection.jsx';
 import BackupBar from '../components/BackupBar.jsx';
 import { applyResult, startTracking } from '../engines/review/review.js';
 import { recordAttempt, recordFixed, addSubmission, saveVocab } from '../engines/skills/skills.js';
@@ -42,6 +43,7 @@ const LEARN = [
   ['idioms', 'مصطلحات'],
   ['grammar', 'قواعد'],
   ['compound', 'جمل مركبة'],
+  ['print', 'طباعة'],
 ];
 const inLearn = (t) => LEARN.some(([k]) => k === t);
 
@@ -215,7 +217,7 @@ export default function App({ backend, migration }) {
           ))}
         </div>
       )}
-      <div style={{ marginTop: 10 }}>
+      <div className="print-host" style={{ marginTop: 10 }}>
         {tab === 'dashboard' && <Dashboard progress={progress} review={review} activity={activity} placement={latestPlacement(placements)} plan={plans[today] || null} onGo={changeTab} />}
         {['words', 'expressions', 'idioms'].includes(tab) && (
           <VocabSection key={tab} list={content[tab]} known={progress[tab]} onToggle={toggle(tab)} onAnswer={(q, ok) => record(q.itemId, ok)} />
@@ -228,6 +230,7 @@ export default function App({ backend, migration }) {
         {tab === 'report' && <ReportSection key={tab + today + activity.last?.at} getIntel={getIntel} onGo={changeTab} />}
         {tab === 'placement' && <PlacementSection latest={latestPlacement(placements)} onFinish={finishPlacement} />}
         {tab === 'review' && <ReviewSection records={review} userwords={userwords} onAnswer={(q, ok) => record(q.itemId, ok)} />}
+        {tab === 'print' && <PrintSection content={content} progress={progress} />}
         {tab === 'compound' && <CompoundSection items={content.compound} onAnswer={(q, ok) => record(q.itemId, ok)} />}
       </div>
       <BackupBar backend={backend} />

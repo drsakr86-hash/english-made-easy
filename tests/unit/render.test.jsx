@@ -5,6 +5,7 @@ import * as content from '../../src/data/legacy-content/index.js';
 import { runMigration } from '../../src/storage/migration.js';
 import { createMemoryStorage } from '../../src/storage/localStorage.js';
 import { buildDailyPlan, markTaskDone } from '../../src/engines/learning/plan.js';
+import { saveTab } from '../../src/storage/progress.js';
 import { dayKey } from '../../src/engines/progress/progress.js';
 
 // يوازي Baseline B02–B06 وB07 وB17 على النسخة الجديدة (عرض على الخادم، بدون متصفح).
@@ -153,5 +154,16 @@ describe('العرض الأولي لكل وحدة', () => {
   it('عند فشل الترحيل يظهر تنبيه ولا يُفقد شيء', () => {
     const html = render({ k_words: '{bad' });
     expect(html).toContain('تعذر ترحيل بياناتك القديمة');
+  });
+});
+
+describe('تبويب الطباعة', () => {
+  it('يعرض معاينة ورقة وزر الطباعة', () => {
+    const st = createMemoryStorage({});
+    const migration = runMigration(st, content);
+    saveTab(st, 'print');
+    const html = renderToString(<App backend={st} migration={migration} />).replaceAll('<!-- -->', '');
+    expect(html).toContain('طباعة / حفظ PDF');
+    expect(html).toContain('الدرجة: ...... / 20');
   });
 });
