@@ -5,7 +5,13 @@
 //   node scripts/learners.mjs revoked      # يطبع سطر REVOKED_TOKEN_IDS
 // الملف learners.json (أو LEARNERS_FILE) يحوي المعرّفات والأسماء فقط؛ الرمز نفسه لا يُحفظ. لا ترفعه إلى GitHub (مُستثنى في .gitignore).
 import { readFileSync, writeFileSync, renameSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { issueToken } from '../server/auth.js';
+
+/** رابط دعوة يحفظ الرمز تلقائيًا عند فتحه (الرمز في الجزء بعد # فلا يُرسل لأي خادم). */
+export function inviteLink(appUrl, token) {
+  return String(appUrl).replace(/#.*$/, '') + '#t=' + token;
+}
 
 export function loadRegistry(path) {
   let text;
@@ -64,7 +70,14 @@ function main() {
   try {
     if (cmd === 'add') {
       const t = addLearner(file, { secret: process.env.TUTOR_TOKEN_SECRET, label: opt('label', ''), days: Number(opt('days', '30')) });
-      console.log(`id:      ${t.id}\nexpires: ${t.expiresAt}\ntoken:   ${t.token}\nسلّم الرمز للمتعلم الآن؛ لا يُحفظ في السجل ولا يمكن عرضه مرة أخرى.`);
+      const appUrl = opt('url', process.env.APP_URL || '');
+      const link = appUrl ? inviteLink(appUrl, t.token) : '';
+      console.log(`id:      ${t.id}\nexpires: ${t.expiresAt}\ntoken:   ${t.token}${link ? `\nlink:    ${link}` : ''}\nسلّم الرمز للمتعلم الآن؛ لا يُحفظ في السجل ولا يمكن عرضه مرة أخرى.`);
+      // Termux: termux-open-url يفتح الرابط مباشرة. --open يفتحه في المتصفح، و--share يفتح واتساب والرسالة جاهزة.
+      const flags = rest.filter((a) => a === '--open' || a === '--share');
+      if (flags.length && !link) console.log('أضف --url <عنوان البرنامج> (أو APP_URL) لتوليد الرابط.');
+      else if (flags.includes('--open')) spawnSync('termux-open-url', [link], { stdio: 'inherit' });
+      else if (flags.includes('--share')) spawnSync('termux-open-url', ['https://wa.me/?text=' + encodeURIComponent(link)], { stdio: 'inherit' });
     } else if (cmd === 'list') {
       const rows = listLearners(file);
       if (!rows.length) return console.log('لا يوجد متعلمون بعد.');
