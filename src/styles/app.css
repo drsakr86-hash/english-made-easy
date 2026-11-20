@@ -80,3 +80,29 @@ h1{background:linear-gradient(90deg,#1d4ed8,#7c3aed);-webkit-background-clip:tex
 .item{display:flex;align-items:center;gap:8px;background:#f3f4f6;border-radius:10px;padding:6px 8px}
 .item .en{direction:ltr;text-align:left;font-weight:600;font-size:14px}
 @media(max-width:420px){.items{grid-template-columns:1fr}}
+
+/* === أوراق التدريب والطباعة === */
+.ws{background:#fff}
+.ws-meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px;color:#374151;border-bottom:1px solid #9ca3af;padding-bottom:6px;margin-bottom:8px}
+.ws-title{font-size:20px;font-weight:700;margin:6px 0}
+.ws-bank{display:flex;flex-wrap:wrap;gap:6px 14px;direction:ltr;border:1px dashed #6b7280;border-radius:8px;padding:8px;margin:8px 0;font-weight:600}
+.ws-q{margin-top:12px;break-inside:avoid}
+.ws-prompt{font-size:17px;line-height:1.7}
+.ws-opts{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:4px;font-size:15px}
+.wline{border-bottom:1px solid #6b7280;height:30px}
+.ws-study{display:flex;justify-content:space-between;gap:10px;font-size:17px}
+.ws-ex{color:#374151;font-size:14px}
+.ws-lesson{font-weight:700;margin-top:16px;border-bottom:2px solid #6b7280}
+.ws-rule{font-size:14px;margin-top:4px;line-height:1.8;color:#374151}
+.ws-key{margin-top:28px;border-top:2px dashed #9ca3af;padding-top:10px}
+.ws-answers{display:flex;flex-wrap:wrap;gap:4px 22px;font-size:15px}
+@media print{
+  @page{margin:14mm}
+  body{background:#fff!important}
+  #root{max-width:none;padding:0}
+  #root>div>:not(.print-host){display:none!important}
+  .noprint{display:none!important}
+  .ws.card{border:none;box-shadow:none;padding:0;margin:0;border-radius:0}
+  .ws-key{break-before:page;border-top:none;margin-top:0;padding-top:0}
+  .ws-lesson{break-after:avoid}
+}
